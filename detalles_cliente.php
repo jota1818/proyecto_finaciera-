@@ -38,6 +38,9 @@ if ($result->num_rows > 0) {
     }
     echo "<tr><td><strong>Ocupación:</strong></td><td>" . htmlspecialchars($row['ocupacion']) . "</td></tr>";
     echo "<tr><td><strong>Clasificación de Riesgo:</strong></td><td>" . htmlspecialchars($row['clasificacion_riesgo']) . "</td></tr>";
+    echo "<tr><td><strong>Clasificación de Agencia:</strong></td><td>" . htmlspecialchars($row['agencia']) . "</td></tr>";
+    echo "<tr><td><strong>Clasificación de Tipo de credito:</strong></td><td>" . htmlspecialchars($row['tipo_credito']) . "</td></tr>";
+    echo "<tr><td><strong>Clasificación de Estado:</strong></td><td>" . htmlspecialchars($row['estado']) . "</td></tr>";
     echo "<tr><td><strong>Fecha de Desembolso:</strong></td><td>" . htmlspecialchars($row['fecha_desembolso']) . "</td></tr>";
     echo "<tr><td><strong>Fecha de Vencimiento:</strong></td><td>" . htmlspecialchars($row['fecha_vencimiento']) . "</td></tr>";
     echo "<tr><td><strong>Monto:</strong></td><td>S/." . htmlspecialchars($row['monto']) . "</td></tr>";
@@ -53,20 +56,36 @@ if ($result->num_rows > 0) {
     echo "<h4>Aval</h4>";
     echo "</div>";
     echo "<table class='table table-bordered'>";
-    echo "<tr><td><strong>Nombre:</strong></td><td>" . htmlspecialchars($row['nombre_garante'] . " " . $row['apellidos_garante']) . "</td></tr>";
-    echo "<tr><td><strong>DNI:</strong></td><td>" . htmlspecialchars($row['dni_garante']) . "</td></tr>";
-    echo "<tr><td><strong>Teléfono:</strong></td><td>" . htmlspecialchars($row['telefono_garante']) . "</td></tr>";
-    echo "<tr><td><strong>Fecha de Nacimiento:</strong></td><td>" . htmlspecialchars($row['fecha_nacimiento_garante']) . "</td></tr>";
-    echo "<tr><td><strong>Domicilio 1:</strong></td><td>" . htmlspecialchars($row['domicilio1_garante']) . "</td></tr>";
-    echo "<tr><td><strong>Referencia 1:</strong></td><td>" . htmlspecialchars($row['referencia1_garante']) . "</td></tr>";
+    if (!empty($row['nombre_garante']) || !empty($row['apellidos_garante'])) {
+        echo "<tr><td><strong>Nombre:</strong></td><td>" . htmlspecialchars($row['nombre_garante'] . " " . $row['apellidos_garante']) . "</td></tr>";
+    }
+    if (!empty($row['dni_garante'])) {
+        echo "<tr><td><strong>DNI:</strong></td><td>" . htmlspecialchars($row['dni_garante']) . "</td></tr>";
+    }
+    if (!empty($row['telefono_garante'])) {
+        echo "<tr><td><strong>Teléfono:</strong></td><td>" . htmlspecialchars($row['telefono_garante']) . "</td></tr>";
+    }
+    if ($row['fecha_nacimiento_garante'] !== '0000-00-00' && !empty($row['fecha_nacimiento_garante'])) {
+        echo "<tr><td><strong>Fecha de Nacimiento:</strong></td><td>" . htmlspecialchars($row['fecha_nacimiento_garante']) . "</td></tr>";
+    }
+    if (!empty($row['domicilio1_garante'])) {
+        echo "<tr><td><strong>Domicilio 1:</strong></td><td>" . htmlspecialchars($row['domicilio1_garante']) . "</td></tr>";
+    }
+    if (!empty($row['referencia1_garante'])) {
+        echo "<tr><td><strong>Referencia 1:</strong></td><td>" . htmlspecialchars($row['referencia1_garante']) . "</td></tr>";
+    }
     if (!empty($row['domicilio2_garante'])) {
         echo "<tr><td><strong>Domicilio 2:</strong></td><td>" . htmlspecialchars($row['domicilio2_garante']) . "</td></tr>";
     }
     if (!empty($row['referencia2_garante'])) {
         echo "<tr><td><strong>Referencia 2:</strong></td><td>" . htmlspecialchars($row['referencia2_garante']) . "</td></tr>";
     }
-    echo "<tr><td><strong>Ocupación:</strong></td><td>" . htmlspecialchars($row['ocupacion_garante']) . "</td></tr>";
-    echo "<tr><td><strong>Clasificación de Riesgo:</strong></td><td>" . htmlspecialchars($row['clasificacion_riesgo_garante']) . "</td></tr>";
+    if (!empty($row['ocupacion_garante'])) {
+        echo "<tr><td><strong>Ocupación:</strong></td><td>" . htmlspecialchars($row['ocupacion_garante']) . "</td></tr>";
+    }
+    if (!empty($row['clasificacion_riesgo_garante'])) {
+        echo "<tr><td><strong>Clasificación de Riesgo:</strong></td><td>" . htmlspecialchars($row['clasificacion_riesgo_garante']) . "</td></tr>";
+    }
     echo "</table>";
     echo '</div>';
 

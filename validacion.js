@@ -13,6 +13,7 @@ function verificarDNI(dni) {
 
 
 function validarFormulario() {
+    // datos cliente
     let nombre = document.forms["registroForm"]["nombre"].value;
     let apellidos = document.forms["registroForm"]["apellidos"].value;
     let dni = document.forms["registroForm"]["dni"].value;
@@ -24,10 +25,14 @@ function validarFormulario() {
     let referencia2 = document.forms["registroForm"]["referencia2"].value;
     let ocupacion = document.forms["registroForm"]["ocupacion"].value;
     let clasificacion_riesgo = document.forms["registroForm"]["clasificacion_riesgo"].value;
+    let agencia = document.forms["registroForm"]["agencia"].value;
+    let tipo_credito = document.forms["registroForm"]["tipo_credito"].value;
+    let estado = document.forms["registroForm"]["estado"].value;
     let fecha_desembolso = document.forms["registroForm"]["fecha_desembolso"].value;
     let fecha_vencimiento = document.forms["registroForm"]["fecha_vencimiento"].value;
     let monto = document.forms["registroForm"]["monto"].value;
     let saldo = document.forms["registroForm"]["saldo"].value;
+    // dato garante
     let nombre_garante = document.forms["registroForm"]["nombre_garante"].value;
     let apellidos_garante = document.forms["registroForm"]["apellidos_garante"].value;
     let dni_garante = document.forms["registroForm"]["dni_garante"].value;
@@ -39,8 +44,10 @@ function validarFormulario() {
     let referencia2_garante = document.forms["registroForm"]["referencia2_garante"].value;
     let ocupacion_garante = document.forms["registroForm"]["ocupacion_garante"].value;
     let clasificacion_riesgo_garante = document.forms["registroForm"]["clasificacion_riesgo_garante"].value;
+    // Fecha Programada
     let fecha_clave = document.forms["registroForm"]["fecha_clave"].value;
     let accion_fecha_clave = document.forms["registroForm"]["accion_fecha_clave"].value;
+    // dato personal asignado
     let analista = document.forms["registroForm"]["analista"].value;
     let gestor = document.forms["registroForm"]["gestor"].value;
     let supervisor = document.forms["registroForm"]["supervisor"].value;
@@ -95,6 +102,15 @@ function validarFormulario() {
     if (!regexTexto.test(ocupacion)) {
         alert("Ocupación del cliente inválida. Debe contener solo letras y espacios."); return false;
     }
+    if (!regexTexto.test(agencia)) {
+        alert("Agencia dato inválido. Debe contener solo letras y espacios."); return false;
+    }
+    if (!regexTexto.test(tipo_credito)) {
+        alert("Tipo de credito dato inválido. Debe contener solo letras y espacios."); return false;
+    }
+    if (!regexTexto.test(estado)) {
+        alert("Estado dato inválido. Debe contener solo letras y espacios."); return false;
+    }
     if (isNaN(monto) || parseFloat(monto) <= 0) {
         alert("Monto inválido"); return false;
     }
@@ -103,46 +119,52 @@ function validarFormulario() {
     }
 
     // Validaciones del garante
-    if (!regexTexto.test(nombre_garante)) {
+    if (nombre_garante && !regexTexto.test(nombre_garante)) {
         alert("Nombre del garante inválido. Debe contener solo letras y espacios."); return false;
     }
-    if (!regexTexto.test(apellidos_garante)) {
+    if (apellidos_garante && !regexTexto.test(apellidos_garante)) {
         alert("Apellidos del garante inválido. Debe contener solo letras y espacios."); return false;
     }
-    if (!regexDNI.test(dni_garante)) {
+    if (dni_garante && !regexDNI.test(dni_garante)) {
         alert("DNI del garante inválido"); return false;
     }
-    if (!regexTelefono.test(telefono_garante)) {
+    if (telefono_garante && !regexTelefono.test(telefono_garante)) {
         alert("Teléfono del garante inválido"); return false;
     }
-    let fechaNacimiento = new Date(fecha_nacimiento_garante);
-    let hoy = new Date();
-    let edadGarante = hoy.getFullYear() - fechaNacimiento.getFullYear();
-    let m = hoy.getMonth() - fechaNacimiento.getMonth();
-    if (m < 0 || (m === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
-        edadGarante--;
+
+    // Validación opcional para fecha de nacimiento
+    if (fecha_nacimiento_garante) {
+        if (!regexFechaNacimiento.test(fecha_nacimiento_garante)) {
+            alert("Fecha de Nacimiento inválida del garante"); return false;
+        }
+        let fechaNacimiento = new Date(fecha_nacimiento_garante);
+        let hoy = new Date();
+        let edadGarante = hoy.getFullYear() - fechaNacimiento.getFullYear();
+        let m = hoy.getMonth() - fechaNacimiento.getMonth();
+        if (m < 0 || (m === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+            edadGarante--;
+        }
+        if (edadGarante < 18) {
+            alert("El garante es menor de edad"); return false;
+        }
     }
-    if (edadGarante < 18) {
-        alert("El garante es menor de edad"); return false;
+
+    if (domicilio1_garante && !regexDireccion.test(domicilio1_garante)) {
+        alert("Domicilio 1 del garante inválido. No comenzar con número o algún carácter"); return false;
     }
-    if (!regexFechaNacimiento.test(fecha_nacimiento_garante)) {
-        alert("Fecha de Nacimiento inválida del garante"); return false;
-    }
-    if (!regexDireccion.test(domicilio1_garante)) {
-        alert("Domicilio 1 del garante inválido. No comenzar con numero o algún caracter"); return false;
-    }
-    if (!regexDireccion.test(referencia1_garante)) {
-        alert("Referencia 1 del garante inválido. No comenzar con numero o algún caracter"); return false;
+    if (referencia1_garante && !regexDireccion.test(referencia1_garante)) {
+        alert("Referencia 1 del garante inválido. No comenzar con número o algún carácter"); return false;
     }
     if (domicilio2_garante && !regexDireccion.test(domicilio2_garante)) {
-        alert("Domicilio 2 del garante inválido. No comenzar con numero o algún caracter"); return false;
+        alert("Domicilio 2 del garante inválido. No comenzar con número o algún carácter"); return false;
     }
     if (referencia2_garante && !regexDireccion.test(referencia2_garante)) {
-        alert("Referencia 2 del garante inválido. No comenzar con numero o algún caracter"); return false;
+        alert("Referencia 2 del garante inválido. No comenzar con número o algún carácter"); return false;
     }
-    if (!regexTexto.test(ocupacion_garante)) {
+    if (ocupacion_garante && !regexTexto.test(ocupacion_garante)) {
         alert("Ocupación del garante inválida. Debe contener solo letras y espacios."); return false;
     }
+    // Fecha Programada
     if (!regexTexto.test(accion_fecha_clave)) {
         alert("Accion de fecha clave inválida. Debe contener solo letras y espacios."); return false;
     }

@@ -24,31 +24,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $referencia2 = isset($_POST["referencia2"]) ? $_POST["referencia2"] : '';
     $ocupacion = $_POST["ocupacion"];
     $clasificacion_riesgo = $_POST["clasificacion_riesgo"];
+    $agencia = $_POST["agencia"]; //nuevo
+    $tipo_credito = $_POST["tipo_credito"]; //nuevo
+    $estado = $_POST["estado"]; //nuevo
     $fecha_desembolso = $_POST["fecha_desembolso"];
     $fecha_vencimiento = $_POST["fecha_vencimiento"];
     $monto = $_POST["monto"];
     $saldo = $_POST["saldo"];
     // datos garante
-    $nombre_garante = $_POST["nombre_garante"];
-    $apellidos_garante = $_POST["apellidos_garante"];
-    $dni_garante = $_POST["dni_garante"];
-    $telefono_garante = $_POST["telefono_garante"];
-    $fecha_nacimiento_garante = $_POST["fecha_nacimiento_garante"];
-    $domicilio1_garante = $_POST["domicilio1_garante"];
-    $referencia1_garante = $_POST["referencia1_garante"];
+    $nombre_garante = $_POST["nombre_garante"] ? $_POST["nombre_garante"] : '';
+    $apellidos_garante = $_POST["apellidos_garante"] ? $_POST["apellidos_garante"] : '';
+    $dni_garante = $_POST["dni_garante"] ? $_POST["dni_garante"] : '';
+    $telefono_garante = $_POST["telefono_garante"] ? $_POST["telefono_garante"] : '';
+    $fecha_nacimiento_garante = $_POST["fecha_nacimiento_garante"] ? $_POST["fecha_nacimiento_garante"] : '';
+    $domicilio1_garante = $_POST["domicilio1_garante"] ? $_POST["domicilio1_garante"] : '';
+    $referencia1_garante = $_POST["referencia1_garante"] ? $_POST["referencia1_garante"] : '';
     $domicilio2_garante = isset($_POST["domicilio2_garante"]) ? $_POST["domicilio2_garante"] : '';
     $referencia2_garante = isset($_POST["referencia2_garante"]) ? $_POST["referencia2_garante"] : '';
-    $ocupacion_garante = $_POST["ocupacion_garante"];
-    $clasificacion_riesgo_garante = $_POST["clasificacion_riesgo_garante"];
+    $ocupacion_garante = $_POST["ocupacion_garante"] ? $_POST["ocupacion_garante"] : ''; 
+    $clasificacion_riesgo_garante = $_POST["clasificacion_riesgo_garante"] ? $_POST["clasificacion_riesgo_garante"] : '';
+    //dato Fecha Programada
     $fecha_clave = $_POST["fecha_clave"];
     $accion_fecha_clave = $_POST["accion_fecha_clave"];
+    // dato personal asignado
     $analista = $_POST["analista"];
     $gestor = $_POST["gestor"];
     $supervisor = $_POST["supervisor"];
     $administrador = $_POST["administrador"];
 
-    $sql = "INSERT INTO clientes (nombre, apellidos, dni, telefono, fecha_nacimiento, domicilio1, referencia1, domicilio2, referencia2, ocupacion, clasificacion_riesgo, fecha_desembolso, fecha_vencimiento, monto, saldo, nombre_garante, apellidos_garante, dni_garante, telefono_garante, fecha_nacimiento_garante, domicilio1_garante, referencia1_garante, domicilio2_garante, referencia2_garante, ocupacion_garante, clasificacion_riesgo_garante, fecha_clave, accion_fecha_clave, analista, gestor, supervisor, administrador)
-    VALUES ('$nombre', '$apellidos', '$dni', '$telefono', '$fecha_nacimiento', '$domicilio1', '$referencia1', '$domicilio2', '$referencia2', '$ocupacion', '$clasificacion_riesgo', '$fecha_desembolso', '$fecha_vencimiento', '$monto', '$saldo', '$nombre_garante', '$apellidos_garante', '$dni_garante', '$telefono_garante', '$fecha_nacimiento_garante', '$domicilio1_garante', '$referencia1_garante', '$domicilio2_garante', '$referencia2_garante', '$ocupacion_garante', '$clasificacion_riesgo_garante', '$fecha_clave', '$accion_fecha_clave', '$analista', '$gestor', '$supervisor', '$administrador')";
+    $sql = "INSERT INTO clientes (nombre, apellidos, dni, telefono, fecha_nacimiento, domicilio1, referencia1, domicilio2, referencia2, ocupacion, clasificacion_riesgo, agencia, tipo_credito, estado, fecha_desembolso, fecha_vencimiento, monto, saldo, nombre_garante, apellidos_garante, dni_garante, telefono_garante, fecha_nacimiento_garante, domicilio1_garante, referencia1_garante, domicilio2_garante, referencia2_garante, ocupacion_garante, clasificacion_riesgo_garante, fecha_clave, accion_fecha_clave, analista, gestor, supervisor, administrador)
+    VALUES ('$nombre', '$apellidos', '$dni', '$telefono', '$fecha_nacimiento', '$domicilio1', '$referencia1', '$domicilio2', '$referencia2', '$ocupacion', '$clasificacion_riesgo', '$agencia', '$tipo_credito', '$estado', '$fecha_desembolso', '$fecha_vencimiento', '$monto', '$saldo', '$nombre_garante', '$apellidos_garante', '$dni_garante', '$telefono_garante', '$fecha_nacimiento_garante', '$domicilio1_garante', '$referencia1_garante', '$domicilio2_garante', '$referencia2_garante', '$ocupacion_garante', '$clasificacion_riesgo_garante', '$fecha_clave', '$accion_fecha_clave', '$analista', '$gestor', '$supervisor', '$administrador')";
 
     if ($conn->query($sql) === TRUE) {
         $message = "Registro exitoso";
@@ -145,6 +150,18 @@ $conn->close();
                         </select>
                     </div>
                     <div class="mb-2">
+                        <label class="fw-bold">Agencia:</label>
+                        <input type="text" name="agencia" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Tipo de credito:</label>
+                        <input type="text" name="tipo_credito" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Estado:</label>
+                        <input type="text" name="estado" required class="form-control">
+                    </div>
+                    <div class="mb-2">
                         <label class="fw-bold">Fecha de Desembolso:</label>
                         <input type="date" name="fecha_desembolso" required class="form-control">
                     </div>
@@ -165,31 +182,31 @@ $conn->close();
                     <h4>Información del Garante</h4>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
-                        <input type="text" name="nombre_garante" required class="form-control">
+                        <input type="text" name="nombre_garante"  class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Apellidos:</label>
-                        <input type="text" name="apellidos_garante" required class="form-control">
+                        <input type="text" name="apellidos_garante"  class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">DNI:</label>
-                        <input type="text" name="dni_garante" required class="form-control">
+                        <input type="text" name="dni_garante"  class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Teléfono:</label>
-                        <input type="number" name="telefono_garante" required class="form-control">
+                        <input type="number" name="telefono_garante"  class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha de Nacimiento:</label>
-                        <input type="date" name="fecha_nacimiento_garante" required class="form-control">
+                        <input type="date" name="fecha_nacimiento_garante"  class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Domicilio 1:</label>
-                        <input type="text" name="domicilio1_garante" required class="form-control">
+                        <input type="text" name="domicilio1_garante"  class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Referencia 1:</label>
-                        <input type="text" name="referencia1_garante" required class="form-control">
+                        <input type="text" name="referencia1_garante"  class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Domicilio 2:</label>
@@ -201,11 +218,11 @@ $conn->close();
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Ocupación:</label>
-                        <input type="text" name="ocupacion_garante" required class="form-control">
+                        <input type="text" name="ocupacion_garante"  class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Clasificación de Riesgo:</label>
-                        <select name="clasificacion_riesgo_garante" required class="form-control">
+                        <select name="clasificacion_riesgo_garante"  class="form-control">
                             <option value="" disabled selected>Seleccione una opción</option>
                             <option value="NOR">NOR</option>
                             <option value="CPP">CPP</option>
