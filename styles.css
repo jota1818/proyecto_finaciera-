@@ -1,0 +1,86 @@
+#clienteDetalles {
+    display: none;
+    margin-top: 20px;
+    position: relative; /* Asegura que los botones se posicionen dentro de este contenedor */
+    overflow: hidden; /* Evita que los elementos se desborden */
+}
+
+.details-container {
+    height: 405px; /* Altura fija para el contenedor de detalles */
+    overflow-y: auto; /* Habilitar desplazamiento vertical */
+    padding-right: 15px; /* Espacio para la barra de desplazamiento */
+    padding-bottom: 40px; /* Añade espacio en la parte inferior para los botones */
+    box-sizing: content-box; /* Asegura que el padding se añada fuera del tamaño total */
+    position: relative; /* Asegura que los elementos absolutos se posicionen dentro de este contenedor */
+}
+
+
+.fixed-header {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    z-index: 2; /* Asegura que el encabezado esté sobre el contenido desplazable */
+}
+
+.scrollable-table-container {
+    max-height: 300px; /* Altura máxima para la tabla */
+    overflow-y: auto; /* Habilitar desplazamiento vertical */
+    padding-right: 15px; /* Espacio para la barra de desplazamiento */
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1; /* Asegura que el encabezado de la tabla esté sobre el contenido desplazable */
+}
+
+.vertical-button-container {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100%; /* Ocupa todo el espacio vertical disponible */
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container {
+    flex: 1; /* Ocupa el espacio restante en el contenedor vertical */
+    overflow-y: auto; /* Habilitar desplazamiento vertical */
+    padding-right: 15px; /* Espacio para la barra de desplazamiento */
+}
+
+.fixed-buttons {
+    position: absolute; /* Cambiar a absolute */
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;  /* Centra los botones horizontalmente */
+    gap: 15px; /* Espacio entre los botones */
+}
+.fixed-buttons button {
+    width: 200px; /* Ajusta el ancho de los botones */
+    font-size: 16px; /* Ajusta el tamaño de la fuente si es necesario */
+}
+
+.default-box {
+    height: 500px; /* Altura del cuadro blanco por defecto */
+    background-color: white;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+}
+.line {
+    position: absolute; /* Asegura que la línea esté posicionada dentro del contenedor */
+    right: 0; /* Ajusta la posición de la línea según sea necesario */
+    top: 0;
+    bottom: 0;
+    width: 5px; /* Ajusta el ancho de la línea */
+    background-color: red; /* Color de la línea */
+}
