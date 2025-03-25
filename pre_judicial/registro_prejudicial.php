@@ -34,8 +34,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $monto_amortizado = $_POST["monto_amortizado"];
     $saldo_fecha = $_POST["saldo_fecha"];
 
-    // Mover archivos al directorio deseado
+    // Directorio de destino para los archivos subidos
     $target_dir = "uploads/";
+
+    // Crear el directorio si no existe
+    if (!file_exists($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
+
+    // Mover archivos al directorio deseado
     move_uploaded_file($_FILES["notif_compromiso_pago_Evidencia"]["tmp_name"], $target_dir . $notif_compromiso_pago_Evidencia);
     move_uploaded_file($_FILES["evidencia1_localizacion"]["tmp_name"], $target_dir . $evidencia1_localizacion);
     move_uploaded_file($_FILES["evidencia2_foto_fecha"]["tmp_name"], $target_dir . $evidencia2_foto_fecha);
@@ -45,8 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         $message = "Registro exitoso";
-        header("Location: index.php?message=" . urlencode($message));
-        exit();
     } else {
         $message = "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -59,37 +64,21 @@ $conn->close();
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="validacion_prejudicial.js" defer></script>
-    <style>
-        .form-container {
-            height: 1000px; /* Altura fija para el contenedor del formulario */
-            overflow-y: auto; /* Habilitar desplazamiento vertical */
-            padding-right: 15px; /* Espacio para la barra de desplazamiento */
-        }
-        .fixed-buttons {
-            position: sticky;
-            bottom: 0;
-            background-color: white;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-            justify-content: center;  /* Centra los botones horizontalmente */
-            gap: 100px; /* Espacio entre los botones */
-        }
-        .fixed-buttons button {
-            width: 200px; /* Ajusta el ancho de los botones */
-            font-size: 16px; /* Ajusta el tamaño de la fuente si es necesario */
-        }
-    </style>
 </head>
 <body class="container mt-3">
     <div>
         <h2>Formulario de Etapa Pre-Judicial</h2>
+        <?php if ($message): ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo $message; ?>
+            </div>
+        <?php endif; ?>
     </div>
     <div class="form-container">
         <form name="preJudicialForm" method="post" action="registro_prejudicial.php" enctype="multipart/form-data" onsubmit="return validarFormularioPreJudicial()">
             <div class="row">
                 <div class="col-md-12 border p-3">
                     <h4>Información de la Etapa Pre-Judicial</h4>
-                    <!-- El campo fecha_acto ha sido eliminado -->
                     <div class="mb-2">
                         <label class="fw-bold">Acto:</label>
                         <select name="acto" required class="form-control">
@@ -147,7 +136,11 @@ $conn->close();
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Objetivo Logrado:</label>
-                        <input type="text" name="objetivo_logrado" required class="form-control">
+                        <select name="objetivo_logrado" required class="form-control">
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            <option value="SI">SI</option>
+                            <option value="NO">NO</option>
+                        </select>
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Días de Mora:</label>
