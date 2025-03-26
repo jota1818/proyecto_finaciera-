@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set('America/Lima'); // Asegúrate de configurar tu zona horaria local
+date_default_timezone_set('America/Lima');
 
 $servername = "localhost";
 $username = "root";
@@ -17,6 +17,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Establecer la fecha y hora actual
     $fecha_acto = date('Y-m-d H:i:s');
 
+    // Obtener la fecha de inicio del caso (fecha_acto del ID 1) y la fecha_clave
+    $sql_select_inicio = "SELECT fecha_acto, fecha_clave FROM etapa_prejudicial WHERE id = 1";
+    $result_inicio = $conn->query($sql_select_inicio);
+
+    if ($result_inicio->num_rows > 0) {
+        $row_inicio = $result_inicio->fetch_assoc();
+        $fecha_inicio_caso = $row_inicio['fecha_acto'];
+        $fecha_clave_inicio = $row_inicio['fecha_clave'];
+    } else {
+        // Si no hay registros, fecha_inicio_caso y fecha_clave_inicio son la misma que fecha_acto
+        $fecha_inicio_caso = $fecha_acto;
+        $fecha_clave_inicio = $fecha_acto;
+    }
+
     // Datos de la etapa pre-judicial
     $acto = $_POST["acto"];
     $n_de_notif_voucher = $_POST["n_de_notif_voucher"];
@@ -27,12 +41,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $actor = $_POST["actor"];
     $evidencia1_localizacion = $_FILES["evidencia1_localizacion"]["name"];
     $evidencia2_foto_fecha = $_FILES["evidencia2_foto_fecha"]["name"];
-    $dias_de_mora = $_POST["dias_de_mora"];
-    $dias_mora_PJ = $_POST["dias_mora_PJ"];
-    $interes = $_POST["interes"];
     $saldo_int = $_POST["saldo_int"];
     $monto_amortizado = $_POST["monto_amortizado"];
-    $saldo_fecha = $_POST["saldo_fecha"];
+
+    // Calcular dias_mora_PJ
+    $dias_mora_PJ = calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso);
+
+    // Calcular saldo_fecha
+    $saldo_fecha = $saldo_int - $monto_amortizado;
+
+    // Calcular dias_de_mora
+    $dias_de_mora = calcularDiasDeMora($fecha_acto, $fecha_clave_inicio);
+
+    // Asignar el valor de dias_mora_PJ a interes
+    $interes = $dias_mora_PJ;
 
     // Directorio de destino para los archivos subidos
     $target_dir = "uploads/";
@@ -52,20 +74,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     VALUES ('$fecha_acto', '$acto', '$n_de_notif_voucher', '$descripcion', '$target_dir$notif_compromiso_pago_evidencia', '$fecha_clave', '$accion_fecha_clave', '$actor', '$target_dir$evidencia1_localizacion', '$target_dir$evidencia2_foto_fecha', '$dias_de_mora', '$dias_mora_PJ', '$interes', '$saldo_int', '$monto_amortizado', '$saldo_fecha')";
 
     if ($conn->query($sql_insert) === TRUE) {
-        // Obtener el ID del último registro insertado
         $last_id = $conn->insert_id;
-
-        // Actualizar la fila anterior si existe
         actualizarFilaAnterior($conn, $last_id, $fecha_acto);
-
         $message = "Registro exitoso";
     } else {
         $message = "Error: " . $sql_insert . "<br>" . $conn->error;
     }
 }
 
+function calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso) {
+    $fecha_acto = new DateTime($fecha_acto);
+    $fecha_inicio_caso = new DateTime($fecha_inicio_caso);
+    $interval = $fecha_acto->diff($fecha_inicio_caso);
+    return $interval->days;
+}
+
+function calcularDiasDeMora($fecha_acto, $fecha_clave_inicio) {
+    $fecha_acto = new DateTime($fecha_acto);
+    $fecha_clave_inicio = new DateTime($fecha_clave_inicio);
+
+    // Si la fecha_acto es menor o igual a fecha_clave_inicio, devolver 0
+    if ($fecha_acto <= $fecha_clave_inicio) {
+        return 0;
+    }
+
+    // Calcular la diferencia de días
+    $interval = $fecha_acto->diff($fecha_clave_inicio);
+    return $interval->days;
+}
+
 function actualizarFilaAnterior($conn, $last_id, $fecha_acto) {
-    // Obtener la fila anterior
     $sql_select = "SELECT id, fecha_clave FROM etapa_prejudicial WHERE id < $last_id ORDER BY id DESC LIMIT 1";
     $result = $conn->query($sql_select);
 
@@ -74,11 +112,9 @@ function actualizarFilaAnterior($conn, $last_id, $fecha_acto) {
         $id_anterior = $row['id'];
         $fecha_clave_anterior = $row['fecha_clave'];
 
-        // Calcular "Días desde Fecha Clave"
         $dias_desde_fecha_clave = calcularDiasDesdeFechaClave($fecha_acto, $fecha_clave_anterior);
         $objetivo_logrado = $dias_desde_fecha_clave >= 0 ? "NO" : "SI";
 
-        // Actualizar la fila anterior
         $sql_update = "UPDATE etapa_prejudicial SET dias_desde_fecha_clave = $dias_desde_fecha_clave, objetivo_logrado = '$objetivo_logrado' WHERE id = $id_anterior";
         $conn->query($sql_update);
     }
@@ -87,14 +123,9 @@ function actualizarFilaAnterior($conn, $last_id, $fecha_acto) {
 function calcularDiasDesdeFechaClave($fecha_acto_siguiente, $fecha_clave) {
     $fecha_acto_siguiente = new DateTime($fecha_acto_siguiente);
     $fecha_clave = new DateTime($fecha_clave);
-
-    // Calcular la diferencia de días
     $interval = $fecha_acto_siguiente->diff($fecha_clave);
-
-    // Obtener la diferencia en días
     $dias = $interval->days;
 
-    // Ajustar el signo de la diferencia
     if ($fecha_clave > $fecha_acto_siguiente) {
         $dias = -$dias-1;
     }
@@ -104,7 +135,6 @@ function calcularDiasDesdeFechaClave($fecha_acto_siguiente, $fecha_clave) {
 
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -181,28 +211,12 @@ $conn->close();
                         <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Días de Mora:</label>
-                        <input type="number" name="dias_de_mora" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Días de Mora Pre-Judicial:</label>
-                        <input type="number" name="dias_mora_PJ" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Interés:</label>
-                        <input type="number" step="0.01" name="interes" required class="form-control">
-                    </div>
-                    <div class="mb-2">
                         <label class="fw-bold">Saldo más Interés:</label>
                         <input type="number" step="0.01" name="saldo_int" required class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Monto Amortizado:</label>
                         <input type="number" step="0.01" name="monto_amortizado" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Saldo a la Fecha:</label>
-                        <input type="number" step="0.01" name="saldo_fecha" required class="form-control">
                     </div>
                 </div>
             </div>
