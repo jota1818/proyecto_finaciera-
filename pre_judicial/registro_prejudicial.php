@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Lima'); // Asegúrate de configurar tu zona horaria local
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -19,14 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $acto = $_POST["acto"];
     $n_de_notif_voucher = $_POST["n_de_notif_voucher"];
     $descripcion = $_POST["descripcion"];
-    $notif_compromiso_pago_Evidencia = $_FILES["notif_compromiso_pago_Evidencia"]["name"];
+    $notif_compromiso_pago_evidencia = $_FILES["notif_compromiso_pago_evidencia"]["name"];
     $fecha_clave = $_POST["fecha_clave"];
     $accion_fecha_clave = $_POST["accion_fecha_clave"];
     $actor = $_POST["actor"];
     $evidencia1_localizacion = $_FILES["evidencia1_localizacion"]["name"];
     $evidencia2_foto_fecha = $_FILES["evidencia2_foto_fecha"]["name"];
-    $dias_desde_fecha_clave = $_POST["dias_desde_fecha_clave"];
-    $objetivo_logrado = $_POST["objetivo_logrado"];
     $dias_de_mora = $_POST["dias_de_mora"];
     $dias_mora_PJ = $_POST["dias_mora_PJ"];
     $interes = $_POST["interes"];
@@ -43,21 +43,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Mover archivos al directorio deseado
-    move_uploaded_file($_FILES["notif_compromiso_pago_Evidencia"]["tmp_name"], $target_dir . $notif_compromiso_pago_Evidencia);
+    move_uploaded_file($_FILES["notif_compromiso_pago_evidencia"]["tmp_name"], $target_dir . $notif_compromiso_pago_evidencia);
     move_uploaded_file($_FILES["evidencia1_localizacion"]["tmp_name"], $target_dir . $evidencia1_localizacion);
     move_uploaded_file($_FILES["evidencia2_foto_fecha"]["tmp_name"], $target_dir . $evidencia2_foto_fecha);
 
-    $sql = "INSERT INTO etapa_prejudicial (fecha_acto, acto, n_de_notif_voucher, descripcion, notif_compromiso_pago_Evidencia, fecha_clave, accion_fecha_clave, actor, evidencia1_localizacion, evidencia2_foto_fecha, dias_desde_fecha_clave, objetivo_logrado, dias_de_mora, dias_mora_PJ, interes, saldo_int, monto_amortizado, saldo_fecha)
-    VALUES ('$fecha_acto', '$acto', '$n_de_notif_voucher', '$descripcion', '$target_dir$notif_compromiso_pago_Evidencia', '$fecha_clave', '$accion_fecha_clave', '$actor', '$target_dir$evidencia1_localizacion', '$target_dir$evidencia2_foto_fecha', '$dias_desde_fecha_clave', '$objetivo_logrado', '$dias_de_mora', '$dias_mora_PJ', '$interes', '$saldo_int', '$monto_amortizado', '$saldo_fecha')";
+    // Insertar el nuevo registro
+    $sql_insert = "INSERT INTO etapa_prejudicial (fecha_acto, acto, n_de_notif_voucher, descripcion, notif_compromiso_pago_evidencia, fecha_clave, accion_fecha_clave, actor, evidencia1_localizacion, evidencia2_foto_fecha, dias_de_mora, dias_mora_PJ, interes, saldo_int, monto_amortizado, saldo_fecha)
+    VALUES ('$fecha_acto', '$acto', '$n_de_notif_voucher', '$descripcion', '$target_dir$notif_compromiso_pago_evidencia', '$fecha_clave', '$accion_fecha_clave', '$actor', '$target_dir$evidencia1_localizacion', '$target_dir$evidencia2_foto_fecha', '$dias_de_mora', '$dias_mora_PJ', '$interes', '$saldo_int', '$monto_amortizado', '$saldo_fecha')";
 
-    if ($conn->query($sql) === TRUE) {
+    if ($conn->query($sql_insert) === TRUE) {
+        // Obtener el ID del último registro insertado
+        $last_id = $conn->insert_id;
+
+        // Actualizar la fila anterior si existe
+        actualizarFilaAnterior($conn, $last_id, $fecha_acto);
+
         $message = "Registro exitoso";
     } else {
-        $message = "Error: " . $sql . "<br>" . $conn->error;
+        $message = "Error: " . $sql_insert . "<br>" . $conn->error;
     }
 }
+
+function actualizarFilaAnterior($conn, $last_id, $fecha_acto) {
+    // Obtener la fila anterior
+    $sql_select = "SELECT id, fecha_clave FROM etapa_prejudicial WHERE id < $last_id ORDER BY id DESC LIMIT 1";
+    $result = $conn->query($sql_select);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $id_anterior = $row['id'];
+        $fecha_clave_anterior = $row['fecha_clave'];
+
+        // Calcular "Días desde Fecha Clave"
+        $dias_desde_fecha_clave = calcularDiasDesdeFechaClave($fecha_acto, $fecha_clave_anterior);
+        $objetivo_logrado = $dias_desde_fecha_clave >= 0 ? "NO" : "SI";
+
+        // Actualizar la fila anterior
+        $sql_update = "UPDATE etapa_prejudicial SET dias_desde_fecha_clave = $dias_desde_fecha_clave, objetivo_logrado = '$objetivo_logrado' WHERE id = $id_anterior";
+        $conn->query($sql_update);
+    }
+}
+
+function calcularDiasDesdeFechaClave($fecha_acto_siguiente, $fecha_clave) {
+    $fecha_acto_siguiente = new DateTime($fecha_acto_siguiente);
+    $fecha_clave = new DateTime($fecha_clave);
+
+    // Calcular la diferencia de días
+    $interval = $fecha_acto_siguiente->diff($fecha_clave);
+
+    // Obtener la diferencia en días
+    $dias = $interval->days;
+
+    // Ajustar el signo de la diferencia
+    if ($fecha_clave > $fecha_acto_siguiente) {
+        $dias = -$dias-1;
+    }
+
+    return $dias;
+}
+
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -101,8 +148,11 @@ $conn->close();
                         <textarea name="descripcion" required class="form-control"></textarea>
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Notificación/Compromiso de Pago (PDF):</label>
-                        <input type="file" name="notif_compromiso_pago_Evidencia" accept="application/pdf" required class="form-control">
+                        <label class="fw-bold">Notificación/Compromiso de Pago:</label>
+                        <input type="file" name="notif_compromiso_pago_evidencia"
+                            accept=".docx, .pdf, .jpg, .png"
+                            required
+                            class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha Clave:</label>
@@ -123,24 +173,12 @@ $conn->close();
                         </select>
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Evidencia 1 (Foto):</label>
+                        <label class="fw-bold">Evidencia 1:</label>
                         <input type="file" name="evidencia1_localizacion" accept="image/*" required class="form-control">
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Evidencia 2 (Foto con Fecha):</label>
+                        <label class="fw-bold">Evidencia 2:</label>
                         <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Días Desde Fecha Clave:</label>
-                        <input type="number" name="dias_desde_fecha_clave" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Objetivo Logrado:</label>
-                        <select name="objetivo_logrado" required class="form-control">
-                            <option value="" disabled selected>Seleccione una opción</option>
-                            <option value="SI">SI</option>
-                            <option value="NO">NO</option>
-                        </select>
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Días de Mora:</label>
