@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Búsqueda de Clientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
     <script src="validacion.js" defer></script>
 </head>
+
 <body class="container-fluid mt-3">
     <div class="row">
         <!-- Barra lateral vertical -->
@@ -91,7 +93,9 @@
                 </div>
                 <div class="fixed-buttons mt-3">
                     <button type="button" class="btn btn-primary">Ver Historia</button>
-                    <button type="button" class="btn btn-secondary">Agregar Historia</button>
+                    <button type="button" class="btn btn-secondary" onclick="agregarHistoria(100)">Agregar Historia</button>
+
+                    <!-- <button type="button" class="btn btn-secondary" onclick="window.location.href='../pre_judicial/registro_prejudicial.php'">Agregar Historia</button> -->
                     <button type="button" class="btn btn-success">Regresar</button>
                     <button type="button" class="btn btn-danger">Salir</button>
                 </div>
@@ -100,11 +104,17 @@
     </div>
 
     <script>
+        function agregarHistoria(saldo) {
+            console.log("Redirigiendo con saldo:", saldo); // Debugging
+            window.location.href = '../pre_judicial/registro_prejudicial.php?saldo=' + encodeURIComponent(saldo);
+        }
+
         function sortTable(n) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
             table = document.querySelector(".table");
             switching = true;
-            dir = "asc";
+            // Determinar la dirección inicial
+            dir = table.querySelectorAll("th")[n].getAttribute("data-order") === "asc" ? "asc" : "desc";
 
             while (switching) {
                 switching = false;
@@ -115,13 +125,22 @@
                     x = rows[i].getElementsByTagName("TD")[n];
                     y = rows[i + 1].getElementsByTagName("TD")[n];
 
+                    // Convertir a números si es la columna de Monto o Saldo
+                    if (n === 4 || n === 5) {
+                        xValue = parseFloat(x.innerHTML.replace(/,/g, ''));
+                        yValue = parseFloat(y.innerHTML.replace(/,/g, ''));
+                    } else {
+                        xValue = x.innerHTML.toLowerCase();
+                        yValue = y.innerHTML.toLowerCase();
+                    }
+
                     if (dir == "asc") {
-                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        if (xValue > yValue) {
                             shouldSwitch = true;
                             break;
                         }
                     } else if (dir == "desc") {
-                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        if (xValue < yValue) {
                             shouldSwitch = true;
                             break;
                         }
@@ -135,24 +154,56 @@
                 } else {
                     if (switchcount == 0 && dir == "asc") {
                         dir = "desc";
-                        switching = true;
+                        table.querySelectorAll("th")[n].setAttribute("data-order", "desc");
+                    } else {
+                        dir = "asc";
+                        table.querySelectorAll("th")[n].setAttribute("data-order", "asc");
                     }
                 }
             }
+
         }
+
+        function formatNumber(number) {
+            return number.toLocaleString('es-PE', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function cargarDatosClientes(data) {
+            const listaClientes = document.getElementById('listaClientes');
+            listaClientes.innerHTML = data.map(cliente => `
+        <tr>
+            <td>${cliente.nombre}</td>
+            <td>${cliente.apellidos}</td>
+            <td>${cliente.dni}</td>
+            <td>${cliente.telefono}</td>
+            <td>${formatNumber(parseFloat(cliente.monto))}</td>
+            <td>${formatNumber(parseFloat(cliente.saldo))}</td>
+            <td>${cliente.fecha_clave}</td>
+            <td>${cliente.accion_fecha_clave}</td>
+            <td><button onclick="mostrarCliente('${cliente.dni}')">Información</button></td>
+        </tr>
+            `).join('');
+        }
+
+        // Llamar a cargarDatosClientes con los datos obtenidos
+        fetch('buscar_clientes.php')
+            .then(response => response.json())
+            .then(data => cargarDatosClientes(data));
+
 
         function buscarCliente(event) {
             event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
             var formData = new FormData(document.getElementById('busquedaForm'));
 
             fetch('buscar_clientes.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('listaClientes').innerHTML = data;
-            });
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json()) // Asegúrate de que la respuesta se convierta a JSON
+                .then(data => cargarDatosClientes(data));
         }
 
         function buscarClientePorDNI() {
@@ -191,11 +242,10 @@
         // Cargar la lista de clientes al inicio
         window.onload = function() {
             fetch('buscar_clientes.php')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('listaClientes').innerHTML = data;
-                });
+                .then(response => response.json()) // Asegúrate de que la respuesta se convierta a JSON
+                .then(data => cargarDatosClientes(data));
         };
     </script>
 </body>
+
 </html>

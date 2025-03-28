@@ -27,23 +27,16 @@ $sql .= " ORDER BY nombre ASC, apellidos ASC";
 
 $result = $conn->query($sql);
 
+$data = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['apellidos']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['dni']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['telefono']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['monto']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['saldo']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['fecha_clave']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['accion_fecha_clave']) . "</td>";
-        echo "<td class='fixed-column'><button type='button' class='btn btn-warning' onclick='mostrarCliente(\"" . htmlspecialchars($row['dni']) . "\")'>Seleccionar</button></td>";
-        echo "</tr>";
+        $data[] = $row;
     }
-} else {
-    echo "<tr><td colspan='8'>No se encontraron clientes</td></tr>";
 }
 
 $conn->close();
+
+// Enviar datos como JSON
+header('Content-Type: application/json');
+echo json_encode($data);
 ?>

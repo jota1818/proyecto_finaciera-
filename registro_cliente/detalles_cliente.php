@@ -9,6 +9,10 @@ if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
+function formatNumber($number) {
+    return 'S/.' . number_format($number, 2, '.', ',');
+}
+
 $dni = isset($_GET['dni']) ? $_GET['dni'] : '';
 $sql = "SELECT * FROM clientes WHERE dni='$dni'";
 $result = $conn->query($sql);
@@ -43,8 +47,8 @@ if ($result->num_rows > 0) {
     echo "<tr><td><strong>Clasificación de Estado:</strong></td><td>" . htmlspecialchars($row['estado']) . "</td></tr>";
     echo "<tr><td><strong>Fecha de Desembolso:</strong></td><td>" . htmlspecialchars($row['fecha_desembolso']) . "</td></tr>";
     echo "<tr><td><strong>Fecha de Vencimiento:</strong></td><td>" . htmlspecialchars($row['fecha_vencimiento']) . "</td></tr>";
-    echo "<tr><td><strong>Monto:</strong></td><td>S/." . htmlspecialchars($row['monto']) . "</td></tr>";
-    echo "<tr><td><strong>Saldo:</strong></td><td>S/." . htmlspecialchars($row['saldo']) . "</td></tr>";
+    echo "<tr><td><strong>Monto:</strong></td><td>" . formatNumber($row['monto']) . "</td></tr>";
+    echo "<tr><td><strong>Saldo:</strong></td><td>" . formatNumber($row['saldo']) . "</td></tr>";
     echo "<tr><td><strong>Fecha clave:</strong></td><td>" . htmlspecialchars($row['fecha_clave']) . "</td></tr>";
     echo "<tr><td><strong>Acción en fecha clave:</strong></td><td>" . htmlspecialchars($row['accion_fecha_clave']) . "</td></tr>";
     echo "</table>";

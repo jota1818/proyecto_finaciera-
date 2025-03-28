@@ -224,6 +224,7 @@ $conn->close();
                 <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                 <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
                 <br>
+                <button type="button" class="btn btn-success mt-3" onclick="window.location.href='../registro_cliente/index.php'">Regresar</button>
                 <button type="button" class="btn btn-danger mt-3" onclick="cerrarRegistroPreJudicial()">Salir</button>
             </div>
         </form>
