@@ -93,8 +93,7 @@
                 </div>
                 <div class="fixed-buttons mt-3">
                     <button type="button" class="btn btn-primary">Ver Historia</button>
-                    <button type="button" class="btn btn-secondary" onclick="agregarHistoria(100)">Agregar Historia</button>
-
+                    <button type="button" class="btn btn-secondary" onclick="agregarHistoria()">Agregar Historia</button>
                     <!-- <button type="button" class="btn btn-secondary" onclick="window.location.href='../pre_judicial/registro_prejudicial.php'">Agregar Historia</button> -->
                     <button type="button" class="btn btn-success">Regresar</button>
                     <button type="button" class="btn btn-danger">Salir</button>
@@ -102,12 +101,20 @@
             </div>
         </div>
     </div>
-
+    <!-- Campo oculto para almacenar el DNI seleccionado -->
+    <input type="hidden" id="selectedDni">
     <script>
-        function agregarHistoria(saldo) {
-            console.log("Redirigiendo con saldo:", saldo); // Debugging
-            window.location.href = '../pre_judicial/registro_prejudicial.php?saldo=' + encodeURIComponent(saldo);
+        function agregarHistoria() {
+            var dni = document.getElementById('selectedDni').value;
+            if (dni) {
+                // Usar una ruta absoluta
+                window.location.href = '/proyecto_financiera/pre_judicial/registro_prejudicial.php?dni=' + encodeURIComponent(dni);
+            } else {
+                alert("Por favor, seleccione un cliente primero.");
+            }
         }
+
+
 
         function sortTable(n) {
             var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
@@ -183,7 +190,7 @@
             <td>${formatNumber(parseFloat(cliente.saldo))}</td>
             <td>${cliente.fecha_clave}</td>
             <td>${cliente.accion_fecha_clave}</td>
-            <td><button onclick="mostrarCliente('${cliente.dni}')">Información</button></td>
+            <td><button onclick="mostrarCliente('${cliente.dni}')">Seleccionar</button></td>
         </tr>
             `).join('');
         }
@@ -236,8 +243,12 @@
                 .then(data => {
                     document.getElementById('detallesContent').innerHTML = data;
                     document.getElementById('clienteDetalles').style.display = 'block';
+
+                    // Almacenar el DNI en un campo oculto
+                    document.getElementById('selectedDni').value = dni;
                 });
         }
+
 
         // Cargar la lista de clientes al inicio
         window.onload = function() {

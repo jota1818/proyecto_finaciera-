@@ -11,6 +11,17 @@ if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
+$dni = isset($_GET['dni']) ? $_GET['dni'] : '';
+$cliente = [];
+
+if ($dni) {
+    $sql = "SELECT nombre, dni, monto, saldo, fecha_desembolso, fecha_vencimiento FROM clientes WHERE dni='$dni'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $cliente = $result->fetch_assoc();
+    }
+}
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -82,14 +93,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-function calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso) {
+function calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso)
+{
     $fecha_acto = new DateTime($fecha_acto);
     $fecha_inicio_caso = new DateTime($fecha_inicio_caso);
     $interval = $fecha_acto->diff($fecha_inicio_caso);
     return $interval->days;
 }
 
-function calcularDiasDeMora($fecha_acto, $fecha_clave_inicio) {
+function calcularDiasDeMora($fecha_acto, $fecha_clave_inicio)
+{
     $fecha_acto = new DateTime($fecha_acto);
     $fecha_clave_inicio = new DateTime($fecha_clave_inicio);
 
@@ -103,31 +116,41 @@ function calcularDiasDeMora($fecha_acto, $fecha_clave_inicio) {
     return $interval->days;
 }
 
-function actualizarFilaAnterior($conn, $last_id, $fecha_acto) {
-    $sql_select = "SELECT id, fecha_clave FROM etapa_prejudicial WHERE id < $last_id ORDER BY id DESC LIMIT 1";
+function actualizarFilaAnterior($conn, $last_id, $fecha_acto)
+{
+    $sql_select = "SELECT id, fecha_clave, actor FROM etapa_prejudicial WHERE id < $last_id ORDER BY id DESC LIMIT 1";
     $result = $conn->query($sql_select);
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $id_anterior = $row['id'];
         $fecha_clave_anterior = $row['fecha_clave'];
+        $actor = $row['actor'];
 
         $dias_desde_fecha_clave = calcularDiasDesdeFechaClave($fecha_acto, $fecha_clave_anterior);
-        $objetivo_logrado = $dias_desde_fecha_clave >= 0 ? "NO" : "SI";
+
+        // Solo actualizar objetivo_logrado si el actor es "Gestor"
+        if ($actor == "Gestor") {
+            $objetivo_logrado = $dias_desde_fecha_clave == 0 ? "SI" : "NO";
+        } else {
+            $objetivo_logrado = "";
+        }
 
         $sql_update = "UPDATE etapa_prejudicial SET dias_desde_fecha_clave = $dias_desde_fecha_clave, objetivo_logrado = '$objetivo_logrado' WHERE id = $id_anterior";
         $conn->query($sql_update);
     }
 }
 
-function calcularDiasDesdeFechaClave($fecha_acto_siguiente, $fecha_clave) {
+
+function calcularDiasDesdeFechaClave($fecha_acto_siguiente, $fecha_clave)
+{
     $fecha_acto_siguiente = new DateTime($fecha_acto_siguiente);
     $fecha_clave = new DateTime($fecha_clave);
     $interval = $fecha_acto_siguiente->diff($fecha_clave);
     $dias = $interval->days;
 
     if ($fecha_clave > $fecha_acto_siguiente) {
-        $dias = -$dias-1;
+        $dias = -$dias - 1;
     }
 
     return $dias;
@@ -138,10 +161,12 @@ $conn->close();
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="validacion_prejudicial.js" defer></script>
 </head>
+
 <body class="container mt-3">
     <div>
         <h2>Formulario de Etapa Pre-Judicial</h2>
@@ -155,23 +180,56 @@ $conn->close();
         <form name="preJudicialForm" method="post" action="registro_prejudicial.php" enctype="multipart/form-data" onsubmit="return validarFormularioPreJudicial()">
             <div class="row">
                 <div class="col-md-12 border p-3">
-                    <h4>Información de la Etapa Pre-Judicial</h4>
-                    <div class="mb-2">
-                        <label class="fw-bold">Acto:</label>
-                        <select name="acto" required class="form-control">
-                            <option value="" disabled selected>Seleccione una opción</option>
-                            <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
-                            <option value="Notificación">Notificación</option>
-                            <option value="Amortización">Amortización</option>
-                            <option value="Cambio Gestor">Cambio Gestor</option>
-                            <option value="Postergación">Postergación</option>
-                            <option value="Fin de caso">Fin de caso</option>
-                            <option value="Pasa a Judicial">Pasa a Judicial</option>
-                        </select>
+                <h4>Información del Cliente</h4>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Nombre:</label>
+                            <input type="text" value="<?php echo htmlspecialchars($cliente['nombre'] ?? ''); ?>" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">DNI:</label>
+                            <input type="text" value="<?php echo htmlspecialchars($cliente['dni'] ?? ''); ?>" class="form-control" readonly>
+                        </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Número de Notificación/Voucher:</label>
-                        <input type="text" name="n_de_notif_voucher" required class="form-control">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Monto:</label>
+                            <input type="text" value="<?php echo htmlspecialchars($cliente['monto'] ?? ''); ?>" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Saldo:</label>
+                            <input type="text" value="<?php echo htmlspecialchars($cliente['saldo'] ?? ''); ?>" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Fecha Desembolso:</label>
+                            <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_desembolso'] ?? ''); ?>" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Fecha Vencimiento:</label>
+                            <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_vencimiento'] ?? ''); ?>" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <h4>Información de la Etapa Pre-Judicial</h4>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Acto:</label>
+                            <select name="acto" required class="form-control">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
+                                <option value="Notificación">Notificación</option>
+                                <option value="Amortización">Amortización</option>
+                                <option value="Cambio Gestor">Cambio Gestor</option>
+                                <option value="Postergación">Postergación</option>
+                                <option value="Fin de caso">Fin de caso</option>
+                                <option value="Pasa a Judicial">Pasa a Judicial</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Número de Notificación/Voucher:</label>
+                            <input type="text" name="n_de_notif_voucher" required class="form-control">
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Descripción:</label>
@@ -202,13 +260,15 @@ $conn->close();
                             <option value="Administrador">Administrador</option>
                         </select>
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Evidencia 1:</label>
-                        <input type="file" name="evidencia1_localizacion" accept="image/*" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Evidencia 2:</label>
-                        <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Evidencia 1:</label>
+                            <input type="file" name="evidencia1_localizacion" accept="image/*" required class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Evidencia 2:</label>
+                            <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Saldo más Interés:</label>
@@ -230,4 +290,5 @@ $conn->close();
         </form>
     </div>
 </body>
+
 </html>
