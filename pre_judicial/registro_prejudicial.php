@@ -174,6 +174,15 @@ $conn->close();
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="validacion_prejudicial.js" defer></script>
+    <style>
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+    </style>
 </head>
 
 <body class="container mt-3">
@@ -187,7 +196,7 @@ $conn->close();
     </div>
 
     <!-- Información del Cliente -->
-    <div class="form-container border p-3 mb-3">
+    <div class="form-container border p-3 mb-3 active">
         <div class="row mb-2">
             <div class="col-md-6">
                 <label class="fw-bold">Nombres:</label>
@@ -228,82 +237,175 @@ $conn->close();
         </div>
     </div>
 
-    <!-- Información de la Etapa Pre-Judicial -->
-    <h2>Formulario de Etapa Pre-Judicial</h2>
-    <div class="form-container border p-3">
-        <h4>Información de la Etapa Pre-Judicial</h4>
-        <form name="preJudicialForm" method="post" action="registro_prejudicial.php" enctype="multipart/form-data" onsubmit="return validarFormularioPreJudicial()">
-            <div class="row mb-2">
-                <div class="col-md-6">
-                    <label class="fw-bold">Acto:</label>
-                    <select name="acto" required class="form-control">
+    <!-- Información de la Etapa Pre-Judicial y Judicial -->
+    <div class="row">
+        <!-- Formulario de Etapa Pre-Judicial -->
+        <div class="col-md-8 border p-3 active">
+            <h2>Formulario de Etapa Pre-Judicial</h2>
+            <form name="preJudicialForm" method="post" action="registro_prejudicial.php" enctype="multipart/form-data" onsubmit="return validarFormularioPreJudicial()">
+                <h4>Información de la Etapa Pre-Judicial</h4>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <label class="fw-bold">Acto:</label>
+                        <select name="acto" required class="form-control">
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
+                            <option value="Notificación">Notificación</option>
+                            <option value="Amortización">Amortización</option>
+                            <option value="Cambio Gestor">Cambio Gestor</option>
+                            <option value="Postergación">Postergación</option>
+                            <option value="Fin de caso">Fin de caso</option>
+                            <option value="Pasa a Judicial">Pasa a Judicial</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="fw-bold">Número de Notificación/Voucher:</label>
+                        <input type="text" name="n_de_notif_voucher" required class="form-control">
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Descripción:</label>
+                    <textarea name="descripcion" required class="form-control"></textarea>
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Notificación/Compromiso de Pago:</label>
+                    <input type="file" name="notif_compromiso_pago_evidencia"
+                        accept=".docx, .pdf, .jpg, .png"
+                        required
+                        class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Fecha Clave:</label>
+                    <input type="date" name="fecha_clave" required class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Acción en Fecha Clave:</label>
+                    <input type="text" name="accion_fecha_clave" required class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Actor Involucrado:</label>
+                    <select name="actor" required class="form-control">
                         <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
-                        <option value="Notificación">Notificación</option>
-                        <option value="Amortización">Amortización</option>
-                        <option value="Cambio Gestor">Cambio Gestor</option>
-                        <option value="Postergación">Postergación</option>
-                        <option value="Fin de caso">Fin de caso</option>
-                        <option value="Pasa a Judicial">Pasa a Judicial</option>
+                        <option value="Gestor">Gestor</option>
+                        <option value="Cliente">Cliente</option>
+                        <option value="Supervisor">Supervisor</option>
+                        <option value="Administrador">Administrador</option>
                     </select>
                 </div>
-                <div class="col-md-6">
-                    <label class="fw-bold">Número de Notificación/Voucher:</label>
-                    <input type="text" name="n_de_notif_voucher" required class="form-control">
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <label class="fw-bold">Evidencia 1:</label>
+                        <input type="file" name="evidencia1_localizacion" accept="image/*" required class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="fw-bold">Evidencia 2:</label>
+                        <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
+                    </div>
                 </div>
-            </div>
-            <div class="mb-2">
-                <label class="fw-bold">Descripción:</label>
-                <textarea name="descripcion" required class="form-control"></textarea>
-            </div>
-            <div class="mb-2">
-                <label class="fw-bold">Notificación/Compromiso de Pago:</label>
-                <input type="file" name="notif_compromiso_pago_evidencia"
-                    accept=".docx, .pdf, .jpg, .png"
-                    required
-                    class="form-control">
-            </div>
-            <div class="mb-2">
-                <label class="fw-bold">Fecha Clave:</label>
-                <input type="date" name="fecha_clave" required class="form-control">
-            </div>
-            <div class="mb-2">
-                <label class="fw-bold">Acción en Fecha Clave:</label>
-                <input type="text" name="accion_fecha_clave" required class="form-control">
-            </div>
-            <div class="mb-2">
-                <label class="fw-bold">Actor Involucrado:</label>
-                <select name="actor" required class="form-control">
-                    <option value="" disabled selected>Seleccione una opción</option>
-                    <option value="Gestor">Gestor</option>
-                    <option value="Cliente">Cliente</option>
-                    <option value="Supervisor">Supervisor</option>
-                    <option value="Administrador">Administrador</option>
-                </select>
-            </div>
-            <div class="row mb-2">
-                <div class="col-md-6">
-                    <label class="fw-bold">Evidencia 1:</label>
-                    <input type="file" name="evidencia1_localizacion" accept="image/*" required class="form-control">
+                <div class="mb-2">
+                    <label class="fw-bold">Saldo mas interes:</label>
+                    <input type="number" step="0.01" name="saldo_int" required class="form-control">
                 </div>
-                <div class="col-md-6">
-                    <label class="fw-bold">Evidencia 2:</label>
-                    <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
+                <div class="mb-2">
+                    <label class="fw-bold">Monto Amortizado:</label>
+                    <input type="number" step="0.01" name="monto_amortizado" required class="form-control">
                 </div>
+                <div class="fixed-buttons">
+                    <button type="submit" class="btn btn-primary mt-3">Registrar</button>
+                    <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
+                    <br>
+                    <button type="button" class="btn btn-success mt-3" onclick="window.location.href='../registro_cliente/index.php'">Regresar</button>
+                    <!-- <button type="button" class="btn btn-danger mt-3" onclick="cerrarRegistroPreJudicial()">Salir</button> -->
+                </div>
+            </form>
+        </div>
+
+        <!-- Botón para abrir el formulario judicial -->
+        <div class="col-md-4 border p-3">
+            <button type="button" class="btn btn-info w-100 mt-3" onclick="toggleJudicialForm()">Judicial</button>
+
+            <!-- Formulario de Etapa Judicial -->
+            <?php if ($message): ?>
+                <div class="alert alert-success" role="alert">
+                    <?php echo $message; ?>
+                </div>
+            <?php endif; ?>
+            <div class="form-container mt-3" id="judicialFormContainer">
+                <h4>Información de la Etapa Judicial</h4>
+                <form name="judicialForm" method="post" action="../judicial/registro_judicial.php" enctype="multipart/form-data" onsubmit="return validarFormularioJudicial()">
+                    <div class="mb-2">
+                        <label class="fw-bold">Acto:</label>
+                        <input type="text" name="acto" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Juzgado:</label>
+                        <input type="text" name="juzgado" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Número de Expediente del Juzgado:</label>
+                        <input type="text" name="n_exp_juzgado" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Número de Cédula:</label>
+                        <input type="text" name="n_cedula" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Descripción:</label>
+                        <textarea name="descripcion" required class="form-control"></textarea>
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Documento de Evidencia:</label>
+                        <input type="file" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Fecha Clave:</label>
+                        <input type="date" name="fecha_clave" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Acción en Fecha Clave:</label>
+                        <input type="text" name="accion_en_fecha_clave" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Actor Involucrado:</label>
+                        <input type="text" name="actor" required class="form-control">
+                    </div>
+                    <div class="fixed-buttons">
+                        <button type="submit" class="btn btn-primary mt-3">Registrar</button>
+                        <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
+                        <br>
+                        <!-- <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button> -->
+                    </div>
+                </form>
             </div>
-            <div class="mb-2">
-                <label class="fw-bold">Monto Amortizado:</label>
-                <input type="number" step="0.01" name="monto_amortizado" required class="form-control">
-            </div>
-            <div class="fixed-buttons">
-                <button type="submit" class="btn btn-primary mt-3">Registrar</button>
-                <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                <br>
-                <button type="button" class="btn btn-success mt-3" onclick="window.location.href='../registro_cliente/index.php'">Regresar</button>
-                <button type="button" class="btn btn-danger mt-3" onclick="cerrarRegistroPreJudicial()">Salir</button>
-            </div>
-        </form>
+        </div>
+
     </div>
+
+    <script>
+        function toggleJudicialForm() {
+            const judicialFormContainer = document.getElementById('judicialFormContainer');
+            judicialFormContainer.classList.toggle('active');
+        }
+
+        document.getElementById('judicialForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita el envío tradicional del formulario
+
+            var formData = new FormData(this);
+
+            fetch('../judicial/registro_judicial.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // Muestra el mensaje de éxito o error
+                    document.getElementById('message').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
 </body>
 
 </html>

@@ -18,11 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha = date('Y-m-d');
 
     // Datos de la etapa judicial
-    $etapa = $_POST["etapa"];
+    $etapa = "Judicial"; // Establecer automáticamente como "Judicial"
     $acto = $_POST["acto"];
     $juzgado = $_POST["juzgado"];
-    $n_exp_juzgado = $_POST["n_exp_juzgado"];
-    $n_cedula = $_POST["n_cedula"];
+    $n_exp_juzgado = $_POST["n_exp_juzgado"] ?? null; // Opcional
+    $n_cedula = $_POST["n_cedula"] ?? null; // Opcional
     $descripcion = $_POST["descripcion"];
     $doc_evidencia = $_FILES["doc_evidencia"]["name"];
     $fecha_clave = $_POST["fecha_clave"];
@@ -45,21 +45,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     VALUES ('$etapa', '$fecha', '$acto', '$juzgado', '$n_exp_juzgado', '$n_cedula', '$descripcion', '$target_dir$doc_evidencia', '$fecha_clave', '$accion_en_fecha_clave', '$actor')";
 
     if ($conn->query($sql_insert) === TRUE) {
-        $message = "Registro exitoso";
+        $message = '<div class="alert alert-success" role="alert">Registro exitoso</div>';
     } else {
-        $message = "Error: " . $sql_insert . "<br>" . $conn->error;
+        $message = '<div class="alert alert-danger" role="alert">Error: ' . $conn->error . '</div>';
     }
+
+    echo $message;
 }
 
 $conn->close();
 ?>
 
-<!DOCTYPE html>
+
+
+<!-- <!DOCTYPE html>
 <html>
+
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="validacion_judicial.js" defer></script>
 </head>
+
 <body class="container mt-3">
     <div>
         <h2>Formulario de Etapa Judicial</h2>
@@ -75,14 +81,6 @@ $conn->close();
                 <div class="col-md-12 border p-3">
                     <h4>Información de la Etapa Judicial</h4>
                     <div class="mb-2">
-                        <label class="fw-bold">Etapa:</label>
-                        <input type="text" name="etapa" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Fecha:</label>
-                        <input type="date" name="fecha" required class="form-control">
-                    </div>
-                    <div class="mb-2">
                         <label class="fw-bold">Acto:</label>
                         <input type="text" name="acto" required class="form-control">
                     </div>
@@ -92,11 +90,11 @@ $conn->close();
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Número de Expediente del Juzgado:</label>
-                        <input type="text" name="n_exp_juzgado" required class="form-control">
+                        <input type="text" name="n_exp_juzgado" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Número de Cédula:</label>
-                        <input type="text" name="n_cedula" required class="form-control">
+                        <input type="text" name="n_cedula" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Descripción:</label>
@@ -104,7 +102,7 @@ $conn->close();
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Documento de Evidencia:</label>
-                        <input type="file" name="doc_evidencia" accept=".docx, .pdf, .jpg, .png" required class="form-control">
+                        <input type="file" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha Clave:</label>
@@ -124,10 +122,11 @@ $conn->close();
                 <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                 <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
                 <br>
-                <!-- <button type="button" class="btn btn-success mt-3" onclick="window.location.href='../registro_cliente/index.php'">Regresar</button> -->
-                <button type="button" class="btn btn-danger mt-3" onclick="cerrarRegistroJudicial()">Salir</button>
+                <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
             </div>
         </form>
     </div>
 </body>
+
 </html>
+ -->
