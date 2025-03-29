@@ -13,15 +13,25 @@ if ($conn->connect_error) {
 
 $dni = isset($_GET['dni']) ? $_GET['dni'] : '';
 $cliente = [];
+$monto_abonado = 0; // Inicializar con un valor predeterminado
+$plazo_credito = 0; // Inicializar con un valor predeterminado
 
 if ($dni) {
-    $sql = "SELECT nombre, dni, monto, saldo, fecha_desembolso, fecha_vencimiento FROM clientes WHERE dni='$dni'";
+    $sql = "SELECT nombre, apellidos, dni, monto, saldo, fecha_desembolso, fecha_vencimiento FROM clientes WHERE dni='$dni'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         $cliente = $result->fetch_assoc();
+
+        // Calcular monto abonado y plazo de crédito
+        $monto_abonado = $cliente['monto'] - $cliente['saldo'];
+
+        $fecha_desembolso = new DateTime($cliente['fecha_desembolso']);
+        $fecha_vencimiento = new DateTime($cliente['fecha_vencimiento']);
+        $plazo_credito = $fecha_vencimiento->diff($fecha_desembolso)->days;
     }
 }
+
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -141,7 +151,6 @@ function actualizarFilaAnterior($conn, $last_id, $fecha_acto)
     }
 }
 
-
 function calcularDiasDesdeFechaClave($fecha_acto_siguiente, $fecha_clave)
 {
     $fecha_acto_siguiente = new DateTime($fecha_acto_siguiente);
@@ -169,116 +178,122 @@ $conn->close();
 
 <body class="container mt-3">
     <div>
-        <h2>Formulario de Etapa Pre-Judicial</h2>
+        <h2>Información del Cliente</h2>
         <?php if ($message): ?>
             <div class="alert alert-success" role="alert">
                 <?php echo $message; ?>
             </div>
         <?php endif; ?>
     </div>
-    <div class="form-container">
+
+    <!-- Información del Cliente -->
+    <div class="form-container border p-3 mb-3">
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <label class="fw-bold">Nombres:</label>
+                <input type="text" value="<?php echo htmlspecialchars(isset($cliente['nombre']) ? $cliente['nombre'] . ' ' . $cliente['apellidos'] : ''); ?>" class="form-control" readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="fw-bold">DNI:</label>
+                <input type="text" value="<?php echo htmlspecialchars($cliente['dni'] ?? ''); ?>" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <label class="fw-bold">Monto:</label>
+                <input type="number" value="<?php echo htmlspecialchars($cliente['monto'] ?? ''); ?>" class="form-control" readonly>
+            </div>
+            <div class="col-md-4">
+                <label class="fw-bold">Saldo:</label>
+                <input type="number" value="<?php echo htmlspecialchars($cliente['saldo'] ?? ''); ?>" class="form-control" readonly>
+            </div>
+            <div class="col-md-4">
+                <label class="fw-bold">Monto Abonado:</label>
+                <input type="text" value="<?php echo htmlspecialchars($monto_abonado); ?>" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <label class="fw-bold">Fecha Desembolso:</label>
+                <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_desembolso'] ?? ''); ?>" class="form-control" readonly>
+            </div>
+            <div class="col-md-4">
+                <label class="fw-bold">Fecha Vencimiento:</label>
+                <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_vencimiento'] ?? ''); ?>" class="form-control" readonly>
+            </div>
+            <div class="col-md-4">
+                <label class="fw-bold">Plazo de Crédito (días):</label>
+                <input type="text" value="<?php echo htmlspecialchars($plazo_credito); ?>" class="form-control" readonly>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información de la Etapa Pre-Judicial -->
+    <h2>Formulario de Etapa Pre-Judicial</h2>
+    <div class="form-container border p-3">
+        <h4>Información de la Etapa Pre-Judicial</h4>
         <form name="preJudicialForm" method="post" action="registro_prejudicial.php" enctype="multipart/form-data" onsubmit="return validarFormularioPreJudicial()">
-            <div class="row">
-                <div class="col-md-12 border p-3">
-                <h4>Información del Cliente</h4>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Nombre:</label>
-                            <input type="text" value="<?php echo htmlspecialchars($cliente['nombre'] ?? ''); ?>" class="form-control" readonly>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">DNI:</label>
-                            <input type="text" value="<?php echo htmlspecialchars($cliente['dni'] ?? ''); ?>" class="form-control" readonly>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Monto:</label>
-                            <input type="text" value="<?php echo htmlspecialchars($cliente['monto'] ?? ''); ?>" class="form-control" readonly>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">Saldo:</label>
-                            <input type="text" value="<?php echo htmlspecialchars($cliente['saldo'] ?? ''); ?>" class="form-control" readonly>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Fecha Desembolso:</label>
-                            <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_desembolso'] ?? ''); ?>" class="form-control" readonly>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">Fecha Vencimiento:</label>
-                            <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_vencimiento'] ?? ''); ?>" class="form-control" readonly>
-                        </div>
-                    </div>
-                    <h4>Información de la Etapa Pre-Judicial</h4>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Acto:</label>
-                            <select name="acto" required class="form-control">
-                                <option value="" disabled selected>Seleccione una opción</option>
-                                <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
-                                <option value="Notificación">Notificación</option>
-                                <option value="Amortización">Amortización</option>
-                                <option value="Cambio Gestor">Cambio Gestor</option>
-                                <option value="Postergación">Postergación</option>
-                                <option value="Fin de caso">Fin de caso</option>
-                                <option value="Pasa a Judicial">Pasa a Judicial</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">Número de Notificación/Voucher:</label>
-                            <input type="text" name="n_de_notif_voucher" required class="form-control">
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Descripción:</label>
-                        <textarea name="descripcion" required class="form-control"></textarea>
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Notificación/Compromiso de Pago:</label>
-                        <input type="file" name="notif_compromiso_pago_evidencia"
-                            accept=".docx, .pdf, .jpg, .png"
-                            required
-                            class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Fecha Clave:</label>
-                        <input type="date" name="fecha_clave" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Acción en Fecha Clave:</label>
-                        <input type="text" name="accion_fecha_clave" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Actor Involucrado:</label>
-                        <select name="actor" required class="form-control">
-                            <option value="" disabled selected>Seleccione una opción</option>
-                            <option value="Gestor">Gestor</option>
-                            <option value="Cliente">Cliente</option>
-                            <option value="Supervisor">Supervisor</option>
-                            <option value="Administrador">Administrador</option>
-                        </select>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Evidencia 1:</label>
-                            <input type="file" name="evidencia1_localizacion" accept="image/*" required class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">Evidencia 2:</label>
-                            <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Saldo más Interés:</label>
-                        <input type="number" step="0.01" name="saldo_int" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Monto Amortizado:</label>
-                        <input type="number" step="0.01" name="monto_amortizado" required class="form-control">
-                    </div>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label class="fw-bold">Acto:</label>
+                    <select name="acto" required class="form-control">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
+                        <option value="Notificación">Notificación</option>
+                        <option value="Amortización">Amortización</option>
+                        <option value="Cambio Gestor">Cambio Gestor</option>
+                        <option value="Postergación">Postergación</option>
+                        <option value="Fin de caso">Fin de caso</option>
+                        <option value="Pasa a Judicial">Pasa a Judicial</option>
+                    </select>
                 </div>
+                <div class="col-md-6">
+                    <label class="fw-bold">Número de Notificación/Voucher:</label>
+                    <input type="text" name="n_de_notif_voucher" required class="form-control">
+                </div>
+            </div>
+            <div class="mb-2">
+                <label class="fw-bold">Descripción:</label>
+                <textarea name="descripcion" required class="form-control"></textarea>
+            </div>
+            <div class="mb-2">
+                <label class="fw-bold">Notificación/Compromiso de Pago:</label>
+                <input type="file" name="notif_compromiso_pago_evidencia"
+                    accept=".docx, .pdf, .jpg, .png"
+                    required
+                    class="form-control">
+            </div>
+            <div class="mb-2">
+                <label class="fw-bold">Fecha Clave:</label>
+                <input type="date" name="fecha_clave" required class="form-control">
+            </div>
+            <div class="mb-2">
+                <label class="fw-bold">Acción en Fecha Clave:</label>
+                <input type="text" name="accion_fecha_clave" required class="form-control">
+            </div>
+            <div class="mb-2">
+                <label class="fw-bold">Actor Involucrado:</label>
+                <select name="actor" required class="form-control">
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    <option value="Gestor">Gestor</option>
+                    <option value="Cliente">Cliente</option>
+                    <option value="Supervisor">Supervisor</option>
+                    <option value="Administrador">Administrador</option>
+                </select>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label class="fw-bold">Evidencia 1:</label>
+                    <input type="file" name="evidencia1_localizacion" accept="image/*" required class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="fw-bold">Evidencia 2:</label>
+                    <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
+                </div>
+            </div>
+            <div class="mb-2">
+                <label class="fw-bold">Monto Amortizado:</label>
+                <input type="number" step="0.01" name="monto_amortizado" required class="form-control">
             </div>
             <div class="fixed-buttons">
                 <button type="submit" class="btn btn-primary mt-3">Registrar</button>

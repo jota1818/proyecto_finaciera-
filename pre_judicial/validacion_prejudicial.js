@@ -4,6 +4,9 @@ function validarFormularioPreJudicial() {
     let fecha_clave = new Date(document.forms["preJudicialForm"]["fecha_clave"].value);
     let descripcion = document.forms["preJudicialForm"]["descripcion"].value;
     let monto_amortizado = document.forms["preJudicialForm"]["monto_amortizado"].value;
+    let numero_notificacion = document.forms["preJudicialForm"]["n_de_notif_voucher"].value;
+
+    let regexNumeral = /^\d+$/;
 
     // Validaciones
     if (descripcion.trim().split(/\s+/).length > 100) {
@@ -18,6 +21,12 @@ function validarFormularioPreJudicial() {
 
     if (monto_amortizado && isNaN(monto_amortizado)) {
         alert("El monto amortizado debe ser un número.");
+        return false;
+    }
+
+    // Validar que el número de notificación/voucher solo contenga números del 0 al 9
+    if (!regexNumeral.test(numero_notificacion)) {
+        alert("El Número de Notificación/Voucher solo debe contener números del 0 al 9.");
         return false;
     }
 
