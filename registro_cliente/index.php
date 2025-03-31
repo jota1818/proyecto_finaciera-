@@ -94,8 +94,8 @@
                 <div class="fixed-buttons mt-3">
                     <button type="button" class="btn btn-primary">Ver Historia</button>
                     <button type="button" class="btn btn-secondary" onclick="agregarHistoria()">Agregar Historia</button>
-                    <!-- <button type="button" class="btn btn-secondary" onclick="window.location.href='../pre_judicial/registro_prejudicial.php'">Agregar Historia</button> -->
-                    <button type="button" class="btn btn-success">Regresar</button>
+                    <button type="button" class="btn btn-success" onclick="window.location.href='index.php'">Regresar</button>
+                    
                     <button type="button" class="btn btn-danger">Salir</button>
                 </div>
             </div>

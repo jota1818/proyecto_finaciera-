@@ -1,15 +1,5 @@
 <?php
-date_default_timezone_set('America/Lima');
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "proyect";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
+require "../conexion_db/connection.php";
 
 $dni = isset($_GET['dni']) ? $_GET['dni'] : '';
 $cliente = [];
@@ -173,7 +163,7 @@ $conn->close();
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="validacion_prejudicial.js" defer></script>
+    <script src="validacion_etapas.js" defer></script>
     <style>
         .form-container {
             display: none;
@@ -188,13 +178,7 @@ $conn->close();
 <body class="container mt-3">
     <div>
         <h2>Información del Cliente</h2>
-        <?php if ($message): ?>
-            <div class="alert alert-success" role="alert">
-                <?php echo $message; ?>
-            </div>
-        <?php endif; ?>
     </div>
-
     <!-- Información del Cliente -->
     <div class="form-container border p-3 mb-3 active">
         <div class="row mb-2">
@@ -239,9 +223,16 @@ $conn->close();
 
     <!-- Información de la Etapa Pre-Judicial y Judicial -->
     <div class="row">
+        <div>
+            <h2>Formulario de Etapa Prejudicial y Judicial</h2>
+        </div>
         <!-- Formulario de Etapa Pre-Judicial -->
         <div class="col-md-8 border p-3 active">
-            <h2>Formulario de Etapa Pre-Judicial</h2>
+            <?php if ($message): ?>
+                <div class="alert alert-success" role="alert">
+                    <?php echo $message; ?>
+                </div>
+            <?php endif; ?>
             <form name="preJudicialForm" method="post" action="registro_prejudicial.php" enctype="multipart/form-data" onsubmit="return validarFormularioPreJudicial()">
                 <h4>Información de la Etapa Pre-Judicial</h4>
                 <div class="row mb-2">
@@ -315,7 +306,6 @@ $conn->close();
                     <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
                     <br>
                     <button type="button" class="btn btn-success mt-3" onclick="window.location.href='../registro_cliente/index.php'">Regresar</button>
-                    <!-- <button type="button" class="btn btn-danger mt-3" onclick="cerrarRegistroPreJudicial()">Salir</button> -->
                 </div>
             </form>
         </div>
@@ -325,14 +315,10 @@ $conn->close();
             <button type="button" class="btn btn-info w-100 mt-3" onclick="toggleJudicialForm()">Judicial</button>
 
             <!-- Formulario de Etapa Judicial -->
-            <?php if ($message): ?>
-                <div class="alert alert-success" role="alert">
-                    <?php echo $message; ?>
-                </div>
-            <?php endif; ?>
             <div class="form-container mt-3" id="judicialFormContainer">
                 <h4>Información de la Etapa Judicial</h4>
-                <form name="judicialForm" method="post" action="../judicial/registro_judicial.php" enctype="multipart/form-data" onsubmit="return validarFormularioJudicial()">
+                <div id="message"></div>
+                <form name="judicialForm" id="judicialForm" enctype="multipart/form-data">
                     <div class="mb-2">
                         <label class="fw-bold">Acto:</label>
                         <input type="text" name="acto" required class="form-control">
@@ -372,8 +358,6 @@ $conn->close();
                     <div class="fixed-buttons">
                         <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                         <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                        <br>
-                        <!-- <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button> -->
                     </div>
                 </form>
             </div>
@@ -382,6 +366,7 @@ $conn->close();
     </div>
 
     <script>
+
         function toggleJudicialForm() {
             const judicialFormContainer = document.getElementById('judicialFormContainer');
             judicialFormContainer.classList.toggle('active');
@@ -392,7 +377,7 @@ $conn->close();
 
             var formData = new FormData(this);
 
-            fetch('../judicial/registro_judicial.php', {
+            fetch('http://localhost/proyecto_financiera/judicial/registro_judicial.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -400,6 +385,8 @@ $conn->close();
                 .then(data => {
                     // Muestra el mensaje de éxito o error
                     document.getElementById('message').innerHTML = data;
+                    // Limpia el formulario después de registrar
+                    document.getElementById('judicialForm').reset();
                 })
                 .catch(error => {
                     console.error('Error:', error);
