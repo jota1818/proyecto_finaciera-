@@ -6,6 +6,7 @@ $message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Establecer la fecha y hora actual
     $fecha = date('Y-m-d');
+    $id_cliente = isset($_POST['id_cliente']) ? $_POST['id_cliente'] : '';
 
     // Datos de la etapa judicial
     $etapa = "Judicial"; // Establecer automáticamente como "Judicial"
@@ -31,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     move_uploaded_file($_FILES["doc_evidencia"]["tmp_name"], $target_dir . $doc_evidencia);
 
     // Insertar el nuevo registro
-    $sql_insert = "INSERT INTO etapa_judicial (etapa, fecha, acto, juzgado, n_exp_juzgado, n_cedula, descripcion, doc_evidencia, fecha_clave, accion_en_fecha_clave, actor)
-    VALUES ('$etapa', '$fecha', '$acto', '$juzgado', '$n_exp_juzgado', '$n_cedula', '$descripcion', '$target_dir$doc_evidencia', '$fecha_clave', '$accion_en_fecha_clave', '$actor')";
+    $sql_insert = "INSERT INTO etapa_judicial (id_cliente, etapa, fecha, acto, juzgado, n_exp_juzgado, n_cedula, descripcion, doc_evidencia, fecha_clave, accion_en_fecha_clave, actor)
+    VALUES ('$id_cliente', '$etapa', '$fecha', '$acto', '$juzgado', '$n_exp_juzgado', '$n_cedula', '$descripcion', '$target_dir$doc_evidencia', '$fecha_clave', '$accion_en_fecha_clave', '$actor')";
 
     if ($conn->query($sql_insert) === TRUE) {
         $message = '<div class="alert alert-success" role="alert">Registro exitoso</div>';
