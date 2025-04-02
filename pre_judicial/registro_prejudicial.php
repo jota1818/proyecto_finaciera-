@@ -3,8 +3,8 @@ require "../conexion_db/connection.php";
 
 $id_cliente = isset($_GET['id_cliente']) ? $_GET['id_cliente'] : '';
 $cliente = [];
-$monto_abonado = 0;
-$plazo_credito = 0;
+$monto_abonado = 0; // Inicializar con un valor predeterminado
+$plazo_credito = 0; // Inicializar con un valor predeterminado
 
 if ($id_cliente) {
     $sql = "SELECT nombre, apellidos, dni, monto, saldo, fecha_desembolso, fecha_vencimiento FROM clientes WHERE id_cliente='$id_cliente'";
@@ -27,6 +27,22 @@ $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha_acto = date('Y-m-d H:i:s');
+
+    // Obtener la fecha de inicio del caso (fecha_acto del ID 1) y la fecha_clave
+    $sql_select_inicio = "SELECT fecha_acto, fecha_clave FROM etapa_prejudicial WHERE id = 1";
+    $result_inicio = $conn->query($sql_select_inicio);
+
+    if ($result_inicio->num_rows > 0) {
+        $row_inicio = $result_inicio->fetch_assoc();
+        $fecha_inicio_caso = $row_inicio['fecha_acto'];
+        $fecha_clave_inicio = $row_inicio['fecha_clave'];
+    } else {
+        // Si no hay registros, fecha_inicio_caso y fecha_clave_inicio son la misma que fecha_acto
+        $fecha_inicio_caso = $fecha_acto;
+        $fecha_clave_inicio = $fecha_acto;
+    }
+
+    // Datos de la etapa pre-judicial
     $acto = $_POST["acto"];
     $n_de_notif_voucher = $_POST["n_de_notif_voucher"];
     $descripcion = $_POST["descripcion"];
@@ -39,12 +55,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $saldo_int = $_POST["saldo_int"];
     $monto_amortizado = $_POST["monto_amortizado"];
 
+    // Calcular dias_mora_PJ
     $dias_mora_PJ = calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso);
+    // Calcular saldo_fecha
     $saldo_fecha = $saldo_int - $monto_amortizado;
+    // Calcular dias_de_mora
     $dias_de_mora = calcularDiasDeMora($fecha_acto, $fecha_clave_inicio);
+    // Asignar el valor de dias_mora_PJ a interes
     $interes = $dias_mora_PJ;
 
+    // Directorio de destino para los archivos subidos
     $target_dir = "uploads/";
+    // Crear el directorio si no existe
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0777, true);
     }
@@ -53,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     move_uploaded_file($_FILES["evidencia1_localizacion"]["tmp_name"], $target_dir . $evidencia1_localizacion);
     move_uploaded_file($_FILES["evidencia2_foto_fecha"]["tmp_name"], $target_dir . $evidencia2_foto_fecha);
 
+    // Insertar el nuevo registro
     $sql_insert = "INSERT INTO etapa_prejudicial (id_cliente, fecha_acto, acto, n_de_notif_voucher, descripcion, notif_compromiso_pago_evidencia, fecha_clave, accion_fecha_clave, actor, evidencia1_localizacion, evidencia2_foto_fecha, dias_de_mora, dias_mora_PJ, interes, saldo_int, monto_amortizado, saldo_fecha)
     VALUES ('$id_cliente', '$fecha_acto', '$acto', '$n_de_notif_voucher', '$descripcion', '$target_dir$notif_compromiso_pago_evidencia', '$fecha_clave', '$accion_fecha_clave', '$actor', '$target_dir$evidencia1_localizacion', '$target_dir$evidencia2_foto_fecha', '$dias_de_mora', '$dias_mora_PJ', '$interes', '$saldo_int', '$monto_amortizado', '$saldo_fecha')";
 
@@ -77,11 +100,11 @@ function calcularDiasDeMora($fecha_acto, $fecha_clave_inicio)
 {
     $fecha_acto = new DateTime($fecha_acto);
     $fecha_clave_inicio = new DateTime($fecha_clave_inicio);
-
+    // Si la fecha_acto es menor o igual a fecha_clave_inicio, devolver 0
     if ($fecha_acto <= $fecha_clave_inicio) {
         return 0;
     }
-
+    // Calcular la diferencia de días
     $interval = $fecha_acto->diff($fecha_clave_inicio);
     return $interval->days;
 }
@@ -136,6 +159,7 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="validacion_etapas.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
         .form-container {
             display: none;
@@ -288,51 +312,53 @@ $conn->close();
             <button type="button" class="btn btn-info w-100 mt-3" onclick="toggleJudicialForm()">Judicial</button>
 
             <!-- Formulario de Etapa Judicial -->
-            <form name="judicialForm" id="judicialForm" enctype="multipart/form-data">
-                <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                <h4>Información de la Etapa Judicial</h4>
-                <div id="message"></div>
-                <div class="mb-2">
-                    <label class="fw-bold">Acto:</label>
-                    <input type="text" name="acto" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Juzgado:</label>
-                    <input type="text" name="juzgado" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Número de Expediente del Juzgado:</label>
-                    <input type="text" name="n_exp_juzgado" class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Número de Cédula:</label>
-                    <input type="text" name="n_cedula" class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Descripción:</label>
-                    <textarea name="descripcion" required class="form-control"></textarea>
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Documento de Evidencia:</label>
-                    <input type="file" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Fecha Clave:</label>
-                    <input type="date" name="fecha_clave" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Acción en Fecha Clave:</label>
-                    <input type="text" name="accion_en_fecha_clave" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Actor Involucrado:</label>
-                    <input type="text" name="actor" required class="form-control">
-                </div>
-                <div class="fixed-buttons">
-                    <button type="submit" class="btn btn-primary mt-3">Registrar</button>
-                    <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                </div>
-            </form>
+            <div id="judicialFormContainer" class="form-container">
+                <form name="judicialForm" id="judicialForm" enctype="multipart/form-data" onsubmit="return enviarFormularioJudicial(event)">
+                    <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
+                    <h4>Información de la Etapa Judicial</h4>
+                    <div id="message"></div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Acto:</label>
+                        <input type="text" name="acto" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Juzgado:</label>
+                        <input type="text" name="juzgado" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Número de Expediente del Juzgado:</label>
+                        <input type="text" name="n_exp_juzgado" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Número de Cédula:</label>
+                        <input type="text" name="n_cedula" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Descripción:</label>
+                        <textarea name="descripcion" required class="form-control"></textarea>
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Documento de Evidencia:</label>
+                        <input type="file" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Fecha Clave:</label>
+                        <input type="date" name="fecha_clave" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Acción en Fecha Clave:</label>
+                        <input type="text" name="accion_en_fecha_clave" required class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Actor Involucrado:</label>
+                        <input type="text" name="actor" required class="form-control">
+                    </div>
+                    <div class="fixed-buttons">
+                        <button type="submit" class="btn btn-primary mt-3">Registrar</button>
+                        <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -340,11 +366,11 @@ $conn->close();
 
     <script>
         function enviarFormulario(event) {
-            event.preventDefault(); // Evita el envío tradicional del formulario
-
+            // Validar el formulario antes de evitar el envío tradicional
             if (!validarFormularioPreJudicial()) {
                 return false; // Si la validación falla, no se envía el formulario
             }
+            event.preventDefault(); // Evita el envío tradicional del formulario
 
             var formData = new FormData(document.getElementById('preJudicialForm'));
 
@@ -366,27 +392,6 @@ $conn->close();
             return false; // Evita el comportamiento predeterminado del formulario
         }
 
-        /* document.getElementById('preJudicialForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Evita el envío tradicional del formulario
-
-            var formData = new FormData(this);
-
-            fetch('registro_prejudicial.php', { // Asegúrate de que la URL sea correcta
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(data => {
-                    // Maneja la respuesta del servidor
-                    alert('Registro exitoso');
-                    // Puedes actualizar parte de la página si es necesario
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Hubo un error al registrar los datos.');
-                });
-        }); */
-
         function toggleJudicialForm() {
             const judicialFormContainer = document.getElementById('judicialFormContainer');
             judicialFormContainer.classList.toggle('active');
@@ -394,8 +399,8 @@ $conn->close();
 
         document.getElementById('judicialForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Evita el envío tradicional del formulario
-
             var formData = new FormData(this);
+            
 
             fetch('http://localhost/proyecto_financiera/judicial/registro_judicial.php', {
                     method: 'POST',
@@ -411,7 +416,56 @@ $conn->close();
                 .catch(error => {
                     console.error('Error:', error);
                 });
+                
         });
+        /* function enviarFormularioJudicial(event) {
+            // Validar el formulario antes de evitar el envío tradicional
+            if (!validarFormularioJudicial()) {
+                return false; // Si la validación falla, no se envía el formulario
+            }
+
+            event.preventDefault(); // Evita el envío tradicional del formulario
+
+            var formData = new FormData(document.getElementById('judicialForm'));
+
+            fetch('http://localhost/proyecto_financiera/judicial/registro_judicial.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // Muestra el mensaje de éxito o error
+                    document.getElementById('message').innerHTML = data;
+                    // Limpia el formulario después de registrar
+                    document.getElementById('judicialForm').reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            return false; // Evita el comportamiento predeterminado del formulario
+        }
+
+        function validarFormularioJudicial() {
+            // Obtener valores del formulario
+            let fecha_clave = new Date(document.forms["judicialForm"]["fecha_clave"].value);
+            let descripcion = document.forms["judicialForm"]["descripcion"].value;
+            let fecha_actual = new Date();
+
+            // Validaciones
+            if (descripcion.trim().split(/\s+/).length > 100) {
+                alert("La descripción debe tener un máximo de 100 palabras.");
+                return false;
+            }
+
+            if (fecha_clave && fecha_clave < fecha_actual) {
+                alert("La fecha clave no puede ser anterior a la fecha actual.");
+                return false;
+            }
+
+            console.log("Formulario validado correctamente");
+            return true;
+        } */
     </script>
 </body>
 
