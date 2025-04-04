@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha_acto = date('Y-m-d H:i:s');
 
     // Obtener la fecha de inicio del caso (fecha_acto del ID 1) y la fecha_clave
-    $sql_select_inicio = "SELECT fecha_acto, fecha_clave FROM etapa_prejudicial WHERE id = 1";
+    $sql_select_inicio = "SELECT fecha_acto, fecha_clave FROM etapa_prejudicial WHERE id_cliente = $id_cliente AND id = 1";
     $result_inicio = $conn->query($sql_select_inicio);
 
     if ($result_inicio->num_rows > 0) {
@@ -59,8 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dias_mora_PJ = calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso);
     // Calcular saldo_fecha
     $saldo_fecha = $saldo_int - $monto_amortizado;
-    // Calcular dias_de_mora
-    $dias_de_mora = calcularDiasDeMora($fecha_acto, $fecha_clave_inicio);
+    // Calcular dias_de_mora usando la fecha de vencimiento del cliente
+    $dias_de_mora = calcularDiasDeMora($fecha_acto, $cliente['fecha_vencimiento']);
     // Asignar el valor de dias_mora_PJ a interes
     $interes = $dias_mora_PJ;
 
@@ -81,13 +81,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql_insert) === TRUE) {
         $last_id = $conn->insert_id;
-        actualizarFilaAnterior($conn, $last_id, $fecha_acto);
+        actualizarFilaAnterior($conn, $last_id, $fecha_acto, $id_cliente);
         $message = "Registro exitoso";
     } else {
         $message = "Error: " . $sql_insert . "<br>" . $conn->error;
     }
 }
 
+//falta condicionar con id_cliernte y id
 function calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso)
 {
     $fecha_acto = new DateTime($fecha_acto);
@@ -96,22 +97,24 @@ function calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso)
     return $interval->days;
 }
 
-function calcularDiasDeMora($fecha_acto, $fecha_clave_inicio)
+//correcto
+function calcularDiasDeMora($fecha_acto, $fecha_vencimiento)
 {
     $fecha_acto = new DateTime($fecha_acto);
-    $fecha_clave_inicio = new DateTime($fecha_clave_inicio);
-    // Si la fecha_acto es menor o igual a fecha_clave_inicio, devolver 0
-    if ($fecha_acto <= $fecha_clave_inicio) {
+    $fecha_vencimiento = new DateTime($fecha_vencimiento);
+    // Si la fecha_acto es menor o igual a fecha_vencimiento, devolver 0
+    if ($fecha_acto <= $fecha_vencimiento) {
         return 0;
     }
     // Calcular la diferencia de días
-    $interval = $fecha_acto->diff($fecha_clave_inicio);
+    $interval = $fecha_acto->diff($fecha_vencimiento);
     return $interval->days;
 }
 
-function actualizarFilaAnterior($conn, $last_id, $fecha_acto)
+//correcto
+function actualizarFilaAnterior($conn, $last_id, $fecha_acto, $id_cliente)
 {
-    $sql_select = "SELECT id, fecha_clave, actor FROM etapa_prejudicial WHERE id < $last_id ORDER BY id DESC LIMIT 1";
+    $sql_select = "SELECT id, fecha_clave, actor FROM etapa_prejudicial WHERE id_cliente = $id_cliente AND id < $last_id ORDER BY id DESC LIMIT 1";
     $result = $conn->query($sql_select);
 
     if ($result->num_rows > 0) {
@@ -123,7 +126,7 @@ function actualizarFilaAnterior($conn, $last_id, $fecha_acto)
         $dias_desde_fecha_clave = calcularDiasDesdeFechaClave($fecha_acto, $fecha_clave_anterior);
 
         if ($actor == "Gestor") {
-            $objetivo_logrado = $dias_desde_fecha_clave == 0 ? "SI" : "NO";
+            $objetivo_logrado = $dias_desde_fecha_clave <= 0 ? "SI" : "NO";
         } else {
             $objetivo_logrado = "";
         }
@@ -133,6 +136,7 @@ function actualizarFilaAnterior($conn, $last_id, $fecha_acto)
     }
 }
 
+// falta cumplir funcion
 function calcularDiasDesdeFechaClave($fecha_acto_siguiente, $fecha_clave)
 {
     $fecha_acto_siguiente = new DateTime($fecha_acto_siguiente);
@@ -313,7 +317,7 @@ $conn->close();
 
             <!-- Formulario de Etapa Judicial -->
             <div id="judicialFormContainer" class="form-container">
-                <form name="judicialForm" id="judicialForm" enctype="multipart/form-data" onsubmit="return enviarFormularioJudicial(event)">
+                <form id="judicialForm" enctype="multipart/form-data" >
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
                     <h4>Información de la Etapa Judicial</h4>
                     <div id="message"></div>
@@ -418,54 +422,7 @@ $conn->close();
                 });
                 
         });
-        /* function enviarFormularioJudicial(event) {
-            // Validar el formulario antes de evitar el envío tradicional
-            if (!validarFormularioJudicial()) {
-                return false; // Si la validación falla, no se envía el formulario
-            }
-
-            event.preventDefault(); // Evita el envío tradicional del formulario
-
-            var formData = new FormData(document.getElementById('judicialForm'));
-
-            fetch('http://localhost/proyecto_financiera/judicial/registro_judicial.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(data => {
-                    // Muestra el mensaje de éxito o error
-                    document.getElementById('message').innerHTML = data;
-                    // Limpia el formulario después de registrar
-                    document.getElementById('judicialForm').reset();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-
-            return false; // Evita el comportamiento predeterminado del formulario
-        }
-
-        function validarFormularioJudicial() {
-            // Obtener valores del formulario
-            let fecha_clave = new Date(document.forms["judicialForm"]["fecha_clave"].value);
-            let descripcion = document.forms["judicialForm"]["descripcion"].value;
-            let fecha_actual = new Date();
-
-            // Validaciones
-            if (descripcion.trim().split(/\s+/).length > 100) {
-                alert("La descripción debe tener un máximo de 100 palabras.");
-                return false;
-            }
-
-            if (fecha_clave && fecha_clave < fecha_actual) {
-                alert("La fecha clave no puede ser anterior a la fecha actual.");
-                return false;
-            }
-
-            console.log("Formulario validado correctamente");
-            return true;
-        } */
+        
     </script>
 </body>
 
