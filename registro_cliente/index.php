@@ -92,7 +92,8 @@
                     <p>No se ha seleccionado ningún cliente.</p>
                 </div>
                 <div class="fixed-buttons mt-3">
-                    <button type="button" class="btn btn-primary">Ver Historia</button>
+                    <!-- <button type="button" class="btn btn-primary">Ver Historia</button> -->
+                    <button type="button" class="btn btn-primary" onclick="verHistorial()">Ver Historia</button>
                     <button type="button" class="btn btn-secondary" onclick="agregarHistoria()">Agregar Historia</button>
                     <button type="button" class="btn btn-success" onclick="window.location.href='index.php'">Regresar</button>
 
@@ -120,6 +121,32 @@
                         console.log("Respuesta del servidor:", data); // Verifica la respuesta del servidor
                         if (data.id_cliente) {
                             window.location.href = '/proyecto_financiera/pre_judicial/registro_prejudicial.php?id_cliente=' + encodeURIComponent(data.id_cliente);
+                        } else {
+                            alert("No se pudo obtener el ID del cliente.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("Hubo un error al obtener el ID del cliente.");
+                    });
+            } else {
+                alert("Por favor, seleccione un cliente primero.");
+            }
+        }
+
+        function verHistorial() {
+            var dni = document.getElementById('selectedDni').value;
+            if (dni) {
+                fetch('../conexion_db/obtener_id_cliente.php?dni=' + encodeURIComponent(dni))
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.id_cliente) {
+                            window.location.href = '/proyecto_financiera/historial/record.php?id_cliente=' + encodeURIComponent(data.id_cliente);
                         } else {
                             alert("No se pudo obtener el ID del cliente.");
                         }

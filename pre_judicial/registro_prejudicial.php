@@ -306,7 +306,8 @@ $conn->close();
                     <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                     <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
                     <br>
-                    <button type="button" class="btn btn-success mt-3" onclick="window.location.href='../registro_cliente/index.php'">Regresar</button>
+                    <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
+                    <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                 </div>
             </form>
         </div>
@@ -317,7 +318,7 @@ $conn->close();
 
             <!-- Formulario de Etapa Judicial -->
             <div id="judicialFormContainer" class="form-container">
-                <form id="judicialForm" enctype="multipart/form-data" >
+                <form id="judicialForm" enctype="multipart/form-data">
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
                     <h4>Información de la Etapa Judicial</h4>
                     <div id="message"></div>
@@ -404,7 +405,7 @@ $conn->close();
         document.getElementById('judicialForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Evita el envío tradicional del formulario
             var formData = new FormData(this);
-            
+
 
             fetch('http://localhost/proyecto_financiera/judicial/registro_judicial.php', {
                     method: 'POST',
@@ -420,9 +421,8 @@ $conn->close();
                 .catch(error => {
                     console.error('Error:', error);
                 });
-                
+
         });
-        
     </script>
 </body>
 
