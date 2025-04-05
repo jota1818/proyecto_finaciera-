@@ -1,24 +1,52 @@
-body {
-    font-family: Arial, sans-serif;
+.table-responsive {
+    overflow-x: auto;
 }
 
-.client-info,
-.historial {
-    margin-bottom: 20px;
+.table-fixed th:first-child,
+.table-fixed td:first-child {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    background-color: #f8d7da;
+    z-index: 1;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.table th,
-.table td {
-    vertical-align: middle;
+.table-fixed th,
+.table-fixed td {
     white-space: nowrap;
 }
 
 .fixed-buttons {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 10px;
 }
 
-.table-responsive {
-    overflow-x: auto;
+.preview-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 40%;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    display: none;
+    padding: 20px;
+}
+
+.preview-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }

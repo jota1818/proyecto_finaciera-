@@ -36,51 +36,7 @@ $conn->close();
     <title>Historial del Cliente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
-    <style>
-        .table-responsive {
-            overflow-x: auto;
-        }
 
-        .table-fixed th:first-child,
-        .table-fixed td:first-child {
-            position: -webkit-sticky;
-            position: sticky;
-            left: 0;
-            background-color: #f8d7da;
-            z-index: 1;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .table-fixed th,
-        .table-fixed td {
-            white-space: nowrap;
-        }
-
-        .fixed-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .preview-container {
-            position: fixed;
-            top: 0;
-            right: 0;
-            height: 100%;
-            width: 40%;
-            background-color: white;
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            display: none;
-            padding: 20px;
-        }
-
-        .preview-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
 </head>
 
 <body class="container mt-3">
@@ -128,12 +84,12 @@ $conn->close();
                                 <td>{$row['acto']}</td>
                                 <td>{$row['n_de_notif_voucher']}</td>
                                 <td>{$row['descripcion']}</td>
-                                <td><a href='#' class='file-link' data-url='/proyecto_financiera/pre_judicial/uploads/{$row['notif_compromiso_pago_evidencia']}'>{$row['notif_compromiso_pago_evidencia']}</a></td>
+                                <td><a href='#' class='file-link' data-url='../pre_judicial/{$row['notif_compromiso_pago_evidencia']}'>{$row['notif_compromiso_pago_evidencia']}</a></td>
                                 <td>{$row['fecha_clave']}</td>
                                 <td>{$row['accion_fecha_clave']}</td>
                                 <td>{$row['actor']}</td>
-                                <td><a href='#' class='file-link' data-url='/proyecto_financiera/pre_judicial/uploads/{$row['evidencia1_localizacion']}'>{$row['evidencia1_localizacion']}</a></td>
-                                <td><a href='#' class='file-link' data-url='/proyecto_financiera/pre_judicial/uploads/{$row['evidencia2_foto_fecha']}'>{$row['evidencia2_foto_fecha']}</a></td>
+                                <td><a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia1_localizacion']}'>{$row['evidencia1_localizacion']}</a></td>
+                                <td><a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia2_foto_fecha']}'>{$row['evidencia2_foto_fecha']}</a></td>
                                 <td>{$row['dias_desde_fecha_clave']}</td>
                                 <td>{$row['objetivo_logrado']}</td>
                                 <td>{$row['dias_de_mora']}</td>
@@ -181,7 +137,7 @@ $conn->close();
                                 <td>{$row['n_exp_juzgado']}</td>
                                 <td>{$row['n_cedula']}</td>
                                 <td>{$row['descripcion']}</td>
-                                <td><a href='#' class='file-link' data-url='/proyecto_financiera/judicial/uploads/{$row['doc_evidencia']}'>{$row['doc_evidencia']}</a></td>
+                                <td><a href='#' class='file-link' data-url='../judicial/{$row['doc_evidencia']}'>{$row['doc_evidencia']}</a></td>
                                 <td>{$row['fecha_clave']}</td>
                                 <td>{$row['accion_en_fecha_clave']}</td>
                                 <td>{$row['actor']}</td>
@@ -224,12 +180,13 @@ $conn->close();
             }
         });
 
+        //Para la vista previa 
         function openPreview(url) {
             var previewContainer = document.getElementById('previewContainer');
             var previewFrame = document.getElementById('previewFrame');
             previewFrame.src = url;
             previewFrame.onload = function() {
-                previewContainer.style.display = 'block';
+                previewContainer.style.display = 'flex'; // Usa flex para centrar
             };
             previewFrame.onerror = function() {
                 alert('El archivo no se puede mostrar. Verifica la URL o la existencia del archivo.');
