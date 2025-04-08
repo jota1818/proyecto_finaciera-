@@ -266,6 +266,10 @@
                     .then(data => {
                         document.getElementById('detallesContent').innerHTML = data;
                         document.getElementById('clienteDetalles').style.display = 'block';
+                        // Almacenar el DNI en un campo oculto
+                        document.getElementById('selectedDni').value = dni;
+                        // Mostrar los detalles del cliente automáticamente
+                        mostrarCliente(dni);
                     });
             } else {
                 document.getElementById('detallesContent').innerHTML = '<p>No se ha seleccionado ningún cliente.</p>';

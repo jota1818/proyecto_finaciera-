@@ -156,7 +156,6 @@ $conn->close();
     </div>
 
     <!-- Contenedor de vista previa -->
-    <!-- Contenedor de vista previa -->
     <div class="preview-container" id="previewContainer">
         <button class="btn btn-danger" onclick="closePreview()">Cerrar</button>
         <iframe id="previewFrame"></iframe>
