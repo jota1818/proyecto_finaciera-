@@ -411,9 +411,12 @@ $conn->close();
         }
 
         document.getElementById('judicialForm').addEventListener('submit', function(event) {
+            // Validar el formulario judicial antes de enviar
+            if (!validarFormularioJudicial()) {
+                return false; // Si la validación falla, no se envía el formulario
+            }
             event.preventDefault(); // Evita el envío tradicional del formulario
             var formData = new FormData(this);
-
 
             fetch('http://localhost/proyecto_financiera/judicial/registro_judicial.php', {
                     method: 'POST',
@@ -429,8 +432,8 @@ $conn->close();
                 .catch(error => {
                     console.error('Error:', error);
                 });
-
         });
+        
     </script>
 </body>
 
