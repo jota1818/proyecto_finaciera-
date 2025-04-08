@@ -39,13 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha_clave = $_POST["fecha_clave"];
     $accion_fecha_clave = $_POST["accion_fecha_clave"];
     // dato personal asignado
-    $analista = $_POST["analista"];
     $gestor = $_POST["gestor"];
     $supervisor = $_POST["supervisor"];
     $administrador = $_POST["administrador"];
 
-    $sql = "INSERT INTO clientes (nombre, apellidos, dni, telefono, fecha_nacimiento, domicilio1, referencia1, domicilio2, referencia2, ocupacion, clasificacion_riesgo, agencia, tipo_credito, estado, fecha_desembolso, fecha_vencimiento, monto, saldo, nombre_garante, apellidos_garante, dni_garante, telefono_garante, fecha_nacimiento_garante, domicilio1_garante, referencia1_garante, domicilio2_garante, referencia2_garante, ocupacion_garante, clasificacion_riesgo_garante, fecha_clave, accion_fecha_clave, analista, gestor, supervisor, administrador)
-    VALUES ('$nombre', '$apellidos', '$dni', '$telefono', '$fecha_nacimiento', '$domicilio1', '$referencia1', '$domicilio2', '$referencia2', '$ocupacion', '$clasificacion_riesgo', '$agencia', '$tipo_credito', '$estado', '$fecha_desembolso', '$fecha_vencimiento', '$monto', '$saldo', '$nombre_garante', '$apellidos_garante', '$dni_garante', '$telefono_garante', '$fecha_nacimiento_garante', '$domicilio1_garante', '$referencia1_garante', '$domicilio2_garante', '$referencia2_garante', '$ocupacion_garante', '$clasificacion_riesgo_garante', '$fecha_clave', '$accion_fecha_clave', '$analista', '$gestor', '$supervisor', '$administrador')";
+    $sql = "INSERT INTO clientes (nombre, apellidos, dni, telefono, fecha_nacimiento, domicilio1, referencia1, domicilio2, referencia2, ocupacion, clasificacion_riesgo, agencia, tipo_credito, estado, fecha_desembolso, fecha_vencimiento, monto, saldo, nombre_garante, apellidos_garante, dni_garante, telefono_garante, fecha_nacimiento_garante, domicilio1_garante, referencia1_garante, domicilio2_garante, referencia2_garante, ocupacion_garante, clasificacion_riesgo_garante, fecha_clave, accion_fecha_clave, gestor, supervisor, administrador)
+    VALUES ('$nombre', '$apellidos', '$dni', '$telefono', '$fecha_nacimiento', '$domicilio1', '$referencia1', '$domicilio2', '$referencia2', '$ocupacion', '$clasificacion_riesgo', '$agencia', '$tipo_credito', '$estado', '$fecha_desembolso', '$fecha_vencimiento', '$monto', '$saldo', '$nombre_garante', '$apellidos_garante', '$dni_garante', '$telefono_garante', '$fecha_nacimiento_garante', '$domicilio1_garante', '$referencia1_garante', '$domicilio2_garante', '$referencia2_garante', '$ocupacion_garante', '$clasificacion_riesgo_garante', '$fecha_clave', '$accion_fecha_clave', '$gestor', '$supervisor', '$administrador')";
 
     if ($conn->query($sql) === TRUE) {
         $message = "Registro exitoso";
@@ -105,7 +104,7 @@ $conn->close();
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Teléfono:</label>
-                        <input type="number" name="telefono" required class="form-control">
+                        <input type="text" name="telefono" required class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha de Nacimiento:</label>
@@ -236,10 +235,6 @@ $conn->close();
                 </div>
                 <div class="col-md-12 border p-3">
                     <h4>Personal Asignado</h4>
-                    <div class="mb-2">
-                        <label class="fw-bold">Analista:</label>
-                        <input type="number" name="analista" required class="form-control" min="1" max="9">
-                    </div>
                     <div class="mb-2">
                         <label class="fw-bold">Gestor:</label>
                         <input type="number" name="gestor" required class="form-control" min="1" max="9">

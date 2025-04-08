@@ -36,7 +36,6 @@ $conn->close();
     <title>Historial del Cliente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
-
 </head>
 
 <body class="container mt-3">
@@ -84,12 +83,12 @@ $conn->close();
                                 <td>{$row['acto']}</td>
                                 <td>{$row['n_de_notif_voucher']}</td>
                                 <td>{$row['descripcion']}</td>
-                                <td><a href='#' class='file-link' data-url='../pre_judicial/{$row['notif_compromiso_pago_evidencia']}'>{$row['notif_compromiso_pago_evidencia']}</a></td>
+                                <td>" . (isset($row['notif_compromiso_pago_evidencia']) && !empty($row['notif_compromiso_pago_evidencia']) && $row['notif_compromiso_pago_evidencia'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['notif_compromiso_pago_evidencia']}'>{$row['notif_compromiso_pago_evidencia']}</a> <a href='../pre_judicial/{$row['notif_compromiso_pago_evidencia']}' download style='margin-left:10px; color:blue; font-weight:bold;'>📥Descargar</a>" : '') . "</td>
                                 <td>{$row['fecha_clave']}</td>
                                 <td>{$row['accion_fecha_clave']}</td>
                                 <td>{$row['actor']}</td>
-                                <td><a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia1_localizacion']}'>{$row['evidencia1_localizacion']}</a></td>
-                                <td><a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia2_foto_fecha']}'>{$row['evidencia2_foto_fecha']}</a></td>
+                                <td>" . (isset($row['evidencia1_localizacion']) && !empty($row['evidencia1_localizacion']) && $row['evidencia1_localizacion'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia1_localizacion']}'>{$row['evidencia1_localizacion']}</a> <a href='../pre_judicial/{$row['evidencia1_localizacion']}' download style='margin-left:10px; color:blue; font-weight:bold;' >📥Descargar</a>" : '') . "</td>
+                                <td>" . (isset($row['evidencia2_foto_fecha']) && !empty($row['evidencia2_foto_fecha']) && $row['evidencia2_foto_fecha'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia2_foto_fecha']}'>{$row['evidencia2_foto_fecha']}</a> <a href='../pre_judicial/{$row['evidencia2_foto_fecha']}' download style='margin-left:10px; color:blue; font-weight:bold;'>📥Descargar</a>" : '') . "</td>
                                 <td>{$row['dias_desde_fecha_clave']}</td>
                                 <td>{$row['objetivo_logrado']}</td>
                                 <td>{$row['dias_de_mora']}</td>
@@ -137,7 +136,7 @@ $conn->close();
                                 <td>{$row['n_exp_juzgado']}</td>
                                 <td>{$row['n_cedula']}</td>
                                 <td>{$row['descripcion']}</td>
-                                <td><a href='#' class='file-link' data-url='../judicial/{$row['doc_evidencia']}'>{$row['doc_evidencia']}</a></td>
+                                <td>" . (isset($row['doc_evidencia']) && !empty($row['doc_evidencia']) && $row['doc_evidencia'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../judicial/{$row['doc_evidencia']}'>{$row['doc_evidencia']}</a> <a href='../judicial/{$row['doc_evidencia']}' download style='margin-left:10px; color:blue; font-weight:bold;'>📥Descargar</a>" : '') . "</td>
                                 <td>{$row['fecha_clave']}</td>
                                 <td>{$row['accion_en_fecha_clave']}</td>
                                 <td>{$row['actor']}</td>
@@ -156,6 +155,7 @@ $conn->close();
         <button type="button" class="btn btn-danger" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
     </div>
 
+    <!-- Contenedor de vista previa -->
     <!-- Contenedor de vista previa -->
     <div class="preview-container" id="previewContainer">
         <button class="btn btn-danger" onclick="closePreview()">Cerrar</button>
@@ -180,7 +180,7 @@ $conn->close();
             }
         });
 
-        //Para la vista previa 
+        //Para la vista previa
         function openPreview(url) {
             var previewContainer = document.getElementById('previewContainer');
             var previewFrame = document.getElementById('previewFrame');
