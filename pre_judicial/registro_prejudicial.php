@@ -28,18 +28,18 @@ $message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha_acto = date('Y-m-d H:i:s');
 
-    // Obtener la fecha de inicio del caso (fecha_acto del ID 1) y la fecha_clave
-    $sql_select_inicio = "SELECT fecha_acto, fecha_clave FROM etapa_prejudicial WHERE id_cliente = $id_cliente AND id = 1";
+    // Obtener la fecha de inicio del caso (fecha_acto del primer registro)
+    $sql_select_inicio = "SELECT fecha_acto, saldo_int FROM etapa_prejudicial WHERE id_cliente = $id_cliente ORDER BY id ASC LIMIT 1";
     $result_inicio = $conn->query($sql_select_inicio);
 
     if ($result_inicio->num_rows > 0) {
         $row_inicio = $result_inicio->fetch_assoc();
         $fecha_inicio_caso = $row_inicio['fecha_acto'];
-        $fecha_clave_inicio = $row_inicio['fecha_clave'];
+        $saldo_int_anterior = $row_inicio['saldo_int'];
     } else {
-        // Si no hay registros, fecha_inicio_caso y fecha_clave_inicio son la misma que fecha_acto
+        // Si no hay registros, fecha_inicio_caso es la misma que fecha_acto
         $fecha_inicio_caso = $fecha_acto;
-        $fecha_clave_inicio = $fecha_acto;
+        $saldo_int_anterior = null;
     }
 
     // Datos de la etapa pre-judicial
@@ -52,17 +52,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $actor = $_POST["actor"];
     $evidencia1_localizacion = $_FILES["evidencia1_localizacion"]["name"];
     $evidencia2_foto_fecha = $_FILES["evidencia2_foto_fecha"]["name"];
-    $saldo_int = $_POST["saldo_int"];
     $monto_amortizado = $_POST["monto_amortizado"];
 
     // Calcular dias_mora_PJ
     $dias_mora_PJ = calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso);
-    // Calcular saldo_fecha
-    $saldo_fecha = $saldo_int - $monto_amortizado;
     // Calcular dias_de_mora usando la fecha de vencimiento del cliente
     $dias_de_mora = calcularDiasDeMora($fecha_acto, $cliente['fecha_vencimiento']);
     // Asignar el valor de dias_mora_PJ a interes
     $interes = $dias_mora_PJ;
+    // Calcular saldo_int
+    if ($saldo_int_anterior === null) {
+        $saldo_int = $cliente['saldo'];
+    } else {
+        $sql_select_anterior = "SELECT saldo_fecha FROM etapa_prejudicial WHERE id_cliente = $id_cliente ORDER BY id DESC LIMIT 1";
+        $result_anterior = $conn->query($sql_select_anterior);
+        if ($result_anterior->num_rows > 0) {
+            $row_anterior = $result_anterior->fetch_assoc();
+            $saldo_int = $row_anterior['saldo_fecha'] + $interes;
+        } else {
+            $saldo_int = $cliente['saldo'];
+        }
+    }
+    // Calcular saldo_fecha
+    $saldo_fecha = $saldo_int - $monto_amortizado;
 
     // Directorio de destino para los archivos subidos
     $target_dir = "uploads/";
@@ -88,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-//falta condicionar con id_cliernte y id
+// Función para calcular dias_mora_PJ
 function calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso)
 {
     $fecha_acto = new DateTime($fecha_acto);
@@ -136,7 +148,7 @@ function actualizarFilaAnterior($conn, $last_id, $fecha_acto, $id_cliente)
     }
 }
 
-// falta cumplir funcion
+
 function calcularDiasDesdeFechaClave($fecha_acto_siguiente, $fecha_clave)
 {
     $fecha_acto_siguiente = new DateTime($fecha_acto_siguiente);
@@ -293,10 +305,6 @@ $conn->close();
                         <label class="fw-bold">Evidencia 2:</label>
                         <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
                     </div>
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Saldo mas interes:</label>
-                    <input type="number" step="0.01" name="saldo_int" required class="form-control">
                 </div>
                 <div class="mb-2">
                     <label class="fw-bold">Monto Amortizado:</label>
