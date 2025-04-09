@@ -130,16 +130,16 @@ $conn->close();
                         echo "<tr>
                                 <td>{$count}</td>
                                 <td>{$row['etapa']}</td>
-                                <td>{$row['fecha']}</td>
-                                <td>{$row['acto']}</td>
+                                <td>{$row['fecha_judicial']}</td>
+                                <td>{$row['acto_judicial']}</td>
                                 <td>{$row['juzgado']}</td>
                                 <td>{$row['n_exp_juzgado']}</td>
                                 <td>{$row['n_cedula']}</td>
-                                <td>{$row['descripcion']}</td>
+                                <td>{$row['descripcion_judicial']}</td>
                                 <td>" . (isset($row['doc_evidencia']) && !empty($row['doc_evidencia']) && $row['doc_evidencia'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../judicial/{$row['doc_evidencia']}'>{$row['doc_evidencia']}</a> <a href='../judicial/{$row['doc_evidencia']}' download style='margin-left:10px; color:blue; font-weight:bold;'>📥Descargar</a>" : '') . "</td>
-                                <td>{$row['fecha_clave']}</td>
+                                <td>{$row['fecha_clave_judicial']}</td>
                                 <td>{$row['accion_en_fecha_clave']}</td>
-                                <td>{$row['actor']}</td>
+                                <td>{$row['actor_judicial']}</td>
                               </tr>";
                         $count++;
                     }

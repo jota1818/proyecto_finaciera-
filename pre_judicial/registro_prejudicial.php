@@ -256,7 +256,7 @@ $conn->close();
             <!-- Formulario de Etapa Pre-Judicial -->
             <form id="preJudicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo !$etapa_judicial ? 'active' : ''; ?>" onsubmit="return enviarFormulario()">
                 <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                <h4>Información de la Etapa Pre-Judicial</h4>
+                <h4>Etapa Pre-Judicial</h4>
                 <div class="row mb-2">
                     <div class="col-md-6">
                         <label class="fw-bold">Acto:</label>
@@ -331,7 +331,7 @@ $conn->close();
             <!-- Formulario de Etapa Judicial -->
             <form id="judicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo $etapa_judicial ? 'active' : ''; ?>">
                 <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                <h4>Información de la Etapa Judicial</h4>
+                <h4>Etapa Judicial</h4>
                 <div id="message"></div>
                 <div class="mb-2">
                     <label class="fw-bold">Acto:</label>
@@ -372,6 +372,9 @@ $conn->close();
                 <div class="fixed-buttons">
                     <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                     <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
+                    <br>
+                    <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
+                    <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                 </div>
             </form>
         </div>
@@ -410,9 +413,10 @@ $conn->close();
         document.getElementById('judicialForm').addEventListener('submit', function(event) {
             // Validar el formulario judicial antes de enviar
             if (!validarFormularioJudicial()) {
+                event.preventDefault(); // Evita el envío del formulario si la validación falla
                 return false; // Si la validación falla, no se envía el formulario
             }
-            event.preventDefault(); // Evita el envío tradicional del formulario
+            event.preventDefault(); // Evita el envío del formulario si la validación falla
             var formData = new FormData(this);
 
             fetch('http://localhost/proyecto_financiera/judicial/registro_judicial.php', {
