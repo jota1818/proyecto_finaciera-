@@ -16,6 +16,16 @@ if ($id_cliente) {
         $fecha_desembolso = new DateTime($cliente['fecha_desembolso']);
         $fecha_vencimiento = new DateTime($cliente['fecha_vencimiento']);
         $plazo_credito = $fecha_vencimiento->diff($fecha_desembolso)->days;
+
+        // Verificar si el cliente ya pasó a la etapa judicial
+        $sql_check_judicial = "SELECT COUNT(*) as count FROM etapa_prejudicial WHERE id_cliente = $id_cliente AND acto = 'Pasa a Judicial'";
+        $result_check_judicial = $conn->query($sql_check_judicial);
+        if ($result_check_judicial->num_rows > 0) {
+            $row_check_judicial = $result_check_judicial->fetch_assoc();
+            if ($row_check_judicial['count'] > 0) {
+                $etapa_judicial = true;
+            }
+        }
     } else {
         die("Error: El ID del cliente no existe en la base de datos.");
     }
@@ -191,7 +201,6 @@ $conn->close();
     <div>
         <h2>Información del Cliente</h2>
     </div>
-    <!-- Información del Cliente -->
     <div class="form-container border p-3 mb-3 active">
         <div class="row mb-2">
             <div class="col-md-6">
@@ -233,19 +242,19 @@ $conn->close();
         </div>
     </div>
 
-    <!-- Información de la Etapa Pre-Judicial y Judicial -->
     <div class="row">
         <div>
             <h2>Formulario de Etapa Prejudicial y Judicial</h2>
         </div>
-        <!-- Formulario de Etapa Pre-Judicial -->
-        <div class="col-md-8 border p-3 active">
+        <div class="col-md-12 border p-3">
             <?php if ($message): ?>
                 <div class="alert alert-success" role="alert">
                     <?php echo $message; ?>
                 </div>
             <?php endif; ?>
-            <form id="preJudicialForm" method="post" enctype="multipart/form-data" onsubmit="return enviarFormulario()">
+
+            <!-- Formulario de Etapa Pre-Judicial -->
+            <form id="preJudicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo !$etapa_judicial ? 'active' : ''; ?>" onsubmit="return enviarFormulario()">
                 <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
                 <h4>Información de la Etapa Pre-Judicial</h4>
                 <div class="row mb-2">
@@ -318,64 +327,56 @@ $conn->close();
                     <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                 </div>
             </form>
-        </div>
-
-        <!-- Botón para abrir el formulario judicial -->
-        <div class="col-md-4 border p-3">
-            <button type="button" class="btn btn-info w-100 mt-3" onclick="toggleJudicialForm()">Judicial</button>
 
             <!-- Formulario de Etapa Judicial -->
-            <div id="judicialFormContainer" class="form-container">
-                <form id="judicialForm" enctype="multipart/form-data">
-                    <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                    <h4>Información de la Etapa Judicial</h4>
-                    <div id="message"></div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Acto:</label>
-                        <input type="text" name="acto" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Juzgado:</label>
-                        <input type="text" name="juzgado" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Número de Expediente del Juzgado:</label>
-                        <input type="text" name="n_exp_juzgado" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Número de Cédula:</label>
-                        <input type="text" name="n_cedula" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Descripción:</label>
-                        <textarea name="descripcion" required class="form-control"></textarea>
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Documento de Evidencia:</label>
-                        <input type="file" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Fecha Clave:</label>
-                        <input type="date" name="fecha_clave" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Acción en Fecha Clave:</label>
-                        <input type="text" name="accion_en_fecha_clave" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Actor Involucrado:</label>
-                        <input type="text" name="actor" required class="form-control">
-                    </div>
-                    <div class="fixed-buttons">
-                        <button type="submit" class="btn btn-primary mt-3">Registrar</button>
-                        <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                    </div>
-                </form>
-            </div>
+            <form id="judicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo $etapa_judicial ? 'active' : ''; ?>">
+                <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
+                <h4>Información de la Etapa Judicial</h4>
+                <div id="message"></div>
+                <div class="mb-2">
+                    <label class="fw-bold">Acto:</label>
+                    <input type="text" name="acto_judicial" required class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Juzgado:</label>
+                    <input type="text" name="juzgado" required class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Número de Expediente del Juzgado:</label>
+                    <input type="text" name="n_exp_juzgado" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Número de Cédula:</label>
+                    <input type="text" name="n_cedula" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Descripción:</label>
+                    <textarea name="descripcion_judicial" required class="form-control"></textarea>
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Documento de Evidencia:</label>
+                    <input type="file" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Fecha Clave:</label>
+                    <input type="date" name="fecha_clave_judicial" required class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Acción en Fecha Clave:</label>
+                    <input type="text" name="accion_en_fecha_clave" required class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label class="fw-bold">Actor Involucrado:</label>
+                    <input type="text" name="actor_judicial" required class="form-control">
+                </div>
+                <div class="fixed-buttons">
+                    <button type="submit" class="btn btn-primary mt-3">Registrar</button>
+                    <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
+                </div>
+            </form>
         </div>
     </div>
-
-    </div>
+    
 
     <script>
         function enviarFormulario(event) {
@@ -395,7 +396,8 @@ $conn->close();
                 .then(data => {
                     // Maneja la respuesta del servidor
                     alert('Registro exitoso');
-                    // Puedes actualizar parte de la página si es necesario
+                    // Recargar la página para mostrar el formulario judicial si es necesario
+                    location.reload();
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -403,11 +405,6 @@ $conn->close();
                 });
 
             return false; // Evita el comportamiento predeterminado del formulario
-        }
-
-        function toggleJudicialForm() {
-            const judicialFormContainer = document.getElementById('judicialFormContainer');
-            judicialFormContainer.classList.toggle('active');
         }
 
         document.getElementById('judicialForm').addEventListener('submit', function(event) {

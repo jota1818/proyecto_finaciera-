@@ -38,17 +38,17 @@ function validarFormularioPreJudicial() {
 
 function validarFormularioJudicial() {
     // Obtener valores del formulario
-    let fecha = new Date();
-    let fecha_clave = new Date(document.forms["judicialForm"]["fecha_clave"].value);
-    let descripcion = document.forms["judicialForm"]["descripcion"].value;
+    let fecha_judicial = new Date();
+    let fecha_clave_judicial = new Date(document.forms["judicialForm"]["fecha_clave_judicial"].value);
+    let descripcion_judicial = document.forms["judicialForm"]["descripcion_judicial"].value;
 
     // Validaciones
-    if (descripcion.trim().split(/\s+/).length > 100) {
+    if (descripcion_judicial.trim().split(/\s+/).length > 100) {
         alert("La descripción debe tener un máximo de 100 palabras.");
         return false;
     }
 
-    if (fecha_clave && fecha_clave < fecha) {
+    if (fecha_clave_judicial && fecha_clave_judicial < fecha_judicial) {
         alert("La fecha clave no puede ser anterior a la fecha actual.");
         return false;
     }
