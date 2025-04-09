@@ -37,14 +37,14 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th onclick="sortTable(0)">Nombre &#9660;</th>
-                                <th onclick="sortTable(1)">Apellidos &#9660;</th>
-                                <th onclick="sortTable(2)">DNI &#9660;</th>
-                                <th onclick="sortTable(3)">Teléfono &#9660;</th>
-                                <th onclick="sortTable(4)">Monto &#9660;</th>
-                                <th onclick="sortTable(5)">Saldo &#9660;</th>
-                                <th onclick="sortTable(6)">Fecha Clave &#9660;</th>
-                                <th onclick="sortTable(7)">Acción en Fecha Clave &#9660;</th>
+                                <th onclick="sortTable(0)">Nombre &#128317;</th>
+                                <th onclick="sortTable(1)">Apellidos &#128317;</th>
+                                <th onclick="sortTable(2)">DNI &#128317;</th>
+                                <th onclick="sortTable(3)">Teléfono &#128317;</th>
+                                <th onclick="sortTable(4)">Monto &#128317;</th>
+                                <th onclick="sortTable(5)">Saldo &#128317;</th>
+                                <th onclick="sortTable(6)">Fecha Clave &#128317;</th>
+                                <th onclick="sortTable(7)">Acción en Fecha Clave &#128317;</th>
                                 <th class="fixed-column">Información</th>
                             </tr>
                         </thead>
@@ -56,7 +56,7 @@
             </div>
 
             <!-- Búsqueda de Clientes -->
-            <div class="mb-4 p-3 border">
+            <div class="mb-4 p-3 border busqueda-clientes">
                 <h2>Búsqueda de Clientes</h2>
                 <form id="busquedaForm" method="post" onsubmit="return buscarCliente(event);">
                     <div class="row">

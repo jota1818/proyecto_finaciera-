@@ -1,6 +1,17 @@
+
+body {
+    /* background: linear-gradient(to right, #b2b411, #610707); */ /* Degradado de azul claro a verde claro */
+    background: linear-gradient(to right, #961526, #190342); /* Degradado de azul claro a verde claro */
+}
+
+
 #clienteDetalles {
     display: none;
     margin-top: 20px;
+    padding: 15px; /* Añade espacio interno */
+    border: 2px solid #ddd; /* Añade un borde */
+    border-radius: 8px; /* Redondea las esquinas */
+    /* background-color: #ac1515; */ /* Color de fondo */
     position: relative; /* Asegura que los botones se posicionen dentro de este contenedor */
     overflow: hidden; /* Evita que los elementos se desborden */
 }
@@ -13,7 +24,20 @@
     box-sizing: content-box; /* Asegura que el padding se añada fuera del tamaño total */
     position: relative; /* Asegura que los elementos absolutos se posicionen dentro de este contenedor */
 }
-
+.details-container {
+    background-color: #fdfcfc; /* Mantiene el color de fondo gris claro */
+    padding: 10px;            /* Añade espacio interno */
+    border-radius: 8px;      /* Redondea las esquinas del contenedor */
+}
+/* ----------Para los titulos: lista de clientes y informacion del cliente ----------------------*/
+/* Estilos para centrar los títulos dentro de contenedores específicos */
+.fixed-header h3,
+.fixed-header h4,
+.details-container h4 {
+    text-align: center; /* Centra el texto dentro del elemento */
+    margin-top: 0;     /* Elimina el margen superior para evitar espacios no deseados */
+    margin-bottom: 10px; /* Añade un margen inferior para separar del contenido siguiente */
+}
 
 .fixed-header {
     position: sticky;
@@ -22,6 +46,13 @@
     padding: 10px;
     border-bottom: 1px solid #ddd;
     z-index: 2; /* Asegura que el encabezado esté sobre el contenido desplazable */
+}
+/* Estilos adicionales para los contenedores si es necesario */
+.fixed-header {
+    background-color: #003366; /* Mantiene el color de fondo azul oscuro */
+    color: white;             /* Mantiene el color del texto blanco */
+    padding: 10px;            /* Mantiene el espacio interno */
+    border-radius: 8px 8px 0 0; /* Mantiene las esquinas superiores redondeadas */
 }
 
 .scrollable-table-container {
@@ -57,13 +88,14 @@ thead th {
 .fixed-buttons {
     position: absolute; /* Cambiar a absolute */
     bottom: 0;
-    width: 100%;
+    width: 98.2%;
     background-color: white;
     padding: 10px;
     border-top: 1px solid #ddd;
     display: flex;
     justify-content: space-around;  /* Centra los botones horizontalmente */
     gap: 15px; /* Espacio entre los botones */
+    margin-top: 20px; /* Añade espacio entre los botones y el contenido */
 }
 .fixed-buttons button {
     width: 200px; /* Ajusta el ancho de los botones */
@@ -85,45 +117,27 @@ thead th {
     background-color: red; /* Color de la línea */
 }
 
-/* ----------Para los titulos: lista de clientes y informacion del cliente ----------------------*/
-/* Estilos para centrar los títulos dentro de contenedores específicos */
-.fixed-header h3,
-.fixed-header h4,
-.details-container h4 {
-    text-align: center; /* Centra el texto dentro del elemento */
-    margin-top: 0;     /* Elimina el margen superior para evitar espacios no deseados */
-    margin-bottom: 10px; /* Añade un margen inferior para separar del contenido siguiente */
-}
-
-/* Estilos adicionales para los contenedores si es necesario */
-.fixed-header {
-    background-color: #003366; /* Mantiene el color de fondo azul oscuro */
-    color: white;             /* Mantiene el color del texto blanco */
-    padding: 10px;            /* Mantiene el espacio interno */
-    border-radius: 8px 8px 0 0; /* Mantiene las esquinas superiores redondeadas */
-}
-
-.details-container {
-    background-color: #f9f9f9; /* Mantiene el color de fondo gris claro */
-    padding: 10px;            /* Añade espacio interno */
-    border-radius: 8px;      /* Redondea las esquinas del contenedor */
-}
-
-/* ------------------Para los titulos titular y aval ------------------------*/
-/* Estilos para el título "Titular" */
-.titular-title {
-    background-color: #e4e4b4; /* Cambia el color de fondo a dorado */
+/* Estilos para los títulos "Titular" y "Aval" */
+.titular-title, .aval-title {
+    background-color: #e4e4b4; /* Color de fondo */
     padding: 10px;
     border-radius: 8px;
     margin: 0; /* Elimina los márgenes para un mejor ajuste */
     color: black; /* Asegura que el texto sea visible */
 }
 
-/* Estilos para el título "Aval" */
-.aval-title {
-    background-color: #e4e4b4; /* Cambia el color de fondo a azul violeta */
-    padding: 10px;
-    border-radius: 8px;
-    margin: 0; /* Elimina los márgenes para un mejor ajuste */
-    color: black; /* Asegura que el texto sea visible */
+/* Estilo para cambiar el color de fondo del contenedor de búsqueda */
+.busqueda-clientes {
+    background-color: #003366; /* Cambia este valor al color que prefieras */
+    padding: 15px; /* Añade un poco de espacio interno */
+    border-radius: 8px; /* Redondea las esquinas del contenedor */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra suave */
+}
+/* Estilo para cambiar el color del texto en la sección de búsqueda */
+.busqueda-clientes h2 {
+    color: #ffffff; /* Cambia este valor al color que prefieras */
+}
+
+.busqueda-clientes label {
+    color: #ffffff; /* Cambia este valor al color que prefieras */
 }
