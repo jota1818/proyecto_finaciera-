@@ -84,3 +84,46 @@ thead th {
     width: 5px; /* Ajusta el ancho de la línea */
     background-color: red; /* Color de la línea */
 }
+
+/* ----------Para los titulos: lista de clientes y informacion del cliente ----------------------*/
+/* Estilos para centrar los títulos dentro de contenedores específicos */
+.fixed-header h3,
+.fixed-header h4,
+.details-container h4 {
+    text-align: center; /* Centra el texto dentro del elemento */
+    margin-top: 0;     /* Elimina el margen superior para evitar espacios no deseados */
+    margin-bottom: 10px; /* Añade un margen inferior para separar del contenido siguiente */
+}
+
+/* Estilos adicionales para los contenedores si es necesario */
+.fixed-header {
+    background-color: #003366; /* Mantiene el color de fondo azul oscuro */
+    color: white;             /* Mantiene el color del texto blanco */
+    padding: 10px;            /* Mantiene el espacio interno */
+    border-radius: 8px 8px 0 0; /* Mantiene las esquinas superiores redondeadas */
+}
+
+.details-container {
+    background-color: #f9f9f9; /* Mantiene el color de fondo gris claro */
+    padding: 10px;            /* Añade espacio interno */
+    border-radius: 8px;      /* Redondea las esquinas del contenedor */
+}
+
+/* ------------------Para los titulos titular y aval ------------------------*/
+/* Estilos para el título "Titular" */
+.titular-title {
+    background-color: #e4e4b4; /* Cambia el color de fondo a dorado */
+    padding: 10px;
+    border-radius: 8px;
+    margin: 0; /* Elimina los márgenes para un mejor ajuste */
+    color: black; /* Asegura que el texto sea visible */
+}
+
+/* Estilos para el título "Aval" */
+.aval-title {
+    background-color: #e4e4b4; /* Cambia el color de fondo a azul violeta */
+    padding: 10px;
+    border-radius: 8px;
+    margin: 0; /* Elimina los márgenes para un mejor ajuste */
+    color: black; /* Asegura que el texto sea visible */
+}
