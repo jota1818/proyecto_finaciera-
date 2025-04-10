@@ -34,9 +34,9 @@ if ($result->num_rows > 0) {
     }
     echo "<tr><td><strong>Ocupación:</strong></td><td>" . htmlspecialchars($row['ocupacion']) . "</td></tr>";
     echo "<tr><td><strong>Clasificación de Riesgo:</strong></td><td>" . htmlspecialchars($row['clasificacion_riesgo']) . "</td></tr>";
-    echo "<tr><td><strong>Clasificación de Agencia:</strong></td><td>" . htmlspecialchars($row['agencia']) . "</td></tr>";
-    echo "<tr><td><strong>Clasificación de Tipo de credito:</strong></td><td>" . htmlspecialchars($row['tipo_credito']) . "</td></tr>";
-    echo "<tr><td><strong>Clasificación de Estado:</strong></td><td>" . htmlspecialchars($row['estado']) . "</td></tr>";
+    echo "<tr><td><strong>Agencia:</strong></td><td>" . htmlspecialchars($row['agencia']) . "</td></tr>";
+    echo "<tr><td><strong>Tipo de credito:</strong></td><td>" . htmlspecialchars($row['tipo_credito']) . "</td></tr>";
+    echo "<tr><td><strong>Estado:</strong></td><td>" . htmlspecialchars($row['estado']) . "</td></tr>";
     echo "<tr><td><strong>Fecha de Desembolso:</strong></td><td>" . htmlspecialchars($row['fecha_desembolso']) . "</td></tr>";
     echo "<tr><td><strong>Fecha de Vencimiento:</strong></td><td>" . htmlspecialchars($row['fecha_vencimiento']) . "</td></tr>";
     echo "<tr><td><strong>Monto:</strong></td><td>" . formatNumber($row['monto']) . "</td></tr>";

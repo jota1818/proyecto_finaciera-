@@ -84,6 +84,7 @@ thead th {
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* Redondea las esquinas del contenedor */
     height: 100%; /* Ocupa todo el espacio vertical disponible */
     display: flex;
     flex-direction: column;
@@ -143,6 +144,10 @@ thead th {
     border-radius: 8px; /* Redondea las esquinas del contenedor */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra suave */
 }
+.busqueda-cli {
+    padding: 0px; /* Añade un poco de espacio interno */
+    border-radius: 8px; /* Redondea las esquinas del contenedor */
+}
 /* Estilo para cambiar el color del texto en la sección de búsqueda */
 .busqueda-clientes h2 {
     color: #ffffff; /* Cambia este valor al color que prefieras */
@@ -150,4 +155,8 @@ thead th {
 
 .busqueda-clientes label {
     color: #ffffff; /* Cambia este valor al color que prefieras */
+}
+
+.border {
+    border-radius: 8px; /* Redondea las esquinas del contenedor */
 }

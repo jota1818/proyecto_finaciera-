@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $referencia1_garante = $_POST["referencia1_garante"] ? $_POST["referencia1_garante"] : '';
     $domicilio2_garante = isset($_POST["domicilio2_garante"]) ? $_POST["domicilio2_garante"] : '';
     $referencia2_garante = isset($_POST["referencia2_garante"]) ? $_POST["referencia2_garante"] : '';
-    $ocupacion_garante = $_POST["ocupacion_garante"] ? $_POST["ocupacion_garante"] : ''; 
+    $ocupacion_garante = $_POST["ocupacion_garante"] ? $_POST["ocupacion_garante"] : '';
     $clasificacion_riesgo_garante = $_POST["clasificacion_riesgo_garante"] ? $_POST["clasificacion_riesgo_garante"] : '';
     //dato Fecha Programada
     $fecha_clave = $_POST["fecha_clave"];
@@ -59,28 +59,39 @@ $conn->close();
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
         .form-container {
-            height: 1000px; /* Altura fija para el contenedor del formulario */
-            overflow-y: auto; /* Habilitar desplazamiento vertical */
-            padding-right: 15px; /* Espacio para la barra de desplazamiento */
+            height: 1000px;
+            /* Altura fija para el contenedor del formulario */
+            overflow-y: auto;
+            /* Habilitar desplazamiento vertical */
+            padding-right: 15px;
+            /* Espacio para la barra de desplazamiento */
         }
+
         .fixed-buttonss {
             position: sticky;
             bottom: 0;
             background-color: white;
             padding: 10px;
             border-top: 1px solid #ddd;
-            justify-content: center;  /* Centra los botones horizontalmente */
-            gap: 100px; /* Espacio entre los botones */
+            justify-content: center;
+            /* Centra los botones horizontalmente */
+            gap: 100px;
+            /* Espacio entre los botones */
         }
+
         .fixed-buttonss button {
-            width: 200px; /* Ajusta el ancho de los botones */
-            font-size: 16px; /* Ajusta el tamaño de la fuente si es necesario */
+            width: 200px;
+            /* Ajusta el ancho de los botones */
+            font-size: 16px;
+            /* Ajusta el tamaño de la fuente si es necesario */
         }
     </style>
 </head>
+
 <body class="container mt-3">
     <div>
         <h2>Formulario de Registro</h2>
@@ -142,11 +153,22 @@ $conn->close();
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Agencia:</label>
-                        <input type="text" name="agencia" required class="form-control">
+                        <select name="agencia" required class="form-control">
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            <option value="Ayacucho">Ayacucho</option>
+                            <option value="Huancayo">Huancayo</option>
+                            <option value="Lima">Lima</option>
+                        </select>
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Tipo de credito:</label>
-                        <input type="text" name="tipo_credito" required class="form-control">
+                        <select name="tipo_credito" required class="form-control">
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            <option value="Diario">Diario</option>
+                            <option value="Semanal">Semanal</option>
+                            <option value="Mensual">Mensual</option>
+                            <option value="Anual">Anual</option>
+                        </select>
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Estado:</label>
@@ -173,31 +195,31 @@ $conn->close();
                     <h4>Información del Garante</h4>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
-                        <input type="text" name="nombre_garante"  class="form-control">
+                        <input type="text" name="nombre_garante" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Apellidos:</label>
-                        <input type="text" name="apellidos_garante"  class="form-control">
+                        <input type="text" name="apellidos_garante" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">DNI:</label>
-                        <input type="text" name="dni_garante"  class="form-control">
+                        <input type="text" name="dni_garante" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Teléfono:</label>
-                        <input type="number" name="telefono_garante"  class="form-control">
+                        <input type="number" name="telefono_garante" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha de Nacimiento:</label>
-                        <input type="date" name="fecha_nacimiento_garante"  class="form-control">
+                        <input type="date" name="fecha_nacimiento_garante" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Domicilio 1:</label>
-                        <input type="text" name="domicilio1_garante"  class="form-control">
+                        <input type="text" name="domicilio1_garante" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Referencia 1:</label>
-                        <input type="text" name="referencia1_garante"  class="form-control">
+                        <input type="text" name="referencia1_garante" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Domicilio 2:</label>
@@ -209,11 +231,11 @@ $conn->close();
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Ocupación:</label>
-                        <input type="text" name="ocupacion_garante"  class="form-control">
+                        <input type="text" name="ocupacion_garante" class="form-control">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Clasificación de Riesgo:</label>
-                        <select name="clasificacion_riesgo_garante"  class="form-control">
+                        <select name="clasificacion_riesgo_garante" class="form-control">
                             <option value="" disabled selected>Seleccione una opción</option>
                             <option value="NOR">NOR</option>
                             <option value="CPP">CPP</option>
@@ -258,4 +280,5 @@ $conn->close();
         </form>
     </div>
 </body>
+
 </html>

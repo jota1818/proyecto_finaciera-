@@ -58,33 +58,34 @@
             </div>
 
             <!-- Búsqueda de Clientes -->
-            <div class="mb-4 p-3 border busqueda-clientes">
-                <h2>Búsqueda de Clientes</h2>
-                <form id="busquedaForm" method="post" onsubmit="return buscarCliente(event);">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="mb-2">
-                                <label class="fw-bold">DNI:</label>
-                                <input type="number" id="dniInput" name="dni" class="form-control" oninput="buscarClientePorDNI()">
+            <div class="mb-4 p-3 border busqueda-cli">
+                <div class="mb-4 p-3 border busqueda-clientes">
+                    <h2>Búsqueda de Clientes</h2>
+                    <form id="busquedaForm" method="post" onsubmit="return buscarCliente(event);">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-2">
+                                    <label class="fw-bold">DNI:</label>
+                                    <input type="number" id="dniInput" name="dni" class="form-control" oninput="buscarClientePorDNI()">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-2">
+                                    <label class="fw-bold">Nombre:</label>
+                                    <input type="text" name="nombre" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-2">
+                                    <label class="fw-bold">Apellidos:</label>
+                                    <input type="text" name="apellidos" class="form-control">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="mb-2">
-                                <label class="fw-bold">Nombre:</label>
-                                <input type="text" name="nombre" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-2">
-                                <label class="fw-bold">Apellidos:</label>
-                                <input type="text" name="apellidos" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-3">Buscar</button>
-                </form>
+                        <button type="submit" class="btn btn-primary mt-3">Buscar</button>
+                    </form>
+                </div>
             </div>
-
             <!-- Cuadro blanco para la información del cliente -->
             <div id="clienteDetalles" class="p-3 border mt-4">
                 <div class="fixed-header">

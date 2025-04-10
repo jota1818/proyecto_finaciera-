@@ -61,8 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha_clave = $_POST["fecha_clave"];
     $accion_fecha_clave = $_POST["accion_fecha_clave"];
     $actor = $_POST["actor"];
-    $evidencia1_localizacion = $_FILES["evidencia1_localizacion"]["name"] ? $_POST["evidencia1_localizacion"] : '';
-    $evidencia2_foto_fecha = $_FILES["evidencia2_foto_fecha"]["name"] ? $_POST["evidencia2_foto_fecha"] : '';
+    $evidencia1_localizacion = $_FILES["evidencia1_localizacion"]["name"];
+    $evidencia2_foto_fecha = $_FILES["evidencia2_foto_fecha"]["name"];
     $monto_amortizado = $_POST["monto_amortizado"] ? $_POST["monto_amortizado"] : '0';
 
     // Calcular dias_mora_PJ
@@ -329,8 +329,8 @@ $conn->close();
                 <div class="fixed-buttons">
                     <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                     <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                    <br>
                     <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
+                    <br>                   
                     <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
                     <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                 </div>
@@ -375,13 +375,19 @@ $conn->close();
                 </div>
                 <div class="mb-2">
                     <label class="fw-bold">Actor Involucrado:</label>
-                    <input type="text" name="actor_judicial" required class="form-control">
+                    <select name="actor_judicial" required class="form-control">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Gestor">Gestor</option>
+                        <option value="Juez">Juez</option>
+                        <option value="Abogado">Abogado</option>
+                        <option value="Supervisor">Supervisor</option>
+                    </select>
                 </div>
                 <div class="fixed-buttons">
                     <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                     <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                    <br>
                     <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
+                    <br>
                     <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
                     <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                 </div>
