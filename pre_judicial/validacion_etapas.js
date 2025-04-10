@@ -1,6 +1,7 @@
 function validarFormularioPreJudicial() {
     // Obtener valores del formulario
-    let fecha_acto = new Date(); // Obtener la fecha actual
+    /* let fecha_acto = new Date(); */ // Obtener la fecha actual
+    let fecha_acto = new Date(document.forms["preJudicialForm"]["fecha_acto"].value);
     let fecha_clave = new Date(document.forms["preJudicialForm"]["fecha_clave"].value);
     let descripcion = document.forms["preJudicialForm"]["descripcion"].value;
     let monto_amortizado = document.forms["preJudicialForm"]["monto_amortizado"].value;
@@ -25,7 +26,7 @@ function validarFormularioPreJudicial() {
     }
 
     // Validar que el número de notificación/voucher solo contenga números del 0 al 9
-    if (!regexNumeral.test(n_de_notif_voucher)) {
+    if (n_de_notif_voucher && !regexNumeral.test(n_de_notif_voucher)) {
         alert("El Número de Notificación/Voucher solo debe contener números del 0 al 9.");
         return false;
     }

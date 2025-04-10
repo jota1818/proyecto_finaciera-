@@ -13,14 +13,16 @@
     <div class="row">
         <!-- Barra lateral vertical -->
         <div class="col-md-4">
-            <div class="vertical-button-container">
-                <button type="button" class="btn btn-primary mb-3" onclick="cargarRegistro()">
-                    Registrar nuevo cliente
-                </button>
-                <div id="registroCliente" class="form-container">
-                    <div id="registroContent">
-                        <!-- El formulario de registro se cargará aquí por defecto -->
-                        <?php include 'registrar.php'; ?>
+            <div class="vertical-button-cont">
+                <div class="vertical-button-container">
+                    <button type="button" class="btn btn-primary mb-3" onclick="cargarRegistro()">
+                        Registrar nuevo cliente
+                    </button>
+                    <div id="registroCliente" class="form-container">
+                        <div id="registroContent">
+                            <!-- El formulario de registro se cargará aquí por defecto -->
+                            <?php include 'registrar.php'; ?>
+                        </div>
                     </div>
                 </div>
             </div>

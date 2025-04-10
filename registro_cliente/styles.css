@@ -78,6 +78,16 @@ thead th {
     display: flex;
     flex-direction: column;
 }
+.vertical-button-cont {
+    /* background-color: rgba(255, 255, 255, 0.5); */ /* Fondo semi-transparente */
+    border: 1px solid white; /* Borde blanco */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100%; /* Ocupa todo el espacio vertical disponible */
+    display: flex;
+    flex-direction: column;
+}
 
 .form-container {
     flex: 1; /* Ocupa el espacio restante en el contenedor vertical */

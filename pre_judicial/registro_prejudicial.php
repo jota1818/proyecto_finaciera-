@@ -36,7 +36,8 @@ if ($id_cliente) {
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fecha_acto = date('Y-m-d H:i:s');
+    /* $fecha_acto = date('Y-m-d H:i:s'); */
+    $fecha_acto = $_POST["fecha_acto"];
 
     // Obtener la fecha de inicio del caso (fecha_acto del primer registro)
     $sql_select_inicio = "SELECT fecha_acto, saldo_int FROM etapa_prejudicial WHERE id_cliente = $id_cliente ORDER BY id ASC LIMIT 1";
@@ -54,15 +55,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Datos de la etapa pre-judicial
     $acto = $_POST["acto"];
-    $n_de_notif_voucher = $_POST["n_de_notif_voucher"];
+    $n_de_notif_voucher = $_POST["n_de_notif_voucher"] ? $_POST["n_de_notif_voucher"] : '';
     $descripcion = $_POST["descripcion"];
     $notif_compromiso_pago_evidencia = $_FILES["notif_compromiso_pago_evidencia"]["name"];
     $fecha_clave = $_POST["fecha_clave"];
     $accion_fecha_clave = $_POST["accion_fecha_clave"];
     $actor = $_POST["actor"];
-    $evidencia1_localizacion = $_FILES["evidencia1_localizacion"]["name"];
-    $evidencia2_foto_fecha = $_FILES["evidencia2_foto_fecha"]["name"];
-    $monto_amortizado = $_POST["monto_amortizado"];
+    $evidencia1_localizacion = $_FILES["evidencia1_localizacion"]["name"] ? $_POST["evidencia1_localizacion"] : '';
+    $evidencia2_foto_fecha = $_FILES["evidencia2_foto_fecha"]["name"] ? $_POST["evidencia2_foto_fecha"] : '';
+    $monto_amortizado = $_POST["monto_amortizado"] ? $_POST["monto_amortizado"] : '0';
 
     // Calcular dias_mora_PJ
     $dias_mora_PJ = calcularDiasMoraPJ($fecha_acto, $fecha_inicio_caso);
@@ -273,9 +274,15 @@ $conn->close();
                     </div>
                     <div class="col-md-6">
                         <label class="fw-bold">Número de Notificación/Voucher:</label>
-                        <input type="text" name="n_de_notif_voucher" required class="form-control">
+                        <input type="text" name="n_de_notif_voucher" class="form-control">
                     </div>
                 </div>
+                <!-- por el momento para hacer pruebas -->
+                <div class="mb-2">
+                    <label class="fw-bold">Fecha Acto:</label>
+                    <input type="date" name="fecha_acto" required class="form-control">
+                </div>
+                <!-- asta aqui -->
                 <div class="mb-2">
                     <label class="fw-bold">Descripción:</label>
                     <textarea name="descripcion" required class="form-control"></textarea>
@@ -308,21 +315,22 @@ $conn->close();
                 <div class="row mb-2">
                     <div class="col-md-6">
                         <label class="fw-bold">Evidencia 1:</label>
-                        <input type="file" name="evidencia1_localizacion" accept="image/*" required class="form-control">
+                        <input type="file" name="evidencia1_localizacion" accept="image/*" class="form-control">
                     </div>
                     <div class="col-md-6">
                         <label class="fw-bold">Evidencia 2:</label>
-                        <input type="file" name="evidencia2_foto_fecha" accept="image/*" required class="form-control">
+                        <input type="file" name="evidencia2_foto_fecha" accept="image/*" class="form-control">
                     </div>
                 </div>
                 <div class="mb-2">
                     <label class="fw-bold">Monto Amortizado:</label>
-                    <input type="number" step="0.01" name="monto_amortizado" required class="form-control">
+                    <input type="number" step="0.01" name="monto_amortizado" class="form-control">
                 </div>
                 <div class="fixed-buttons">
                     <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                     <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
                     <br>
+                    <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
                     <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
                     <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                 </div>
@@ -373,15 +381,24 @@ $conn->close();
                     <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                     <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
                     <br>
+                    <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
                     <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
                     <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
 
     <script>
+        function verHistorial(idCliente) {
+            if (idCliente) {
+                window.location.href = '../historial/record.php?id_cliente=' + encodeURIComponent(idCliente);
+            } else {
+                alert("Error: ID del cliente no disponible.");
+            }
+        }
+
         function enviarFormulario(event) {
             // Validar el formulario antes de evitar el envío tradicional
             if (!validarFormularioPreJudicial()) {
@@ -434,7 +451,6 @@ $conn->close();
                     console.error('Error:', error);
                 });
         });
-        
     </script>
 </body>
 
