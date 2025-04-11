@@ -7,7 +7,7 @@ $monto_abonado = 0; // Inicializar con un valor predeterminado
 $plazo_credito = 0; // Inicializar con un valor predeterminado
 
 if ($id_cliente) {
-    $sql = "SELECT nombre, apellidos, dni, monto, saldo, fecha_desembolso, fecha_vencimiento FROM clientes WHERE id_cliente='$id_cliente'";
+    $sql = "SELECT nombre, apellidos, dni, monto, saldo, fecha_desembolso, fecha_vencimiento, agencia, tipo_credito FROM clientes WHERE id_cliente='$id_cliente'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -186,6 +186,7 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="validacion_etapas.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
 
     <style>
         .form-container {
@@ -211,6 +212,16 @@ $conn->close();
             <div class="col-md-6">
                 <label class="fw-bold">DNI:</label>
                 <input type="text" value="<?php echo htmlspecialchars($cliente['dni'] ?? ''); ?>" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <label class="fw-bold">Agencia:</label>
+                <input type="text" value="<?php echo htmlspecialchars($cliente['agencia'] ?? ''); ?>" class="form-control" readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="fw-bold">Tipo de Crédito:</label>
+                <input type="text" value="<?php echo htmlspecialchars($cliente['tipo_credito'] ?? ''); ?>" class="form-control" readonly>
             </div>
         </div>
         <div class="row mb-2">
@@ -264,10 +275,10 @@ $conn->close();
                         <select name="acto" required class="form-control">
                             <option value="" disabled selected>Seleccione una opción</option>
                             <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
-                            <option value="Notificación">Notificación</option>
-                            <option value="Amortización">Amortización</option>
+                            <option value="Notificacion">Notificación</option>
+                            <option value="Amortizacion">Amortización</option>
                             <option value="Cambio Gestor">Cambio Gestor</option>
-                            <option value="Postergación">Postergación</option>
+                            <option value="Postergacion">Postergación</option>
                             <option value="Fin de caso">Fin de caso</option>
                             <option value="Pasa a Judicial">Pasa a Judicial</option>
                         </select>
@@ -289,10 +300,8 @@ $conn->close();
                 </div>
                 <div class="mb-2">
                     <label class="fw-bold">Notificación/Compromiso de Pago:</label>
-                    <input type="file" name="notif_compromiso_pago_evidencia"
-                        accept=".docx, .pdf, .jpg, .png"
-                        required
-                        class="form-control">
+                    <input type="file" id="notif_compromiso_pago_evidencia" name="notif_compromiso_pago_evidencia" accept=".docx, .pdf, .jpg, .png" required class="form-control">
+                    <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('notif_compromiso_pago_evidencia')">Cancelar</button>
                 </div>
                 <div class="mb-2">
                     <label class="fw-bold">Fecha Clave:</label>
@@ -315,11 +324,13 @@ $conn->close();
                 <div class="row mb-2">
                     <div class="col-md-6">
                         <label class="fw-bold">Evidencia 1:</label>
-                        <input type="file" name="evidencia1_localizacion" accept="image/*" class="form-control">
+                        <input type="file" id="evidencia1_localizacion" name="evidencia1_localizacion" accept="image/*" class="form-control">
+                        <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia1_localizacion')">Cancelar</button>
                     </div>
                     <div class="col-md-6">
                         <label class="fw-bold">Evidencia 2:</label>
-                        <input type="file" name="evidencia2_foto_fecha" accept="image/*" class="form-control">
+                        <input type="file" id="evidencia2_foto_fecha" name="evidencia2_foto_fecha" accept="image/*" class="form-control">
+                        <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia2_foto_fecha')">Cancelar</button>
                     </div>
                 </div>
                 <div class="mb-2">
@@ -330,7 +341,7 @@ $conn->close();
                     <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                     <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
                     <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
-                    <br>                   
+                    <br>
                     <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
                     <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                 </div>
@@ -363,7 +374,8 @@ $conn->close();
                 </div>
                 <div class="mb-2">
                     <label class="fw-bold">Documento de Evidencia:</label>
-                    <input type="file" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
+                    <input type="file" id="doc_evidencia" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
+                    <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('doc_evidencia')">Cancelar</button>
                 </div>
                 <div class="mb-2">
                     <label class="fw-bold">Fecha Clave:</label>
@@ -397,6 +409,10 @@ $conn->close();
 
 
     <script>
+        function limpiarArchivo(inputId) {
+            document.getElementById(inputId).value = '';
+        }
+
         function verHistorial(idCliente) {
             if (idCliente) {
                 window.location.href = '../historial/record.php?id_cliente=' + encodeURIComponent(idCliente);

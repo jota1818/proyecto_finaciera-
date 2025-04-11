@@ -6,6 +6,7 @@ function validarFormularioPreJudicial() {
     let descripcion = document.forms["preJudicialForm"]["descripcion"].value;
     let monto_amortizado = document.forms["preJudicialForm"]["monto_amortizado"].value;
     let n_de_notif_voucher = document.forms["preJudicialForm"]["n_de_notif_voucher"].value;
+    let acto = document.forms["preJudicialForm"]["acto"].value;
 
     let regexNumeral = /^\d+$/;
 
@@ -31,6 +32,20 @@ function validarFormularioPreJudicial() {
         return false;
     }
     
+     // Validaciones específicas según el acto seleccionado
+     if (acto === "Amortizacion") {
+        if (!monto_amortizado || monto_amortizado === "0") {
+            alert("El campo Monto Amortizado es obligatorio para la opción Amortización.");
+            return false;
+        }
+    } else if (acto === "Notificacion" || acto === "Fin de caso") {
+        // El campo Monto Amortizado es opcional
+    } else if (["Inicio caso prejudicial", "Cambio Gestor", "Postergacion", "Pasa a Judicial"].includes(acto)) {
+        if (monto_amortizado && monto_amortizado !== "0") {
+            alert("El campo Monto Amortizado no debe ser llenado para la opción seleccionada en 'Acto'.");
+            return false;
+        }
+    }
 
     console.log("Formulario validado correctamente");
     return true;

@@ -2,15 +2,25 @@
 require "../conexion_db/connection.php";
 
 $id_cliente = isset($_GET['id_cliente']) ? $_GET['id_cliente'] : '';
+// solo es para iniciacilar los valores, pero se puede quitar este codigo con normalidad
 $cliente = [];
+$monto_abonado = 0; // Inicializar con un valor predeterminado
+$plazo_credito = 0; // Inicializar con un valor predeterminado
 
 if ($id_cliente) {
     // Obtener información del cliente
-    $sql_cliente = "SELECT nombre, apellidos, dni FROM clientes WHERE id_cliente = '$id_cliente'";
+    $sql_cliente = "SELECT nombre, apellidos, dni, agencia, tipo_credito, monto, saldo, fecha_desembolso, fecha_vencimiento FROM clientes WHERE id_cliente = '$id_cliente'";
     $result_cliente = $conn->query($sql_cliente);
 
     if ($result_cliente->num_rows > 0) {
         $cliente = $result_cliente->fetch_assoc();
+
+        // Calcular el plazo de crédito
+        $fecha_desembolso = new DateTime($cliente['fecha_desembolso']);
+        $fecha_vencimiento = new DateTime($cliente['fecha_vencimiento']);
+        $plazo_credito = $fecha_vencimiento->diff($fecha_desembolso)->days;
+        // Calcular el monto abonado
+        $monto_abonado = $cliente['monto'] - $cliente['saldo'];
     } else {
         die("Error: El ID del cliente no existe en la base de datos.");
     }
@@ -44,6 +54,14 @@ $conn->close();
         <h4>Información del Cliente</h4>
         <p><strong>Nombre:</strong> <?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></p>
         <p><strong>DNI:</strong> <?php echo htmlspecialchars($cliente['dni']); ?></p>
+        <p><strong>Agencia:</strong> <?php echo htmlspecialchars($cliente['agencia']); ?></p>
+        <p><strong>Tipo de Crédito:</strong> <?php echo htmlspecialchars($cliente['tipo_credito']); ?></p>
+        <p><strong>Monto:</strong> <?php echo htmlspecialchars($cliente['monto']); ?></p>
+        <p><strong>Saldo:</strong> <?php echo htmlspecialchars($cliente['saldo']); ?></p>
+        <p><strong>Monto Abonado:</strong> <?php echo htmlspecialchars($monto_abonado); ?></p>
+        <p><strong>Fecha de Desembolso:</strong> <?php echo htmlspecialchars($cliente['fecha_desembolso']); ?></p>
+        <p><strong>Fecha de Vencimiento:</strong> <?php echo htmlspecialchars($cliente['fecha_vencimiento']); ?></p>
+        <p><strong>Plazo de Crédito (días):</strong> <?php echo htmlspecialchars($plazo_credito); ?></p>
     </div>
 
     <div class="historial border p-3">

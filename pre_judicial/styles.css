@@ -1,0 +1,10 @@
+
+.btn-cancelar {
+    width: 80px; /* Ajusta el ancho según tus necesidades */
+    margin-left: auto; /* Alinea el botón a la derecha */
+    margin-top: 5px; /* Añade espacio en la parte superior */
+    padding: 5px 10px; /* Ajusta el padding para reducir la altura */
+    line-height: 1; /* Asegura que el texto esté centrado verticalmente */
+    display: block; /* Asegura que el margen funcione correctamente */
+    font-size: 0.875rem; /* Ajusta el tamaño de la fuente si es necesario */
+}
