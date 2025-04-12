@@ -23,8 +23,11 @@
                             <!-- El formulario de registro se cargará aquí por defecto -->
                             <?php include 'registrar.php'; ?>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
+                <div class="informe-button-container">
+                        <button type="button" class="btn btn-warning informe-button">INFORME</button>
+                    </div>
             </div>
         </div>
 
@@ -106,6 +109,7 @@
             </div>
         </div>
     </div>
+
     <!-- Campo oculto para almacenar el DNI seleccionado -->
     <input type="hidden" id="selectedDni">
     <script>

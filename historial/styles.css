@@ -5,28 +5,43 @@
     margin-bottom: 20px; /* Espacio entre las tablas */
 }
 
-.table-fixed th:first-child,
-.table-fixed td:first-child {
-    position: -webkit-sticky;
+.table-fixed-judicial th:first-child,
+.table-fixed th:first-child {
+    position: -webkit-sticky; /* Para Safari */
     position: sticky;
     left: 0;
+    top: 0; /* Fija la posición en la parte superior */
     background-color: #f8d7da;
-    z-index: 1;
+    z-index: 5; /* MÁS ALTO que otros encabezados */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
+.table-fixed-judicial td:first-child,
+.table-fixed td:first-child { 
+    position: -webkit-sticky; /* Para Safari */
+    position: sticky;
+    left: 0;
+    background-color: #f8d7da;
+    z-index: 4; /* MÁS ALTO que otros td, pero MENOR que el th */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.table-fixed-judicial,
 .table-fixed {
     table-layout: auto; /* Importante para que los anchos personalizados funcionen */
     width: 100%;
     border-collapse: collapse;
 }
 
+.table-fixed-judicial,
 .table-fixed {
     width: 100%;
     border-collapse: collapse;
     table-layout: auto; /* permite que las columnas se ajusten solas */
 }
 
+.table-fixed-judicial,
 .table-fixed {
     width: 100%;
     border-collapse: collapse;
@@ -34,50 +49,73 @@
 }
 
 /* desde aqui para las tablas */
+.table-fixed-judicial th,
 .table-fixed th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-color: #f8d7da;
+    z-index: 3; /* Debajo del encabezado de "N°" */
     text-align: left;
     vertical-align: top;
     padding: 8px;
-    white-space: nowrap;         /* NO permite saltos de línea en encabezado */
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;     /* Muestra "..." si el texto es muy largo */
+    text-overflow: ellipsis;
 }
 
+.table-fixed-judicial td,
 .table-fixed td {
     text-align: left;
     vertical-align: top;
     padding: 8px;
-    white-space: normal;         /* PERMITE saltos de línea en contenido */
+    white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
     border: 1px solid #ddd;
+    z-index: 0; /* por debajo de todo */
 }
 
-/* Descripción */
-.table-fixed th:nth-child(5),
-.table-fixed td:nth-child(5) {
-    width: 320px;
-    min-width: 600px;
-    max-width: 650px;
+.table-fixed th:nth-child(3),/* Descripción */
+.table-fixed td:nth-child(3){
+    width: 600px;
+    min-width: 180px;
+    max-width: 250px;
 }
 
-/* Notificación */
-.table-fixed th:nth-child(6),
-.table-fixed td:nth-child(6) {
-    width: 320px;
-    min-width: 600px;
-    max-width: 350px;
-}
-/* Notificación */
-.table-fixed th:nth-child(10),
+.table-fixed th:nth-child(5),/* Descripción */
+.table-fixed td:nth-child(5),
+.table-fixed th:nth-child(6),/* Notificación */
+.table-fixed td:nth-child(6),
+.table-fixed th:nth-child(10),/* evidencia 1 */
 .table-fixed td:nth-child(10),
-.table-fixed th:nth-child(11),
+.table-fixed th:nth-child(11),/* evidencia 2 */
 .table-fixed td:nth-child(11) {
     width: 320px;
     min-width: 600px;
     max-width: 350px;
 }
 
+.table-fixed-judicial th:nth-child(8),/* Descripcion judicial*/
+.table-fixed-judicial td:nth-child(8),
+.table-fixed-judicial th:nth-child(9),/* Doc evidencia judicial*/
+.table-fixed-judicial td:nth-child(9){
+    width: 320px;
+    min-width: 600px;
+    max-width: 350px;
+}
+.table-fixed-judicial th:nth-child(3),/* fecha judicial */
+.table-fixed-judicial td:nth-child(3){
+    width: 220px;
+    min-width: 110px;
+    max-width: 250px;
+}
+.table-fixed-judicial th:nth-child(12),/* actor judicial*/
+.table-fixed-judicial td:nth-child(12){
+    width: 220px;
+    min-width: 110px;
+    max-width: 250px;
+}
 /* asta aqui */
 
 .fixed-buttons {

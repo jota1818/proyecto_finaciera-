@@ -160,3 +160,23 @@ thead th {
 .border {
     border-radius: 8px; /* Redondea las esquinas del contenedor */
 }
+
+/* Asegúrate de que el contenedor del botón ocupe todo el ancho disponible */
+.informe-button-container {
+    width: 100%;                     /* El contenedor ocupa todo el ancho disponible */
+    display: flex;                   /* Usamos flexbox para organizar su contenido */
+    justify-content: center;        /* Centra el botón horizontalmente (puedes quitarlo si no quieres centrado) */
+    margin-top: 20px;               /* Espacio hacia arriba del botón */
+}
+
+.informe-button {
+    width: 100%;                    /* El botón ocupará todo el ancho del contenedor padre */
+    height: 60px;                   /* Altura del botón */
+    font-size: 18px;                /* Tamaño del texto dentro del botón */
+    border-radius: 8px;             /* Esquinas redondeadas del botón */
+    background-color: #ffc107;      /* Color de fondo (amarillo tipo Bootstrap warning) */
+    border: none;                   /* Sin borde alrededor del botón */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);  /* Sombra para dar profundidad visual */
+}
+
+
