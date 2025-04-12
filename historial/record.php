@@ -49,24 +49,39 @@ $conn->close();
 </head>
 
 <body class="container mt-3">
-    <h2>Historial del Cliente</h2>
-    <div class="client-info border p-3 mb-3">
-        <h4>Información del Cliente</h4>
-        <p><strong>Nombre:</strong> <?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></p>
-        <p><strong>DNI:</strong> <?php echo htmlspecialchars($cliente['dni']); ?></p>
-        <p><strong>Agencia:</strong> <?php echo htmlspecialchars($cliente['agencia']); ?></p>
-        <p><strong>Tipo de Crédito:</strong> <?php echo htmlspecialchars($cliente['tipo_credito']); ?></p>
-        <p><strong>Monto:</strong> <?php echo htmlspecialchars($cliente['monto']); ?></p>
-        <p><strong>Saldo:</strong> <?php echo htmlspecialchars($cliente['saldo']); ?></p>
-        <p><strong>Monto Abonado:</strong> <?php echo htmlspecialchars($monto_abonado); ?></p>
-        <p><strong>Fecha de Desembolso:</strong> <?php echo htmlspecialchars($cliente['fecha_desembolso']); ?></p>
-        <p><strong>Fecha de Vencimiento:</strong> <?php echo htmlspecialchars($cliente['fecha_vencimiento']); ?></p>
-        <p><strong>Plazo de Crédito (días):</strong> <?php echo htmlspecialchars($plazo_credito); ?></p>
-    </div>
 
+
+    <div class="titulo-cliente border p-1">
+        <h2>Información del Cliente</h2>
+    </div>
+    <div class="client-info border p-3 mb-3">
+        <div class="row">
+            <!-- Primera columna -->
+            <div class="col-md-6">
+                <p><strong>Nombre:</strong> <?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></p>
+                <p><strong>DNI:</strong> <?php echo htmlspecialchars($cliente['dni']); ?></p>
+                <p><strong>Agencia:</strong> <?php echo htmlspecialchars($cliente['agencia']); ?></p>
+                <p><strong>Tipo de Crédito:</strong> <?php echo htmlspecialchars($cliente['tipo_credito']); ?></p>
+                <p><strong>Monto:</strong> <?php echo htmlspecialchars($cliente['monto']); ?></p>
+            </div>
+            <!-- Segunda columna -->
+            <div class="col-md-6">
+                <p><strong>Saldo:</strong> <?php echo htmlspecialchars($cliente['saldo']); ?></p>
+                <p><strong>Monto Abonado:</strong> <?php echo htmlspecialchars($monto_abonado); ?></p>
+                <p><strong>Fecha de Desembolso:</strong> <?php echo htmlspecialchars($cliente['fecha_desembolso']); ?></p>
+                <p><strong>Fecha de Vencimiento:</strong> <?php echo htmlspecialchars($cliente['fecha_vencimiento']); ?></p>
+                <p><strong>Plazo de Crédito (días):</strong> <?php echo htmlspecialchars($plazo_credito); ?></p>
+            </div>
+        </div>
+    </div>
+    <div class="titulo-historial border p-1">
+        <h2>Historial del Cliente</h2>
+    </div>
     <div class="historial border p-3">
-        <h4>Historial Pre-Judicial</h4>
         <div class="table-responsive">
+            <h4>Historial Pre-Judicial</h4>
+        </div>
+        <div class="scrollable-table-container">
             <table class="table table-bordered table-striped table-fixed">
                 <thead>
                     <tr>
@@ -123,9 +138,11 @@ $conn->close();
             </table>
         </div>
 
-        <h4>Historial Judicial</h4>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped table-fixed">
+            <h4>Historial Judicial</h4>
+        </div>
+        <div class="scrollable-table-container">
+            <table class="table table-bordered table-striped table-fixed-judicial">
                 <thead>
                     <tr>
                         <th>Nº</th>

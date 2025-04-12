@@ -1,5 +1,8 @@
-.table-responsive {
-    overflow-x: auto;
+/* Para calular el tamaño de los historiales pre-judicial y judicial */
+.scrollable-table-container {
+    max-height: 400px; /* Ajusta la altura máxima según tus necesidades */
+    overflow-y: auto;
+    margin-bottom: 20px; /* Espacio entre las tablas */
 }
 
 .table-fixed th:first-child,
@@ -12,10 +15,70 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.table-fixed th,
-.table-fixed td {
-    white-space: nowrap;
+.table-fixed {
+    table-layout: auto; /* Importante para que los anchos personalizados funcionen */
+    width: 100%;
+    border-collapse: collapse;
 }
+
+.table-fixed {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto; /* permite que las columnas se ajusten solas */
+}
+
+.table-fixed {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+/* desde aqui para las tablas */
+.table-fixed th {
+    text-align: left;
+    vertical-align: top;
+    padding: 8px;
+    white-space: nowrap;         /* NO permite saltos de línea en encabezado */
+    overflow: hidden;
+    text-overflow: ellipsis;     /* Muestra "..." si el texto es muy largo */
+}
+
+.table-fixed td {
+    text-align: left;
+    vertical-align: top;
+    padding: 8px;
+    white-space: normal;         /* PERMITE saltos de línea en contenido */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    border: 1px solid #ddd;
+}
+
+/* Descripción */
+.table-fixed th:nth-child(5),
+.table-fixed td:nth-child(5) {
+    width: 320px;
+    min-width: 600px;
+    max-width: 650px;
+}
+
+/* Notificación */
+.table-fixed th:nth-child(6),
+.table-fixed td:nth-child(6) {
+    width: 320px;
+    min-width: 600px;
+    max-width: 350px;
+}
+/* Notificación */
+.table-fixed th:nth-child(10),
+.table-fixed td:nth-child(10),
+.table-fixed th:nth-child(11),
+.table-fixed td:nth-child(11) {
+    width: 320px;
+    min-width: 600px;
+    max-width: 350px;
+}
+
+/* asta aqui */
 
 .fixed-buttons {
     display: flex;
@@ -50,3 +113,4 @@
     max-height: 100%;
     object-fit: contain;
 }
+
