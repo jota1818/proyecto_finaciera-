@@ -23,11 +23,11 @@
                             <!-- El formulario de registro se cargará aquí por defecto -->
                             <?php include 'registrar.php'; ?>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
                 <div class="informe-button-container">
-                        <button type="button" class="btn btn-warning informe-button">INFORME</button>
-                    </div>
+                    <button type="button" class="btn btn-warning informe-button" onclick="window.location.href='../reports/reporte.php'">INFORME</button>
+                </div>
             </div>
         </div>
 
