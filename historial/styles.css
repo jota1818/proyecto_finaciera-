@@ -4,7 +4,9 @@
     overflow-y: auto;
     margin-bottom: 20px; /* Espacio entre las tablas */
 }
-
+.preview-container {
+    z-index: 9999; /* <-- Asegúrate de que sea más alto que los th fijos */
+}
 .table-fixed-judicial th:first-child,
 .table-fixed th:first-child {
     position: -webkit-sticky; /* Para Safari */
