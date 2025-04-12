@@ -1,4 +1,4 @@
-<?php
+etapa<?php
 require "../conexion_db/connection.php";
 
 $message = "";

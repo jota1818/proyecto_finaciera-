@@ -54,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Datos de la etapa pre-judicial
+    $etapa = "Pre Judicial"; // Establecer automáticamente como "Judicial"
     $acto = $_POST["acto"];
     $n_de_notif_voucher = $_POST["n_de_notif_voucher"] ? $_POST["n_de_notif_voucher"] : '';
     $descripcion = $_POST["descripcion"];
@@ -99,8 +100,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     move_uploaded_file($_FILES["evidencia2_foto_fecha"]["tmp_name"], $target_dir . $evidencia2_foto_fecha);
 
     // Insertar el nuevo registro
-    $sql_insert = "INSERT INTO etapa_prejudicial (id_cliente, fecha_acto, acto, n_de_notif_voucher, descripcion, notif_compromiso_pago_evidencia, fecha_clave, accion_fecha_clave, actor, evidencia1_localizacion, evidencia2_foto_fecha, dias_de_mora, dias_mora_PJ, interes, saldo_int, monto_amortizado, saldo_fecha)
-    VALUES ('$id_cliente', '$fecha_acto', '$acto', '$n_de_notif_voucher', '$descripcion', '$target_dir$notif_compromiso_pago_evidencia', '$fecha_clave', '$accion_fecha_clave', '$actor', '$target_dir$evidencia1_localizacion', '$target_dir$evidencia2_foto_fecha', '$dias_de_mora', '$dias_mora_PJ', '$interes', '$saldo_int', '$monto_amortizado', '$saldo_fecha')";
+    $sql_insert = "INSERT INTO etapa_prejudicial (id_cliente, etapa, fecha_acto, acto, n_de_notif_voucher, descripcion, notif_compromiso_pago_evidencia, fecha_clave, accion_fecha_clave, actor, evidencia1_localizacion, evidencia2_foto_fecha, dias_de_mora, dias_mora_PJ, interes, saldo_int, monto_amortizado, saldo_fecha)
+    VALUES ('$id_cliente', '$etapa', '$fecha_acto', '$acto', '$n_de_notif_voucher', '$descripcion', '$target_dir$notif_compromiso_pago_evidencia', '$fecha_clave', '$accion_fecha_clave', '$actor', '$target_dir$evidencia1_localizacion', '$target_dir$evidencia2_foto_fecha', '$dias_de_mora', '$dias_mora_PJ', '$interes', '$saldo_int', '$monto_amortizado', '$saldo_fecha')";
 
     if ($conn->query($sql_insert) === TRUE) {
         $last_id = $conn->insert_id;
@@ -199,211 +200,238 @@ $conn->close();
     </style>
 </head>
 
-<body class="container mt-3">
-    <div>
-        <h2>Información del Cliente</h2>
-    </div>
-    <div class="form-container border p-3 mb-3 active">
-        <div class="row mb-2">
-            <div class="col-md-6">
-                <label class="fw-bold">Nombres:</label>
-                <input type="text" value="<?php echo htmlspecialchars(isset($cliente['nombre']) ? $cliente['nombre'] . ' ' . $cliente['apellidos'] : ''); ?>" class="form-control" readonly>
-            </div>
-            <div class="col-md-6">
-                <label class="fw-bold">DNI:</label>
-                <input type="text" value="<?php echo htmlspecialchars($cliente['dni'] ?? ''); ?>" class="form-control" readonly>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-md-6">
-                <label class="fw-bold">Agencia:</label>
-                <input type="text" value="<?php echo htmlspecialchars($cliente['agencia'] ?? ''); ?>" class="form-control" readonly>
-            </div>
-            <div class="col-md-6">
-                <label class="fw-bold">Tipo de Crédito:</label>
-                <input type="text" value="<?php echo htmlspecialchars($cliente['tipo_credito'] ?? ''); ?>" class="form-control" readonly>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-md-4">
-                <label class="fw-bold">Monto:</label>
-                <input type="number" value="<?php echo htmlspecialchars($cliente['monto'] ?? ''); ?>" class="form-control" readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="fw-bold">Saldo:</label>
-                <input type="number" value="<?php echo htmlspecialchars($cliente['saldo'] ?? ''); ?>" class="form-control" readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="fw-bold">Monto Abonado:</label>
-                <input type="text" value="<?php echo htmlspecialchars($monto_abonado); ?>" class="form-control" readonly>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-md-4">
-                <label class="fw-bold">Fecha Desembolso:</label>
-                <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_desembolso'] ?? ''); ?>" class="form-control" readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="fw-bold">Fecha Vencimiento:</label>
-                <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_vencimiento'] ?? ''); ?>" class="form-control" readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="fw-bold">Plazo de Crédito (días):</label>
-                <input type="text" value="<?php echo htmlspecialchars($plazo_credito); ?>" class="form-control" readonly>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
+<body class="d-flex flex-column h-100">
+    <div class="container-fluid flex-grow-1">
         <div>
-            <h2>Formulario de Etapa Prejudicial y Judicial</h2>
+            <h2>Información del Cliente</h2>
         </div>
-        <div class="col-md-12 border p-3">
-            <?php if ($message): ?>
-                <div class="alert alert-success" role="alert">
-                    <?php echo $message; ?>
+        <div class="form-container border p-3 mb-3 active">
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label class="fw-bold">Nombres:</label>
+                    <input type="text" value="<?php echo htmlspecialchars(isset($cliente['nombre']) ? $cliente['nombre'] . ' ' . $cliente['apellidos'] : ''); ?>" class="form-control" readonly>
                 </div>
-            <?php endif; ?>
+                <div class="col-md-6">
+                    <label class="fw-bold">DNI:</label>
+                    <input type="text" value="<?php echo htmlspecialchars($cliente['dni'] ?? ''); ?>" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label class="fw-bold">Agencia:</label>
+                    <input type="text" value="<?php echo htmlspecialchars($cliente['agencia'] ?? ''); ?>" class="form-control" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label class="fw-bold">Tipo de Crédito:</label>
+                    <input type="text" value="<?php echo htmlspecialchars($cliente['tipo_credito'] ?? ''); ?>" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4">
+                    <label class="fw-bold">Monto:</label>
+                    <input type="number" value="<?php echo htmlspecialchars($cliente['monto'] ?? ''); ?>" class="form-control" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold">Saldo:</label>
+                    <input type="number" value="<?php echo htmlspecialchars($cliente['saldo'] ?? ''); ?>" class="form-control" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold">Monto Abonado:</label>
+                    <input type="text" value="<?php echo htmlspecialchars($monto_abonado); ?>" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4">
+                    <label class="fw-bold">Fecha Desembolso:</label>
+                    <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_desembolso'] ?? ''); ?>" class="form-control" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold">Fecha Vencimiento:</label>
+                    <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_vencimiento'] ?? ''); ?>" class="form-control" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold">Plazo de Crédito (días):</label>
+                    <input type="text" value="<?php echo htmlspecialchars($plazo_credito); ?>" class="form-control" readonly>
+                </div>
+            </div>
+        </div>
 
-            <!-- Formulario de Etapa Pre-Judicial -->
-            <form id="preJudicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo !$etapa_judicial ? 'active' : ''; ?>" onsubmit="return enviarFormulario()">
-                <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                <h4>Etapa Pre-Judicial</h4>
-                <div class="row mb-2">
-                    <div class="col-md-6">
-                        <label class="fw-bold">Acto:</label>
-                        <select name="acto" required class="form-control">
-                            <option value="" disabled selected>Seleccione una opción</option>
-                            <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
-                            <option value="Notificacion">Notificación</option>
-                            <option value="Amortizacion">Amortización</option>
-                            <option value="Cambio Gestor">Cambio Gestor</option>
-                            <option value="Postergacion">Postergación</option>
-                            <option value="Fin de caso">Fin de caso</option>
-                            <option value="Pasa a Judicial">Pasa a Judicial</option>
-                        </select>
+        <div class="row">
+            <div>
+                <h2>Formulario de Etapa Prejudicial y Judicial</h2>
+            </div>
+            <div class="col-md-12 border p-3">
+                <?php if ($message): ?>
+                    <div class="alert alert-success" role="alert">
+                        <?php echo $message; ?>
                     </div>
-                    <div class="col-md-6">
-                        <label class="fw-bold">Número de Notificación/Voucher:</label>
-                        <input type="text" name="n_de_notif_voucher" class="form-control">
-                    </div>
-                </div>
-                <!-- por el momento para hacer pruebas -->
-                <div class="mb-2">
-                    <label class="fw-bold">Fecha Acto:</label>
-                    <input type="date" name="fecha_acto" required class="form-control">
-                </div>
-                <!-- asta aqui -->
-                <div class="mb-2">
-                    <label class="fw-bold">Descripción:</label>
-                    <textarea name="descripcion" required class="form-control"></textarea>
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Notificación/Compromiso de Pago:</label>
-                    <input type="file" id="notif_compromiso_pago_evidencia" name="notif_compromiso_pago_evidencia" accept=".docx, .pdf, .jpg, .png" required class="form-control">
-                    <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('notif_compromiso_pago_evidencia')">Cancelar</button>
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Fecha Clave:</label>
-                    <input type="date" name="fecha_clave" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Acción en Fecha Clave:</label>
-                    <input type="text" name="accion_fecha_clave" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Actor Involucrado:</label>
-                    <select name="actor" required class="form-control">
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Gestor">Gestor</option>
-                        <option value="Cliente">Cliente</option>
-                        <option value="Supervisor">Supervisor</option>
-                        <option value="Administrador">Administrador</option>
-                    </select>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-md-6">
-                        <label class="fw-bold">Evidencia 1:</label>
-                        <input type="file" id="evidencia1_localizacion" name="evidencia1_localizacion" accept="image/*" class="form-control">
-                        <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia1_localizacion')">Cancelar</button>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="fw-bold">Evidencia 2:</label>
-                        <input type="file" id="evidencia2_foto_fecha" name="evidencia2_foto_fecha" accept="image/*" class="form-control">
-                        <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia2_foto_fecha')">Cancelar</button>
-                    </div>
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Monto Amortizado:</label>
-                    <input type="number" step="0.01" name="monto_amortizado" class="form-control">
-                </div>
-                <div class="fixed-buttons">
-                    <button type="submit" class="btn btn-primary mt-3">Registrar</button>
-                    <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                    <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
-                    <br>
-                    <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
-                    <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
-                </div>
-            </form>
+                <?php endif; ?>
 
-            <!-- Formulario de Etapa Judicial -->
-            <form id="judicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo $etapa_judicial ? 'active' : ''; ?>">
-                <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                <h4>Etapa Judicial</h4>
-                <div id="message"></div>
-                <div class="mb-2">
-                    <label class="fw-bold">Acto:</label>
-                    <input type="text" name="acto_judicial" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Juzgado:</label>
-                    <input type="text" name="juzgado" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Número de Expediente del Juzgado:</label>
-                    <input type="text" name="n_exp_juzgado" class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Número de Cédula:</label>
-                    <input type="text" name="n_cedula" class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Descripción:</label>
-                    <textarea name="descripcion_judicial" required class="form-control"></textarea>
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Documento de Evidencia:</label>
-                    <input type="file" id="doc_evidencia" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
-                    <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('doc_evidencia')">Cancelar</button>
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Fecha Clave:</label>
-                    <input type="date" name="fecha_clave_judicial" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Acción en Fecha Clave:</label>
-                    <input type="text" name="accion_en_fecha_clave" required class="form-control">
-                </div>
-                <div class="mb-2">
-                    <label class="fw-bold">Actor Involucrado:</label>
-                    <select name="actor_judicial" required class="form-control">
-                        <option value="" disabled selected>Seleccione una opción</option>
-                        <option value="Gestor">Gestor</option>
-                        <option value="Juez">Juez</option>
-                        <option value="Abogado">Abogado</option>
-                        <option value="Supervisor">Supervisor</option>
-                    </select>
-                </div>
-                <div class="fixed-buttons">
-                    <button type="submit" class="btn btn-primary mt-3">Registrar</button>
-                    <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                    <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
-                    <br>
-                    <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
-                    <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
-                </div>
-            </form>
+                <!-- Formulario de Etapa Pre-Judicial -->
+                <form id="preJudicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo !$etapa_judicial ? 'active' : ''; ?>" onsubmit="return enviarFormulario()">
+                    <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
+                    <h4>Etapa Pre-Judicial</h4>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Acto:</label>
+                            <select name="acto" required class="form-control">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
+                                <option value="Notificacion">Notificación</option>
+                                <option value="Amortizacion">Amortización</option>
+                                <option value="Cambio Gestor">Cambio Gestor</option>
+                                <option value="Postergacion">Postergación</option>
+                                <option value="Fin de caso">Fin de caso</option>
+                                <option value="Pasa a Judicial">Pasa a Judicial</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Número de Notificación/Voucher:</label>
+                            <input type="text" name="n_de_notif_voucher" class="form-control">
+                        </div>
+                    </div>
+                    <!-- por el momento para hacer pruebas -->
+                    <div class="mb-2">
+                        <label class="fw-bold">Fecha Acto:</label>
+                        <input type="date" name="fecha_acto" required class="form-control">
+                    </div>
+                    <!-- asta aqui -->
+                    <div class="mb-2">
+                        <label class="fw-bold">Descripción:</label>
+                        <textarea name="descripcion" required class="form-control"></textarea>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Notificación/Compromiso de Pago:</label>
+                            <input type="file" id="notif_compromiso_pago_evidencia" name="notif_compromiso_pago_evidencia" accept=".docx, .pdf, .jpg, .png" required class="form-control">
+                        </div>
+                        <div class="col-md-1">
+                            <label class="d-block">&nbsp;</label>
+                            <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('notif_compromiso_pago_evidencia')">Cancelar</button>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="fw-bold">Fecha Clave:</label>
+                            <input type="date" name="fecha_clave" required class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Acción en Fecha Clave:</label>
+                            <input type="text" name="accion_fecha_clave" required class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Actor Involucrado:</label>
+                            <select name="actor" required class="form-control">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="Gestor">Gestor</option>
+                                <option value="Cliente">Cliente</option>
+                                <option value="Supervisor">Supervisor</option>
+                                <option value="Administrador">Administrador</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-5">
+                            <label class="fw-bold">Evidencia 1:</label>
+                            <input type="file" id="evidencia1_localizacion" name="evidencia1_localizacion" accept="image/*" class="form-control">
+                        </div>
+                        <div class="col-md-1">
+                            <label class="d-block">&nbsp;</label>
+                            <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia1_localizacion')">Cancelar</button>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="fw-bold">Evidencia 2:</label>
+                            <input type="file" id="evidencia2_foto_fecha" name="evidencia2_foto_fecha" accept="image/*" class="form-control">
+
+                        </div>
+                        <div class="col-md-1">
+                            <label class="d-block">&nbsp;</label>
+                            <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia2_foto_fecha')">Cancelar</button>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Monto Amortizado:</label>
+                        <input type="number" step="0.01" name="monto_amortizado" class="form-control">
+                    </div>
+                    <div class="fixed-buttons">
+                        <button type="submit" class="btn btn-primary mt-3">Registrar</button>
+                        <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
+                        <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
+                        <br>
+                        <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
+                        <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
+                    </div>
+                </form>
+
+                <!-- Formulario de Etapa Judicial -->
+                <form id="judicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo $etapa_judicial ? 'active' : ''; ?>">
+                    <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
+                    <h4>Etapa Judicial</h4>
+                    <div id="message"></div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Acto:</label>
+                            <input type="text" name="acto_judicial" required class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Juzgado:</label>
+                            <input type="text" name="juzgado" required class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Número de Expediente del Juzgado:</label>
+                            <input type="text" name="n_exp_juzgado" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Número de Cédula:</label>
+                            <input type="text" name="n_cedula" class="form-control">
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Descripción:</label>
+                        <textarea name="descripcion_judicial" required class="form-control"></textarea>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Documento de Evidencia:</label>
+                            <input type="file" id="doc_evidencia" name="doc_evidencia" accept=".docx, .pdf, .jpg, .jpeg, .png" required class="form-control">
+                        </div>
+                        <div class="col-md-1">
+                            <label class="d-block">&nbsp;</label>
+                            <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('doc_evidencia')">Cancelar</button>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="fw-bold">Fecha Clave:</label>
+                            <input type="date" name="fecha_clave_judicial" required class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-7">
+                            <label class="fw-bold">Acción en Fecha Clave:</label>
+                            <input type="text" name="accion_en_fecha_clave" required class="form-control">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="fw-bold">Actor Involucrado:</label>
+                            <select name="actor_judicial" required class="form-control">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="Gestor">Gestor</option>
+                                <option value="Juez">Juez</option>
+                                <option value="Abogado">Abogado</option>
+                                <option value="Supervisor">Supervisor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="fixed-buttons">
+                        <button type="submit" class="btn btn-primary mt-3">Registrar</button>
+                        <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
+                        <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
+                        <br>
+                        <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
+                        <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

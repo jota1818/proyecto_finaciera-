@@ -74,7 +74,7 @@ thead th {
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height: 100%; /* Ocupa todo el espacio vertical disponible */
+    /* height: 100%; */ /* Ocupa todo el espacio vertical disponible */
     display: flex;
     flex-direction: column;
 }
@@ -85,7 +85,7 @@ thead th {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px; /* Redondea las esquinas del contenedor */
-    height: 100%; /* Ocupa todo el espacio vertical disponible */
+    /* height: 100%; */ /* Ocupa todo el espacio vertical disponible */
     display: flex;
     flex-direction: column;
 }

@@ -1,10 +1,34 @@
 
 .btn-cancelar {
     width: 80px; /* Ajusta el ancho según tus necesidades */
-    margin-left: auto; /* Alinea el botón a la derecha */
     margin-top: 5px; /* Añade espacio en la parte superior */
     padding: 5px 10px; /* Ajusta el padding para reducir la altura */
     line-height: 1; /* Asegura que el texto esté centrado verticalmente */
     display: block; /* Asegura que el margen funcione correctamente */
     font-size: 0.875rem; /* Ajusta el tamaño de la fuente si es necesario */
+}
+
+/* de aqui para que sea dinamico la interfaz de formulario prejudicial y judicial */
+.form-container {
+    display: none;
+}
+
+.form-container.active {
+    display: block;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.flex-column {
+    flex-direction: column !important;
+}
+
+.h-100 {
+    height: 100vh !important;
+}
+
+.flex-grow-1 {
+    flex-grow: 1 !important;
 }

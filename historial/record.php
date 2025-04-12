@@ -48,69 +48,68 @@ $conn->close();
     <link href="styles.css" rel="stylesheet">
 </head>
 
-<body class="container mt-3">
-
-
-    <div class="titulo-cliente border p-1">
-        <h2>Información del Cliente</h2>
-    </div>
-    <div class="client-info border p-3 mb-3">
-        <div class="row">
-            <!-- Primera columna -->
-            <div class="col-md-6">
-                <p><strong>Nombre:</strong> <?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></p>
-                <p><strong>DNI:</strong> <?php echo htmlspecialchars($cliente['dni']); ?></p>
-                <p><strong>Agencia:</strong> <?php echo htmlspecialchars($cliente['agencia']); ?></p>
-                <p><strong>Tipo de Crédito:</strong> <?php echo htmlspecialchars($cliente['tipo_credito']); ?></p>
-                <p><strong>Monto:</strong> <?php echo htmlspecialchars($cliente['monto']); ?></p>
-            </div>
-            <!-- Segunda columna -->
-            <div class="col-md-6">
-                <p><strong>Saldo:</strong> <?php echo htmlspecialchars($cliente['saldo']); ?></p>
-                <p><strong>Monto Abonado:</strong> <?php echo htmlspecialchars($monto_abonado); ?></p>
-                <p><strong>Fecha de Desembolso:</strong> <?php echo htmlspecialchars($cliente['fecha_desembolso']); ?></p>
-                <p><strong>Fecha de Vencimiento:</strong> <?php echo htmlspecialchars($cliente['fecha_vencimiento']); ?></p>
-                <p><strong>Plazo de Crédito (días):</strong> <?php echo htmlspecialchars($plazo_credito); ?></p>
+<body class="d-flex flex-column h-100">
+    <div class="container-fluid flex-grow-1">
+        <div class="titulo-cliente border p-1">
+            <h2>Información del Cliente</h2>
+        </div>
+        <div class="client-info border p-3 mb-3">
+            <div class="row">
+                <!-- Primera columna -->
+                <div class="col-md-6">
+                    <p><strong>Nombre:</strong> <?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></p>
+                    <p><strong>DNI:</strong> <?php echo htmlspecialchars($cliente['dni']); ?></p>
+                    <p><strong>Agencia:</strong> <?php echo htmlspecialchars($cliente['agencia']); ?></p>
+                    <p><strong>Tipo de Crédito:</strong> <?php echo htmlspecialchars($cliente['tipo_credito']); ?></p>
+                    <p><strong>Monto:</strong> <?php echo htmlspecialchars($cliente['monto']); ?></p>
+                </div>
+                <!-- Segunda columna -->
+                <div class="col-md-6">
+                    <p><strong>Saldo:</strong> <?php echo htmlspecialchars($cliente['saldo']); ?></p>
+                    <p><strong>Monto Abonado:</strong> <?php echo htmlspecialchars($monto_abonado); ?></p>
+                    <p><strong>Fecha de Desembolso:</strong> <?php echo htmlspecialchars($cliente['fecha_desembolso']); ?></p>
+                    <p><strong>Fecha de Vencimiento:</strong> <?php echo htmlspecialchars($cliente['fecha_vencimiento']); ?></p>
+                    <p><strong>Plazo de Crédito (días):</strong> <?php echo htmlspecialchars($plazo_credito); ?></p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="titulo-historial border p-1">
-        <h2>Historial del Cliente</h2>
-    </div>
-    <div class="historial border p-3">
-        <div class="table-responsive">
-            <h4>Historial Pre-Judicial</h4>
+        <div class="titulo-historial border p-1">
+            <h2>Historial del Cliente</h2>
         </div>
-        <div class="scrollable-table-container">
-            <table class="table table-bordered table-striped table-fixed">
-                <thead>
-                    <tr>
-                        <th>Nº</th>
-                        <th>Fecha Acto</th>
-                        <th>Acto</th>
-                        <th>N° de Notif. Voucher</th>
-                        <th>Descripción</th>
-                        <th>Notificación</th>
-                        <th>Fecha Clave</th>
-                        <th>Acción en Fecha Clave</th>
-                        <th>Actor</th>
-                        <th>Evidencia 1</th>
-                        <th>Evidencia 2</th>
-                        <th>Días desde Fecha Clave</th>
-                        <th>Objetivo Logrado</th>
-                        <th>Días de Mora</th>
-                        <th>Días Mora PJ</th>
-                        <th>Interés</th>
-                        <th>Saldo más Interés</th>
-                        <th>Monto Amortizado</th>
-                        <th>Saldo a la Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $count = 1;
-                    while ($row = $result_prejudicial->fetch_assoc()) {
-                        echo "<tr>
+        <div class="historial border p-3">
+            <div class="table-responsive">
+                <h4>Historial Pre-Judicial</h4>
+            </div>
+            <div class="scrollable-table-container">
+                <table class="table table-bordered table-striped table-fixed">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Fecha Acto</th>
+                            <th>Acto</th>
+                            <th>N° de Notif. Voucher</th>
+                            <th>Descripción</th>
+                            <th>Notificación</th>
+                            <th>Fecha Clave</th>
+                            <th>Acción en Fecha Clave</th>
+                            <th>Actor</th>
+                            <th>Evidencia 1</th>
+                            <th>Evidencia 2</th>
+                            <th>Días desde Fecha Clave</th>
+                            <th>Objetivo Logrado</th>
+                            <th>Días de Mora</th>
+                            <th>Días Mora PJ</th>
+                            <th>Interés</th>
+                            <th>Saldo más Interés</th>
+                            <th>Monto Amortizado</th>
+                            <th>Saldo a la Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $count = 1;
+                        while ($row = $result_prejudicial->fetch_assoc()) {
+                            echo "<tr>
                                 <td>{$count}</td>
                                 <td>{$row['fecha_acto']}</td>
                                 <td>{$row['acto']}</td>
@@ -131,38 +130,38 @@ $conn->close();
                                 <td>{$row['monto_amortizado']}</td>
                                 <td>{$row['saldo_fecha']}</td>
                               </tr>";
-                        $count++;
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
+                            $count++;
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
-        <div class="table-responsive">
-            <h4>Historial Judicial</h4>
-        </div>
-        <div class="scrollable-table-container">
-            <table class="table table-bordered table-striped table-fixed-judicial">
-                <thead>
-                    <tr>
-                        <th>Nº</th>
-                        <th>Etapa</th>
-                        <th>Fecha</th>
-                        <th>Acto</th>
-                        <th>Juzgado</th>
-                        <th>Num. Expediente</th>
-                        <th>Num. Cédula</th>
-                        <th>Descripción</th>
-                        <th>Doc. Evidencia</th>
-                        <th>Fecha Clave</th>
-                        <th>Acción en Fecha Clave</th>
-                        <th>Actor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    while ($row = $result_judicial->fetch_assoc()) {
-                        echo "<tr>
+            <div class="table-responsive">
+                <h4>Historial Judicial</h4>
+            </div>
+            <div class="scrollable-table-container">
+                <table class="table table-bordered table-striped table-fixed-judicial">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Etapa</th>
+                            <th>Fecha</th>
+                            <th>Acto</th>
+                            <th>Juzgado</th>
+                            <th>Num. Expediente</th>
+                            <th>Num. Cédula</th>
+                            <th>Descripción</th>
+                            <th>Doc. Evidencia</th>
+                            <th>Fecha Clave</th>
+                            <th>Acción en Fecha Clave</th>
+                            <th>Actor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        while ($row = $result_judicial->fetch_assoc()) {
+                            echo "<tr>
                                 <td>{$count}</td>
                                 <td>{$row['etapa']}</td>
                                 <td>{$row['fecha_judicial']}</td>
@@ -176,11 +175,12 @@ $conn->close();
                                 <td>{$row['accion_en_fecha_clave']}</td>
                                 <td>{$row['actor_judicial']}</td>
                               </tr>";
-                        $count++;
-                    }
-                    ?>
-                </tbody>
-            </table>
+                            $count++;
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

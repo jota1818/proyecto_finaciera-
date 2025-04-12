@@ -120,12 +120,14 @@
 }
 /* asta aqui */
 
+/* Asegura que los botones se mantengan en una sola línea y se distribuyan correctamente */
 .fixed-buttons {
     display: flex;
     justify-content: space-between;
     gap: 10px;
 }
 
+/* Asegura que el contenedor de vista previa ocupe el 40% del ancho de la pantalla y sea scrollable verticalmente */
 .preview-container {
     position: fixed;
     top: 0;
@@ -139,6 +141,7 @@
     padding: 20px;
 }
 
+/* Asegura que el iframe dentro del contenedor de vista previa ocupe todo el espacio disponible */
 .preview-container iframe {
     width: 100%;
     height: 100%;
