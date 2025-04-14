@@ -71,9 +71,18 @@ $conn->close();
                     <select id="mes" name="mes" class="form-control" required>
                         <?php
                         $meses = [
-                            '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril',
-                            '05' => 'Mayo', '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto',
-                            '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
+                            '01' => 'Enero',
+                            '02' => 'Febrero',
+                            '03' => 'Marzo',
+                            '04' => 'Abril',
+                            '05' => 'Mayo',
+                            '06' => 'Junio',
+                            '07' => 'Julio',
+                            '08' => 'Agosto',
+                            '09' => 'Septiembre',
+                            '10' => 'Octubre',
+                            '11' => 'Noviembre',
+                            '12' => 'Diciembre'
                         ];
                         foreach ($meses as $value => $label) {
                             echo "<option value='$value' " . ($value == $mes ? 'selected' : '') . ">$label</option>";
@@ -165,39 +174,39 @@ $conn->close();
             </div>
         <?php } ?>
 
-        <!-- Botón de descarga -->
-        <button class="btn btn-primary" onclick="descargarReporte()">Descargar Reporte</button>
+        <!-- Botones de descarga y regresar -->
+        <button class="btn btn-primary" onclick="descargarReportePDF()">Descargar Reporte en PDF</button>
+        <button class="btn btn-secondary" onclick="regresar()">Regresar</button>
     </div>
 
     <script>
-        function descargarReporte() {
-            // Convertir la tabla a un archivo CSV
-            const tables = document.querySelectorAll('table');
-            let csvContent = '';
+        function descargarReportePDF() {
+            // Crear un formulario oculto para enviar los datos del mes y año seleccionados
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'generar_pdf.php';
+            form.style.display = 'none';
 
-            tables.forEach((table, index) => {
-                const rows = table.querySelectorAll('tr');
-                rows.forEach(row => {
-                    const cells = row.querySelectorAll('th, td');
-                    const rowData = Array.from(cells).map(cell => cell.innerText).join(',');
-                    csvContent += rowData + '\n';
-                });
+            // Agregar los campos del mes y año al formulario
+            const mesInput = document.createElement('input');
+            mesInput.type = 'hidden';
+            mesInput.name = 'mes';
+            mesInput.value = document.getElementById('mes').value;
+            form.appendChild(mesInput);
 
-                // Agregar una línea en blanco entre tablas
-                if (index < tables.length - 1) {
-                    csvContent += '\n';
-                }
-            });
+            const anioInput = document.createElement('input');
+            anioInput.type = 'hidden';
+            anioInput.name = 'anio';
+            anioInput.value = document.getElementById('anio').value;
+            form.appendChild(anioInput);
 
-            // Crear un enlace para descargar el archivo
-            const blob = new Blob([csvContent], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'reporte_' + <?php echo json_encode($mes . '_' . $anio); ?> + '.csv';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            // Agregar el formulario al cuerpo del documento y enviarlo
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function regresar() {
+            window.location.href = '../registro_cliente/index.php';
         }
     </script>
 </body>
