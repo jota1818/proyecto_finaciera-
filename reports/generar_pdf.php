@@ -123,13 +123,27 @@ foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
         $pdf->SetFont('', '');
         $fill = 0;
         foreach ($prejudiciales as $prejudicial) {
-            $pdf->Cell($w[0], 6, $prejudicial['fecha_acto'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[1], 6, $prejudicial['fecha_clave'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[2], 6, $prejudicial['acto'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[3], 6, $prejudicial['accion_fecha_clave'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[4], 6, $prejudicial['descripcion'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[5], 6, $prejudicial['objetivo_logrado'], 'LR', 0, 'L', $fill);
-            $pdf->Ln();
+            $lineHeight = 5; // altura de línea para multilinea
+            $maxY = $pdf->GetY();
+
+            // Calculamos la altura máxima de celda para esta fila
+            $heights = [];
+            $heights[] = $pdf->getStringHeight($w[0], $prejudicial['fecha_acto']);
+            $heights[] = $pdf->getStringHeight($w[1], $prejudicial['fecha_clave']);
+            $heights[] = $pdf->getStringHeight($w[2], $prejudicial['acto']);
+            $heights[] = $pdf->getStringHeight($w[3], $prejudicial['accion_fecha_clave']);
+            $heights[] = $pdf->getStringHeight($w[4], $prejudicial['descripcion']);
+            $heights[] = $pdf->getStringHeight($w[5], $prejudicial['objetivo_logrado']);
+            $rowHeight = max($heights);
+
+            $pdf->MultiCell($w[0], $rowHeight, $prejudicial['fecha_acto'], 1, 'C', $fill, 0); // centrado
+            $pdf->MultiCell($w[1], $rowHeight, $prejudicial['fecha_clave'], 1, 'C', $fill, 0); // centrado
+            $pdf->MultiCell($w[2], $rowHeight, $prejudicial['acto'], 1, 'L', $fill, 0);
+            $pdf->MultiCell($w[3], $rowHeight, $prejudicial['accion_fecha_clave'], 1, 'L', $fill, 0);
+            $pdf->MultiCell($w[4], $rowHeight, $prejudicial['descripcion'], 1, 'L', $fill, 0);
+            $pdf->MultiCell($w[5], $rowHeight, $prejudicial['objetivo_logrado'], 1, 'C', $fill, 1); // centrado
+
+
             $fill = !$fill;
         }
         $pdf->Cell(array_sum($w), 0, '', 'T');
@@ -163,12 +177,22 @@ foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
         $pdf->SetFont('', '');
         $fill = 0;
         foreach ($judiciales as $judicial) {
-            $pdf->Cell($w[0], 6, $judicial['fecha_judicial'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[1], 6, $judicial['fecha_clave_judicial'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[2], 6, $judicial['acto_judicial'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[3], 6, $judicial['accion_en_fecha_clave'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[4], 6, $judicial['descripcion_judicial'], 'LR', 0, 'L', $fill);
-            $pdf->Ln();
+            $heights = [];
+            $heights[] = $pdf->getStringHeight($w[0], $judicial['fecha_judicial']);
+            $heights[] = $pdf->getStringHeight($w[1], $judicial['fecha_clave_judicial']);
+            $heights[] = $pdf->getStringHeight($w[2], $judicial['acto_judicial']);
+            $heights[] = $pdf->getStringHeight($w[3], $judicial['accion_en_fecha_clave']);
+            $heights[] = $pdf->getStringHeight($w[4], $judicial['descripcion_judicial']);
+            $rowHeight = max($heights);
+
+            $pdf->MultiCell($w[0], $rowHeight, $judicial['fecha_judicial'], 1, 'C', $fill, 0); // centrado
+            $pdf->MultiCell($w[1], $rowHeight, $judicial['fecha_clave_judicial'], 1, 'C', $fill, 0); // centrado
+            $pdf->MultiCell($w[2], $rowHeight, $judicial['acto_judicial'], 1, 'L', $fill, 0);
+            $pdf->MultiCell($w[3], $rowHeight, $judicial['accion_en_fecha_clave'], 1, 'L', $fill, 0);
+            $pdf->MultiCell($w[4], $rowHeight, $judicial['descripcion_judicial'], 1, 'C', $fill, 1); // centrado
+
+
+
             $fill = !$fill;
         }
         $pdf->Cell(array_sum($w), 0, '', 'T');
@@ -221,4 +245,4 @@ if (!empty($clientes_sin_historial)) {
 
 // Cerrar y generar el PDF
 $pdf->Output('reporte_' . $mes . '_' . $anio . '.pdf', 'D');
-?>
+/* esto es la correcta por el momento */

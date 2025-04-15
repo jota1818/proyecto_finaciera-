@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="informe-button-container">
-                    <button type="button" class="btn btn-warning informe-button" onclick="window.location.href='../reports/reporte.php'">INFORME</button>
+                    <button type="button" class="btn btn-warning informe-button" onclick="window.location.href='../reports/reporte.php'">REPORTE</button>
                 </div>
             </div>
         </div>
