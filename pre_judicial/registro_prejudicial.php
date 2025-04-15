@@ -184,6 +184,7 @@ $conn->close();
 <html>
 
 <head>
+    <title>Registro de Etapas Pre-Judicial y Judicial</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="validacion_etapas.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

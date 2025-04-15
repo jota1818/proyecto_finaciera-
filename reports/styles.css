@@ -15,3 +15,23 @@
     margin: 0;
 }
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.form-select-sm, .form-control-sm {
+    width: auto;
+    display: inline-block;
+}
+
+.text-center.w-100 {
+    text-align: center;
+    width: 100%;
+}
+
+.btn-salir {
+    width: 150px; /* Ajusta el ancho del botón según tus necesidades */
+    height: 35px; /* Ajusta la altura del botón según tus necesidades */
+    font-size: 16px; /* Ajusta el tamaño de la fuente según tus necesidades */
+}

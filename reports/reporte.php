@@ -65,48 +65,59 @@ if ($reporte_generado) {
     <title>Reporte de Historiales</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h2>Reporte de Historiales -
-            <?php
-            $meses = [
-                '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril',
-                '05' => 'Mayo', '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto',
-                '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
-            ];
-            echo $meses[$mes] . ' ' . $anio;
-            ?>
-        </h2>
+    <div class="container-fluid mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-center w-100">Reporte de Historiales -
+                <?php
+                $meses = [
+                    '01' => 'Enero',
+                    '02' => 'Febrero',
+                    '03' => 'Marzo',
+                    '04' => 'Abril',
+                    '05' => 'Mayo',
+                    '06' => 'Junio',
+                    '07' => 'Julio',
+                    '08' => 'Agosto',
+                    '09' => 'Septiembre',
+                    '10' => 'Octubre',
+                    '11' => 'Noviembre',
+                    '12' => 'Diciembre'
+                ];
+                echo $meses[$mes] . ' ' . $anio;
+                ?>
+            </h2>
+            <button type="button" class="btn btn-danger btn-salir" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
+        </div>
 
         <!-- Formulario para seleccionar mes y año -->
-        <form id="reporteForm" method="post" action="">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="mes">Mes:</label>
-                    <select id="mes" name="mes" class="form-control" required>
-                        <?php
-                        foreach ($meses as $value => $label) {
-                            echo "<option value='$value' " . ($value == $mes ? 'selected' : '') . ">$label</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label for="anio">Año:</label>
-                    <input type="number" id="anio" name="anio" class="form-control" value="<?php echo $anio; ?>" required>
-                </div>
+        <form id="reporteForm" method="post" action="" class="d-flex justify-content-center mb-4">
+            <div class="me-2">
+                <label for="mes">Mes:</label>
+                <select id="mes" name="mes" class="form-select form-select-sm" required>
+                    <?php
+                    foreach ($meses as $value => $label) {
+                        echo "<option value='$value' " . ($value == $mes ? 'selected' : '') . ">$label</option>";
+                    }
+                    ?>
+                </select>
             </div>
-            <button type="submit" class="btn btn-primary">Generar Reporte</button>
-            <br>
+            <div class="me-2">
+                <label for="anio">Año:</label>
+                <input type="number" id="anio" name="anio" class="form-control form-control-sm" value="<?php echo $anio; ?>" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Generar Reporte</button>
         </form>
-        <!-- Botones de descarga y Salir -->
-        <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
-        <?php if ($reporte_generado): ?>
-            <button class="btn btn-primary" onclick="descargarReportePDF()">Descargar Reporte en PDF</button>
-        <?php endif; ?>
-        <br>
+
+        <!-- Botones de descarga -->
+        <div class="d-flex justify-content-between mb-4">
+            <?php if ($reporte_generado): ?>
+                <button class="btn btn-primary" onclick="descargarReportePDF()">Descargar Reporte en PDF</button>
+            <?php endif; ?>
+        </div>
 
         <!-- Historiales de Clientes -->
         <?php if ($reporte_generado): ?>
@@ -242,10 +253,6 @@ if ($reporte_generado) {
             // Agregar el formulario al cuerpo del documento y enviarlo
             document.body.appendChild(form);
             form.submit();
-        }
-
-        function regresar() {
-            window.location.href = '../registro_cliente/index.php';
         }
     </script>
 </body>
