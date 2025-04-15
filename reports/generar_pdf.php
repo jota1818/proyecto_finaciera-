@@ -30,7 +30,28 @@ $sql_judicial = "
 ";
 $result_judicial = $conn->query($sql_judicial);
 
+// Consulta para obtener todos los clientes
+$sql_clientes = "SELECT * FROM clientes ORDER BY nombre, apellidos";
+$result_clientes = $conn->query($sql_clientes);
+
 $conn->close();
+
+// Obtener la lista de clientes con historial
+$clientes_con_historial = [];
+while ($row = $result_prejudicial->fetch_assoc()) {
+    $clientes_con_historial[$row['id_cliente']] = true;
+}
+while ($row = $result_judicial->fetch_assoc()) {
+    $clientes_con_historial[$row['id_cliente']] = true;
+}
+
+// Obtener la lista de clientes sin historial
+$clientes_sin_historial = [];
+while ($row = $result_clientes->fetch_assoc()) {
+    if (!isset($clientes_con_historial[$row['id_cliente']])) {
+        $clientes_sin_historial[] = $row;
+    }
+}
 
 // Crear una instancia de TCPDF
 $pdf = new TCPDF();
@@ -55,11 +76,13 @@ $pdf->Cell(0, 10, 'Reporte de Historiales - ' . date('F Y', strtotime($fecha_ini
 
 // Agregar los datos de los clientes
 $clientes_prejudicial = [];
+$result_prejudicial->data_seek(0); // Reiniciar el puntero del resultado
 while ($row = $result_prejudicial->fetch_assoc()) {
     $clientes_prejudicial[$row['id_cliente']][] = $row;
 }
 
 $clientes_judicial = [];
+$result_judicial->data_seek(0); // Reiniciar el puntero del resultado
 while ($row = $result_judicial->fetch_assoc()) {
     $clientes_judicial[$row['id_cliente']][] = $row;
 }
@@ -75,9 +98,9 @@ foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
 
     // Agregar el historial pre-judicial
     if (!empty($prejudiciales)) {
-        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetFont('helvetica', 'B', 8); // Reducir el tamaño de la fuente de los encabezados
         $pdf->Cell(0, 10, 'Historial Pre-Judicial', 0, 1, 'L');
-        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetFont('helvetica', '', 8); // Reducir el tamaño de la fuente del contenido
 
         // Crear una tabla para el historial pre-judicial
         $pdf->SetFillColor(255, 255, 255);
@@ -87,8 +110,8 @@ foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
         $pdf->SetFont('', 'B');
 
         // Encabezados de la tabla
-        $header = array('Fecha Acto', 'Acto', 'Descripción', 'Fecha Clave', 'Acción en Fecha Clave');
-        $w = array(30, 40, 60, 30, 40);
+        $header = array('Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción', 'Objetivo logrado');
+        $w = array(25, 25, 30, 40, 45, 30); // Ajustar el ancho de las columnas
         $num_headers = count($header);
 
         for ($i = 0; $i < $num_headers; ++$i) {
@@ -101,10 +124,11 @@ foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
         $fill = 0;
         foreach ($prejudiciales as $prejudicial) {
             $pdf->Cell($w[0], 6, $prejudicial['fecha_acto'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[1], 6, $prejudicial['acto'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[2], 6, $prejudicial['descripcion'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[3], 6, $prejudicial['fecha_clave'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[4], 6, $prejudicial['accion_fecha_clave'], 'LR', 0, 'L', $fill);
+            $pdf->Cell($w[1], 6, $prejudicial['fecha_clave'], 'LR', 0, 'L', $fill);
+            $pdf->Cell($w[2], 6, $prejudicial['acto'], 'LR', 0, 'L', $fill);
+            $pdf->Cell($w[3], 6, $prejudicial['accion_fecha_clave'], 'LR', 0, 'L', $fill);
+            $pdf->Cell($w[4], 6, $prejudicial['descripcion'], 'LR', 0, 'L', $fill);
+            $pdf->Cell($w[5], 6, $prejudicial['objetivo_logrado'], 'LR', 0, 'L', $fill);
             $pdf->Ln();
             $fill = !$fill;
         }
@@ -114,9 +138,9 @@ foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
 
     // Agregar el historial judicial
     if (!empty($judiciales)) {
-        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetFont('helvetica', 'B', 8); // Reducir el tamaño de la fuente de los encabezados
         $pdf->Cell(0, 10, 'Historial Judicial', 0, 1, 'L');
-        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetFont('helvetica', '', 8); // Reducir el tamaño de la fuente del contenido
 
         // Crear una tabla para el historial judicial
         $pdf->SetFillColor(255, 255, 255);
@@ -126,8 +150,8 @@ foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
         $pdf->SetFont('', 'B');
 
         // Encabezados de la tabla
-        $header = array('Fecha Judicial', 'Acto', 'Descripción', 'Fecha Clave', 'Acción en Fecha Clave');
-        $w = array(30, 40, 60, 30, 40);
+        $header = array('Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción');
+        $w = array(25, 30, 40, 35, 40); // Ajustar el ancho de las columnas
         $num_headers = count($header);
 
         for ($i = 0; $i < $num_headers; ++$i) {
@@ -140,10 +164,10 @@ foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
         $fill = 0;
         foreach ($judiciales as $judicial) {
             $pdf->Cell($w[0], 6, $judicial['fecha_judicial'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[1], 6, $judicial['acto_judicial'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[2], 6, $judicial['descripcion_judicial'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[3], 6, $judicial['fecha_clave_judicial'], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[4], 6, $judicial['accion_en_fecha_clave'], 'LR', 0, 'L', $fill);
+            $pdf->Cell($w[1], 6, $judicial['fecha_clave_judicial'], 'LR', 0, 'L', $fill);
+            $pdf->Cell($w[2], 6, $judicial['acto_judicial'], 'LR', 0, 'L', $fill);
+            $pdf->Cell($w[3], 6, $judicial['accion_en_fecha_clave'], 'LR', 0, 'L', $fill);
+            $pdf->Cell($w[4], 6, $judicial['descripcion_judicial'], 'LR', 0, 'L', $fill);
             $pdf->Ln();
             $fill = !$fill;
         }
@@ -153,6 +177,46 @@ foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
 
     // Agregar un espacio entre clientes
     $pdf->Ln(10);
+}
+
+// Clientes sin historial
+if (!empty($clientes_sin_historial)) {
+    $pdf->SetFont('helvetica', 'B', 12);
+    $pdf->Cell(0, 10, 'Clientes sin Historial', 0, 1, 'L');
+    $pdf->Ln(5);
+
+    $pdf->SetFont('helvetica', 'B', 8); // Reducir el tamaño de la fuente de los encabezados
+    $pdf->Cell(0, 10, 'Clientes sin Historial', 0, 1, 'L');
+    $pdf->SetFont('helvetica', '', 8); // Reducir el tamaño de la fuente del contenido
+
+    // Crear una tabla para los clientes sin historial
+    $pdf->SetFillColor(255, 255, 255);
+    $pdf->SetTextColor(0, 0, 0);
+    $pdf->SetDrawColor(0, 0, 0);
+    $pdf->SetLineWidth(0.3);
+    $pdf->SetFont('', 'B');
+
+    // Encabezados de la tabla
+    $header = array('Nombre Completo', 'DNI');
+    $w = array(90, 30); // Ajustar el ancho de las columnas
+    $num_headers = count($header);
+
+    for ($i = 0; $i < $num_headers; ++$i) {
+        $pdf->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
+    }
+    $pdf->Ln();
+
+    // Filas de la tabla
+    $pdf->SetFont('', '');
+    $fill = 0;
+    foreach ($clientes_sin_historial as $cliente) {
+        $pdf->Cell($w[0], 6, $cliente['nombre'] . ' ' . $cliente['apellidos'], 'LR', 0, 'L', $fill);
+        $pdf->Cell($w[1], 6, $cliente['dni'], 'LR', 0, 'L', $fill);
+        $pdf->Ln();
+        $fill = !$fill;
+    }
+    $pdf->Cell(array_sum($w), 0, '', 'T');
+    $pdf->Ln(5);
 }
 
 // Cerrar y generar el PDF

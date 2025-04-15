@@ -29,7 +29,28 @@ $sql_judicial = "
 ";
 $result_judicial = $conn->query($sql_judicial);
 
+// Consulta para obtener todos los clientes
+$sql_clientes = "SELECT * FROM clientes ORDER BY nombre, apellidos";
+$result_clientes = $conn->query($sql_clientes);
+
 $conn->close();
+
+// Obtener la lista de clientes con historial
+$clientes_con_historial = [];
+while ($row = $result_prejudicial->fetch_assoc()) {
+    $clientes_con_historial[$row['id_cliente']] = true;
+}
+while ($row = $result_judicial->fetch_assoc()) {
+    $clientes_con_historial[$row['id_cliente']] = true;
+}
+
+// Obtener la lista de clientes sin historial
+$clientes_sin_historial = [];
+while ($row = $result_clientes->fetch_assoc()) {
+    if (!isset($clientes_con_historial[$row['id_cliente']])) {
+        $clientes_sin_historial[] = $row;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,25 +59,7 @@ $conn->close();
 <head>
     <title>Reporte de Historiales</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../styles.css" rel="stylesheet">
-    <style>
-        .client-box {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-
-        .client-header {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-
-        .client-header h4 {
-            margin: 0;
-        }
-    </style>
+    <link href="styles.css" rel="stylesheet">
 </head>
 
 <body>
@@ -96,16 +99,22 @@ $conn->close();
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Generar Reporte</button>
+            <br>
         </form>
-
+        <!-- Botones de descarga y regresar -->
+        <button class="btn btn-secondary" onclick="regresar()">Regresar</button>
+        <button class="btn btn-primary" onclick="descargarReportePDF()">Descargar Reporte en PDF</button>
+        <br>
         <!-- Historiales de Clientes -->
         <?php
         $clientes_prejudicial = [];
+        $result_prejudicial->data_seek(0); // Reiniciar el puntero del resultado
         while ($row = $result_prejudicial->fetch_assoc()) {
             $clientes_prejudicial[$row['id_cliente']][] = $row;
         }
 
         $clientes_judicial = [];
+        $result_judicial->data_seek(0); // Reiniciar el puntero del resultado
         while ($row = $result_judicial->fetch_assoc()) {
             $clientes_judicial[$row['id_cliente']][] = $row;
         }
@@ -120,25 +129,27 @@ $conn->close();
                 </div>
                 <div class="client-body">
                     <?php if (!empty($prejudiciales)) : ?>
-                        <h5>Historial Pre-Judicial</h5>
+                        <h5>Etapa Pre-Judicial</h5>
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Fecha Acto</th>
-                                    <th>Acto</th>
-                                    <th>Descripción</th>
+                                    <th>Fecha</th>
                                     <th>Fecha Clave</th>
+                                    <th>Acto</th>
                                     <th>Acción en Fecha Clave</th>
+                                    <th>Descripción</th>
+                                    <th>Objetivo Logrado</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($prejudiciales as $prejudicial) : ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($prejudicial['fecha_acto']); ?></td>
-                                        <td><?php echo htmlspecialchars($prejudicial['acto']); ?></td>
-                                        <td><?php echo htmlspecialchars($prejudicial['descripcion']); ?></td>
                                         <td><?php echo htmlspecialchars($prejudicial['fecha_clave']); ?></td>
+                                        <td><?php echo htmlspecialchars($prejudicial['acto']); ?></td>
                                         <td><?php echo htmlspecialchars($prejudicial['accion_fecha_clave']); ?></td>
+                                        <td><?php echo htmlspecialchars($prejudicial['descripcion']); ?></td>
+                                        <td><?php echo htmlspecialchars($prejudicial['objetivo_logrado']); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -146,25 +157,25 @@ $conn->close();
                     <?php endif; ?>
 
                     <?php if (!empty($judiciales)) : ?>
-                        <h5>Historial Judicial</h5>
+                        <h5>Etapa Judicial</h5>
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Fecha Judicial</th>
-                                    <th>Acto</th>
-                                    <th>Descripción</th>
+                                    <th>Fecha</th>
                                     <th>Fecha Clave</th>
+                                    <th>Acto</th>
                                     <th>Acción en Fecha Clave</th>
+                                    <th>Descripción</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($judiciales as $judicial) : ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($judicial['fecha_judicial']); ?></td>
-                                        <td><?php echo htmlspecialchars($judicial['acto_judicial']); ?></td>
-                                        <td><?php echo htmlspecialchars($judicial['descripcion_judicial']); ?></td>
                                         <td><?php echo htmlspecialchars($judicial['fecha_clave_judicial']); ?></td>
+                                        <td><?php echo htmlspecialchars($judicial['acto_judicial']); ?></td>
                                         <td><?php echo htmlspecialchars($judicial['accion_en_fecha_clave']); ?></td>
+                                        <td><?php echo htmlspecialchars($judicial['descripcion_judicial']); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -174,9 +185,32 @@ $conn->close();
             </div>
         <?php } ?>
 
-        <!-- Botones de descarga y regresar -->
-        <button class="btn btn-primary" onclick="descargarReportePDF()">Descargar Reporte en PDF</button>
-        <button class="btn btn-secondary" onclick="regresar()">Regresar</button>
+        <!-- Clientes sin historial -->
+        <?php if (!empty($clientes_sin_historial)) : ?>
+            <div class="client-box">
+                <div class="client-header">
+                    <h4>Clientes sin Historial</h4>
+                </div>
+                <div class="client-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre Completo</th>
+                                <th>DNI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($clientes_sin_historial as $cliente) : ?>
+                                <tr>
+                                <td><?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></td>
+                                    <td><?php echo htmlspecialchars($cliente['dni']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 
     <script>
