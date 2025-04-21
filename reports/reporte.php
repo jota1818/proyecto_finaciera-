@@ -4,9 +4,13 @@ require "../conexion_db/connection.php";
 // Inicializar variables para el mes y año
 $mes = isset($_POST['mes']) ? $_POST['mes'] : date('m');
 $anio = isset($_POST['anio']) ? $_POST['anio'] : date('Y');
+$filtro = isset($_POST['filtro']) ? $_POST['filtro'] : 'todos'; // Nuevo filtro
+$encabezados_prejudicial = isset($_POST['encabezados_prejudicial']) ? $_POST['encabezados_prejudicial'] : []; // Encabezados seleccionados para pre-judicial
+$encabezados_judicial = isset($_POST['encabezados_judicial']) ? $_POST['encabezados_judicial'] : []; // Encabezados seleccionados para judicial
+$encabezados_sin_historial = isset($_POST['encabezados_sin_historial']) ? $_POST['encabezados_sin_historial'] : []; // Encabezados seleccionados para sin historial
 
-// Verificar si el formulario ha sido enviado
-$reporte_generado = isset($_POST['mes']);
+// Verificar si el formulario de encabezados ha sido enviado
+$reporte_generado = isset($_POST['filtro']);
 
 if ($reporte_generado) {
     // Convertir el mes y año a un rango de fechas
@@ -109,14 +113,36 @@ if ($reporte_generado) {
                 <label for="anio">Año:</label>
                 <input type="number" id="anio" name="anio" class="form-control form-control-sm" value="<?php echo $anio; ?>" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-sm">Generar Reporte</button>
         </form>
 
-        <!-- Botones de descarga -->
-        <div class="d-flex justify-content-between mb-4">
-            <?php if ($reporte_generado): ?>
-                <button class="btn btn-primary" onclick="descargarReportePDF()">Descargar Reporte en PDF</button>
-            <?php endif; ?>
+        <!-- Botones de filtro -->
+        <div class="d-flex justify-content-center mb-4">
+            <button type="button" class="btn btn-secondary me-2" onclick="abrirModal('con_historial')">Clientes con Historial</button>
+            <button type="button" class="btn btn-secondary me-2" onclick="abrirModal('sin_historial')">Clientes sin Historial</button>
+            <button type="button" class="btn btn-secondary" onclick="abrirModal('todos')">Clientes con y sin Historial</button>
+        </div>
+
+        <!-- Modal para seleccionar encabezados -->
+        <div class="modal fade" id="encabezadosModal" tabindex="-1" aria-labelledby="encabezadosModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="encabezadosModalLabel">Seleccionar Encabezados</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="encabezadosForm" method="post" action="">
+                            <input type="hidden" name="filtro" id="filtro">
+                            <input type="hidden" name="mes" id="mesModal" value="<?php echo $mes; ?>">
+                            <input type="hidden" name="anio" id="anioModal" value="<?php echo $anio; ?>">
+                            <div id="opcionesEncabezados">
+                                <!-- Opciones de encabezados se insertarán aquí dinámicamente -->
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">Generar Reporte</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Historiales de Clientes -->
@@ -134,127 +160,237 @@ if ($reporte_generado) {
                 $clientes_judicial[$row['id_cliente']][] = $row;
             }
 
-            foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
-                $cliente = $prejudiciales[0];
-                $judiciales = $clientes_judicial[$id_cliente] ?? [];
+            if ($filtro === 'con_historial') {
+                // Mostrar solo clientes con historial
+                foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
+                    $cliente = $prejudiciales[0];
+                    $judiciales = $clientes_judicial[$id_cliente] ?? [];
+                    mostrarCliente($cliente, $prejudiciales, $judiciales, $encabezados_prejudicial, $encabezados_judicial);
+                }
+            } elseif ($filtro === 'sin_historial') {
+                // Mostrar solo clientes sin historial
+                mostrarClientesSinHistorial($clientes_sin_historial, $encabezados_sin_historial);
+            } else {
+                // Mostrar todos los clientes
+                foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
+                    $cliente = $prejudiciales[0];
+                    $judiciales = $clientes_judicial[$id_cliente] ?? [];
+                    mostrarCliente($cliente, $prejudiciales, $judiciales, $encabezados_prejudicial, $encabezados_judicial);
+                }
+                mostrarClientesSinHistorial($clientes_sin_historial, $encabezados_sin_historial);
+            }
             ?>
-                <div class="client-box">
-                    <div class="client-header">
-                        <h4><?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></h4>
-                    </div>
-                    <div class="client-body">
-                        <?php if (!empty($prejudiciales)) : ?>
-                            <h5>Etapa Pre-Judicial</h5>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Fecha Clave</th>
-                                        <th>Acto</th>
-                                        <th>Acción en Fecha Clave</th>
-                                        <th>Descripción</th>
-                                        <th>Objetivo Logrado</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($prejudiciales as $prejudicial) : ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($prejudicial['fecha_acto']); ?></td>
-                                            <td><?php echo htmlspecialchars($prejudicial['fecha_clave']); ?></td>
-                                            <td><?php echo htmlspecialchars($prejudicial['acto']); ?></td>
-                                            <td><?php echo htmlspecialchars($prejudicial['accion_fecha_clave']); ?></td>
-                                            <td><?php echo htmlspecialchars($prejudicial['descripcion']); ?></td>
-                                            <td><?php echo htmlspecialchars($prejudicial['objetivo_logrado']); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        <?php endif; ?>
-
-                        <?php if (!empty($judiciales)) : ?>
-                            <h5>Etapa Judicial</h5>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Fecha Clave</th>
-                                        <th>Acto</th>
-                                        <th>Acción en Fecha Clave</th>
-                                        <th>Descripción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($judiciales as $judicial) : ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($judicial['fecha_judicial']); ?></td>
-                                            <td><?php echo htmlspecialchars($judicial['fecha_clave_judicial']); ?></td>
-                                            <td><?php echo htmlspecialchars($judicial['acto_judicial']); ?></td>
-                                            <td><?php echo htmlspecialchars($judicial['accion_en_fecha_clave']); ?></td>
-                                            <td><?php echo htmlspecialchars($judicial['descripcion_judicial']); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            <?php } ?>
-
-            <!-- Clientes sin historial -->
-            <?php if (!empty($clientes_sin_historial)) : ?>
-                <div class="client-box">
-                    <div class="client-header">
-                        <h4>Clientes sin Historial</h4>
-                    </div>
-                    <div class="client-body">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nombre Completo</th>
-                                    <th>DNI</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($clientes_sin_historial as $cliente) : ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></td>
-                                        <td><?php echo htmlspecialchars($cliente['dni']); ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            <?php endif; ?>
         <?php endif; ?>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function descargarReportePDF() {
-            // Crear un formulario oculto para enviar los datos del mes y año seleccionados
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'generar_pdf.php';
-            form.style.display = 'none';
+        function abrirModal(filtro) {
+            document.getElementById('filtro').value = filtro;
+            document.getElementById('mesModal').value = document.getElementById('mes').value;
+            document.getElementById('anioModal').value = document.getElementById('anio').value;
 
-            // Agregar los campos del mes y año al formulario
-            const mesInput = document.createElement('input');
-            mesInput.type = 'hidden';
-            mesInput.name = 'mes';
-            mesInput.value = document.getElementById('mes').value;
-            form.appendChild(mesInput);
+            const opcionesEncabezados = document.getElementById('opcionesEncabezados');
+            opcionesEncabezados.innerHTML = ''; // Limpiar opciones anteriores
 
-            const anioInput = document.createElement('input');
-            anioInput.type = 'hidden';
-            anioInput.name = 'anio';
-            anioInput.value = document.getElementById('anio').value;
-            form.appendChild(anioInput);
+            if (filtro === 'con_historial') {
+                // Opciones para clientes con historial
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Pre-judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción', 'Objetivo Logrado'], 'encabezados_prejudicial', ['Fecha', 'Fecha Clave', 'Descripción']);
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción'], 'encabezados_judicial', ['Fecha', 'Fecha Clave', 'Descripción']);
+            } else if (filtro === 'sin_historial') {
+                // Opciones para clientes sin historial
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción sin historial', ['Nombres', 'DNI'], 'encabezados_sin_historial', ['Nombres']);
+            } else {
+                // Opciones para clientes con y sin historial
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Pre-judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción', 'Objetivo Logrado'], 'encabezados_prejudicial', ['Fecha', 'Fecha Clave', 'Descripción']);
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción'], 'encabezados_judicial', ['Fecha', 'Fecha Clave']);
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción sin historial', ['Nombres', 'DNI'], 'encabezados_sin_historial', ['Nombres', 'DNI']);
+            }
 
-            // Agregar el formulario al cuerpo del documento y enviarlo
-            document.body.appendChild(form);
-            form.submit();
+            // Mostrar el modal
+            const modal = new bootstrap.Modal(document.getElementById('encabezadosModal'));
+            modal.show();
+        }
+
+        function agregarOpcionEncabezado(contenedor, titulo, encabezados, nombreCampo, opcionesPorDefecto) {
+            const opcionDiv = document.createElement('div');
+            opcionDiv.classList.add('mb-3');
+
+            const tituloLabel = document.createElement('label');
+            tituloLabel.classList.add('form-label');
+            tituloLabel.textContent = titulo;
+            opcionDiv.appendChild(tituloLabel);
+
+            encabezados.forEach(encabezado => {
+                const checkboxDiv = document.createElement('div');
+                checkboxDiv.classList.add('form-check');
+
+                const checkboxInput = document.createElement('input');
+                checkboxInput.type = 'checkbox';
+                checkboxInput.name = nombreCampo + '[]';
+                checkboxInput.value = encabezado;
+                checkboxInput.classList.add('form-check-input');
+                checkboxInput.checked = opcionesPorDefecto.includes(encabezado); // Marcar si está en las opciones por defecto
+                checkboxDiv.appendChild(checkboxInput);
+
+                const checkboxLabel = document.createElement('label');
+                checkboxLabel.classList.add('form-check-label');
+                checkboxLabel.textContent = encabezado;
+                checkboxDiv.appendChild(checkboxLabel);
+
+                opcionDiv.appendChild(checkboxDiv);
+            });
+
+            contenedor.appendChild(opcionDiv);
         }
     </script>
 </body>
 
 </html>
+
+<?php
+function mostrarCliente($cliente, $prejudiciales, $judiciales, $encabezados_prejudicial, $encabezados_judicial) {
+    ?>
+    <div class="client-box">
+        <div class="client-header">
+            <h4><?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></h4>
+        </div>
+        <div class="client-body">
+            <?php if (!empty($prejudiciales) && (in_array('Fecha', $encabezados_prejudicial) || in_array('Fecha Clave', $encabezados_prejudicial) || in_array('Acto', $encabezados_prejudicial) || in_array('Acción en Fecha Clave', $encabezados_prejudicial) || in_array('Descripción', $encabezados_prejudicial) || in_array('Objetivo Logrado', $encabezados_prejudicial))) : ?>
+                <h5>Etapa Pre-Judicial</h5>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <?php if (in_array('Fecha', $encabezados_prejudicial)) : ?>
+                                <th>Fecha</th>
+                            <?php endif; ?>
+                            <?php if (in_array('Fecha Clave', $encabezados_prejudicial)) : ?>
+                                <th>Fecha Clave</th>
+                            <?php endif; ?>
+                            <?php if (in_array('Acto', $encabezados_prejudicial)) : ?>
+                                <th>Acto</th>
+                            <?php endif; ?>
+                            <?php if (in_array('Acción en Fecha Clave', $encabezados_prejudicial)) : ?>
+                                <th>Acción en Fecha Clave</th>
+                            <?php endif; ?>
+                            <?php if (in_array('Descripción', $encabezados_prejudicial)) : ?>
+                                <th>Descripción</th>
+                            <?php endif; ?>
+                            <?php if (in_array('Objetivo Logrado', $encabezados_prejudicial)) : ?>
+                                <th>Objetivo Logrado</th>
+                            <?php endif; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($prejudiciales as $prejudicial) : ?>
+                            <tr>
+                                <?php if (in_array('Fecha', $encabezados_prejudicial)) : ?>
+                                    <td><?php echo htmlspecialchars($prejudicial['fecha_acto']); ?></td>
+                                <?php endif; ?>
+                                <?php if (in_array('Fecha Clave', $encabezados_prejudicial)) : ?>
+                                    <td><?php echo htmlspecialchars($prejudicial['fecha_clave']); ?></td>
+                                <?php endif; ?>
+                                <?php if (in_array('Acto', $encabezados_prejudicial)) : ?>
+                                    <td><?php echo htmlspecialchars($prejudicial['acto']); ?></td>
+                                <?php endif; ?>
+                                <?php if (in_array('Acción en Fecha Clave', $encabezados_prejudicial)) : ?>
+                                    <td><?php echo htmlspecialchars($prejudicial['accion_fecha_clave']); ?></td>
+                                <?php endif; ?>
+                                <?php if (in_array('Descripción', $encabezados_prejudicial)) : ?>
+                                    <td><?php echo htmlspecialchars($prejudicial['descripcion']); ?></td>
+                                <?php endif; ?>
+                                <?php if (in_array('Objetivo Logrado', $encabezados_prejudicial)) : ?>
+                                    <td><?php echo htmlspecialchars($prejudicial['objetivo_logrado']); ?></td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+
+            <?php if (!empty($judiciales) && (in_array('Fecha', $encabezados_judicial) || in_array('Fecha Clave', $encabezados_judicial) || in_array('Acto', $encabezados_judicial) || in_array('Acción en Fecha Clave', $encabezados_judicial) || in_array('Descripción', $encabezados_judicial))) : ?>
+                <h5>Etapa Judicial</h5>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <?php if (in_array('Fecha', $encabezados_judicial)) : ?>
+                                <th>Fecha</th>
+                            <?php endif; ?>
+                            <?php if (in_array('Fecha Clave', $encabezados_judicial)) : ?>
+                                <th>Fecha Clave</th>
+                            <?php endif; ?>
+                            <?php if (in_array('Acto', $encabezados_judicial)) : ?>
+                                <th>Acto</th>
+                            <?php endif; ?>
+                            <?php if (in_array('Acción en Fecha Clave', $encabezados_judicial)) : ?>
+                                <th>Acción en Fecha Clave</th>
+                            <?php endif; ?>
+                            <?php if (in_array('Descripción', $encabezados_judicial)) : ?>
+                                <th>Descripción</th>
+                            <?php endif; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($judiciales as $judicial) : ?>
+                            <tr>
+                                <?php if (in_array('Fecha', $encabezados_judicial)) : ?>
+                                    <td><?php echo htmlspecialchars($judicial['fecha_judicial']); ?></td>
+                                <?php endif; ?>
+                                <?php if (in_array('Fecha Clave', $encabezados_judicial)) : ?>
+                                    <td><?php echo htmlspecialchars($judicial['fecha_clave_judicial']); ?></td>
+                                <?php endif; ?>
+                                <?php if (in_array('Acto', $encabezados_judicial)) : ?>
+                                    <td><?php echo htmlspecialchars($judicial['acto_judicial']); ?></td>
+                                <?php endif; ?>
+                                <?php if (in_array('Acción en Fecha Clave', $encabezados_judicial)) : ?>
+                                    <td><?php echo htmlspecialchars($judicial['accion_en_fecha_clave']); ?></td>
+                                <?php endif; ?>
+                                <?php if (in_array('Descripción', $encabezados_judicial)) : ?>
+                                    <td><?php echo htmlspecialchars($judicial['descripcion_judicial']); ?></td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php
+}
+
+function mostrarClientesSinHistorial($clientes_sin_historial, $encabezados_sin_historial) {
+    ?>
+    <div class="client-box">
+        <div class="client-header">
+            <h4>Clientes sin Historial</h4>
+        </div>
+        <div class="client-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <?php if (in_array('Nombres', $encabezados_sin_historial)) : ?>
+                            <th>Nombre Completo</th>
+                        <?php endif; ?>
+                        <?php if (in_array('DNI', $encabezados_sin_historial)) : ?>
+                            <th>DNI</th>
+                        <?php endif; ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($clientes_sin_historial as $cliente) : ?>
+                        <tr>
+                            <?php if (in_array('Nombres', $encabezados_sin_historial)) : ?>
+                                <td><?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></td>
+                            <?php endif; ?>
+                            <?php if (in_array('DNI', $encabezados_sin_historial)) : ?>
+                                <td><?php echo htmlspecialchars($cliente['dni']); ?></td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <?php
+}
+?>
