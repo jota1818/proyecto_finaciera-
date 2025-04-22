@@ -119,7 +119,8 @@ if ($reporte_generado) {
         <div class="d-flex justify-content-center mb-4">
             <button type="button" class="btn btn-secondary me-2" onclick="abrirModal('con_historial')">Clientes con Historial</button>
             <button type="button" class="btn btn-secondary me-2" onclick="abrirModal('sin_historial')">Clientes sin Historial</button>
-            <button type="button" class="btn btn-secondary" onclick="abrirModal('todos')">Clientes con y sin Historial</button>
+            <button type="button" class="btn btn-secondary me-2" onclick="abrirModal('todos')">Clientes con y sin Historial</button>
+            <button type="button" class="btn btn-primary" onclick="abrirConfiguracion()">Configuración</button>
         </div>
 
         <!-- Modal para seleccionar encabezados -->
@@ -139,6 +140,84 @@ if ($reporte_generado) {
                                 <!-- Opciones de encabezados se insertarán aquí dinámicamente -->
                             </div>
                             <button type="submit" class="btn btn-primary mt-3">Generar Reporte</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para configuración de encabezados -->
+        <div class="modal fade" id="configuracionModal" tabindex="-1" aria-labelledby="configuracionModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="configuracionModalLabel">Configuración de Encabezados</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="configuracionForm">
+                            <div class="mb-3">
+                                <label class="form-label">Encabezados Pre-judicial por defecto</label>
+                                <div class="form-check" id="encabezadosPrejudicial">
+                                    <input type="checkbox" class="form-check-input" id="fechaPrejudicial" value="Fecha">
+                                    <label class="form-check-label" for="fechaPrejudicial">Fecha</label>
+                                </div>
+                                <div class="form-check" id="encabezadosPrejudicial">
+                                    <input type="checkbox" class="form-check-input" id="fechaClavePrejudicial" value="Fecha Clave">
+                                    <label class="form-check-label" for="fechaClavePrejudicial">Fecha Clave</label>
+                                </div>
+                                <div class="form-check" id="encabezadosPrejudicial">
+                                    <input type="checkbox" class="form-check-input" id="actoPrejudicial" value="Acto">
+                                    <label class="form-check-label" for="actoPrejudicial">Acto</label>
+                                </div>
+                                <div class="form-check" id="encabezadosPrejudicial">
+                                    <input type="checkbox" class="form-check-input" id="accionFechaClavePrejudicial" value="Acción en Fecha Clave">
+                                    <label class="form-check-label" for="accionFechaClavePrejudicial">Acción en Fecha Clave</label>
+                                </div>
+                                <div class="form-check" id="encabezadosPrejudicial">
+                                    <input type="checkbox" class="form-check-input" id="descripcionPrejudicial" value="Descripción">
+                                    <label class="form-check-label" for="descripcionPrejudicial">Descripción</label>
+                                </div>
+                                <div class="form-check" id="encabezadosPrejudicial">
+                                    <input type="checkbox" class="form-check-input" id="objetivoLogradoPrejudicial" value="Objetivo Logrado">
+                                    <label class="form-check-label" for="objetivoLogradoPrejudicial">Objetivo Logrado</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Encabezados Judicial por defecto</label>
+                                <div class="form-check" id="encabezadosJudicial">
+                                    <input type="checkbox" class="form-check-input" id="fechaJudicial" value="Fecha">
+                                    <label class="form-check-label" for="fechaJudicial">Fecha</label>
+                                </div>
+                                <div class="form-check" id="encabezadosJudicial">
+                                    <input type="checkbox" class="form-check-input" id="fechaClaveJudicial" value="Fecha Clave">
+                                    <label class="form-check-label" for="fechaClaveJudicial">Fecha Clave</label>
+                                </div>
+                                <div class="form-check" id="encabezadosJudicial">
+                                    <input type="checkbox" class="form-check-input" id="actoJudicial" value="Acto">
+                                    <label class="form-check-label" for="actoJudicial">Acto</label>
+                                </div>
+                                <div class="form-check" id="encabezadosJudicial">
+                                    <input type="checkbox" class="form-check-input" id="accionFechaClaveJudicial" value="Acción en Fecha Clave">
+                                    <label class="form-check-label" for="accionFechaClaveJudicial">Acción en Fecha Clave</label>
+                                </div>
+                                <div class="form-check" id="encabezadosJudicial">
+                                    <input type="checkbox" class="form-check-input" id="descripcionJudicial" value="Descripción">
+                                    <label class="form-check-label" for="descripcionJudicial">Descripción</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Encabezados Sin Historial por defecto</label>
+                                <div class="form-check" id="encabezadosSinHistorial">
+                                    <input type="checkbox" class="form-check-input" id="nombresSinHistorial" value="Nombres">
+                                    <label class="form-check-label" for="nombresSinHistorial">Nombres</label>
+                                </div>
+                                <div class="form-check" id="encabezadosSinHistorial">
+                                    <input type="checkbox" class="form-check-input" id="dniSinHistorial" value="DNI">
+                                    <label class="form-check-label" for="dniSinHistorial">DNI</label>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="guardarConfiguracion()">Guardar Configuración</button>
                         </form>
                     </div>
                 </div>
@@ -193,18 +272,22 @@ if ($reporte_generado) {
             const opcionesEncabezados = document.getElementById('opcionesEncabezados');
             opcionesEncabezados.innerHTML = ''; // Limpiar opciones anteriores
 
+            const encabezadosPrejudicial = JSON.parse(localStorage.getItem('encabezadosPrejudicial')) || [];
+            const encabezadosJudicial = JSON.parse(localStorage.getItem('encabezadosJudicial')) || [];
+            const encabezadosSinHistorial = JSON.parse(localStorage.getItem('encabezadosSinHistorial')) || [];
+
             if (filtro === 'con_historial') {
                 // Opciones para clientes con historial
-                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Pre-judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción', 'Objetivo Logrado'], 'encabezados_prejudicial', ['Fecha', 'Fecha Clave', 'Descripción']);
-                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción'], 'encabezados_judicial', ['Fecha', 'Fecha Clave', 'Descripción']);
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Pre-judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción', 'Objetivo Logrado'], 'encabezados_prejudicial', encabezadosPrejudicial);
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción'], 'encabezados_judicial', encabezadosJudicial);
             } else if (filtro === 'sin_historial') {
                 // Opciones para clientes sin historial
-                agregarOpcionEncabezado(opcionesEncabezados, 'Opción sin historial', ['Nombres', 'DNI'], 'encabezados_sin_historial', ['Nombres']);
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción sin historial', ['Nombres', 'DNI'], 'encabezados_sin_historial', encabezadosSinHistorial);
             } else {
                 // Opciones para clientes con y sin historial
-                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Pre-judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción', 'Objetivo Logrado'], 'encabezados_prejudicial', ['Fecha', 'Fecha Clave', 'Descripción']);
-                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción'], 'encabezados_judicial', ['Fecha', 'Fecha Clave']);
-                agregarOpcionEncabezado(opcionesEncabezados, 'Opción sin historial', ['Nombres', 'DNI'], 'encabezados_sin_historial', ['Nombres', 'DNI']);
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Pre-judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción', 'Objetivo Logrado'], 'encabezados_prejudicial', encabezadosPrejudicial);
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción Judicial', ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción'], 'encabezados_judicial', encabezadosJudicial);
+                agregarOpcionEncabezado(opcionesEncabezados, 'Opción sin historial', ['Nombres', 'DNI'], 'encabezados_sin_historial', encabezadosSinHistorial);
             }
 
             // Mostrar el modal
@@ -243,6 +326,48 @@ if ($reporte_generado) {
 
             contenedor.appendChild(opcionDiv);
         }
+
+        function abrirConfiguracion() {
+            const modal = new bootstrap.Modal(document.getElementById('configuracionModal'));
+            modal.show();
+        }
+
+        function guardarConfiguracion() {
+            // Obtener los encabezados seleccionados
+            const encabezadosPrejudicial = Array.from(document.querySelectorAll('#encabezadosPrejudicial input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value);
+            const encabezadosJudicial = Array.from(document.querySelectorAll('#encabezadosJudicial input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value);
+            const encabezadosSinHistorial = Array.from(document.querySelectorAll('#encabezadosSinHistorial input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            // Guardar la configuración en el localStorage
+            localStorage.setItem('encabezadosPrejudicial', JSON.stringify(encabezadosPrejudicial));
+            localStorage.setItem('encabezadosJudicial', JSON.stringify(encabezadosJudicial));
+            localStorage.setItem('encabezadosSinHistorial', JSON.stringify(encabezadosSinHistorial));
+
+            // Cerrar el modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('configuracionModal'));
+            modal.hide();
+        }
+
+        // Cargar la configuración guardada al cargar la página
+        window.addEventListener('load', function() {
+            const encabezadosPrejudicial = JSON.parse(localStorage.getItem('encabezadosPrejudicial')) || [];
+            const encabezadosJudicial = JSON.parse(localStorage.getItem('encabezadosJudicial')) || [];
+            const encabezadosSinHistorial = JSON.parse(localStorage.getItem('encabezadosSinHistorial')) || [];
+
+            // Marcar los checkboxes según la configuración guardada
+            encabezadosPrejudicial.forEach(encabezado => {
+                document.querySelector(`#encabezadosPrejudicial input[value="${encabezado}"]`).checked = true;
+            });
+            encabezadosJudicial.forEach(encabezado => {
+                document.querySelector(`#encabezadosJudicial input[value="${encabezado}"]`).checked = true;
+            });
+            encabezadosSinHistorial.forEach(encabezado => {
+                document.querySelector(`#encabezadosSinHistorial input[value="${encabezado}"]`).checked = true;
+            });
+        });
     </script>
 </body>
 
