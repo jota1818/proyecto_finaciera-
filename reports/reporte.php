@@ -259,6 +259,16 @@ if ($reporte_generado) {
                 mostrarClientesSinHistorial($clientes_sin_historial, $encabezados_sin_historial);
             }
             ?>
+            <!-- Botón de descarga de reporte -->
+            <form id="descargarReporteForm" method="post" action="generar_pdf.php" target="_blank">
+                <input type="hidden" name="mes" value="<?php echo $mes; ?>">
+                <input type="hidden" name="anio" value="<?php echo $anio; ?>">
+                <input type="hidden" name="filtro" value="<?php echo $filtro; ?>">
+                <input type="hidden" name="encabezados_prejudicial" value="<?php echo implode(',', $encabezados_prejudicial); ?>">
+                <input type="hidden" name="encabezados_judicial" value="<?php echo implode(',', $encabezados_judicial); ?>">
+                <input type="hidden" name="encabezados_sin_historial" value="<?php echo implode(',', $encabezados_sin_historial); ?>">
+                <button type="submit" class="btn btn-success mt-3">Descargar Reporte en PDF</button>
+            </form>
         <?php endif; ?>
     </div>
 
