@@ -267,7 +267,7 @@ if ($reporte_generado) {
                 <input type="hidden" name="encabezados_prejudicial" value="<?php echo implode(',', $encabezados_prejudicial); ?>">
                 <input type="hidden" name="encabezados_judicial" value="<?php echo implode(',', $encabezados_judicial); ?>">
                 <input type="hidden" name="encabezados_sin_historial" value="<?php echo implode(',', $encabezados_sin_historial); ?>">
-                <button type="submit" class="btn btn-success mt-3">Descargar Reporte en PDF</button>
+                <button type="submit" class="btn btn-success mt-3">Descargar Reporte</button>
             </form>
         <?php endif; ?>
     </div>
