@@ -5,6 +5,12 @@ function formatNumber($number) {
     return 'S/.' . number_format($number, 2, '.', ',');
 }
 
+// para ordenar la fecha en el interfaz dia, mes y año
+function formatDate($date) {
+    return date('d-m-Y', strtotime($date));
+}
+
+
 $dni = isset($_GET['dni']) ? $_GET['dni'] : '';
 $sql = "SELECT * FROM clientes WHERE dni='$dni'";
 $result = $conn->query($sql);
@@ -23,7 +29,7 @@ if ($result->num_rows > 0) {
     echo "<tr><td><strong>Nombre:</strong></td><td>" . htmlspecialchars($row['nombre'] . " " . $row['apellidos']) . "</td></tr>";
     echo "<tr><td><strong>DNI:</strong></td><td>" . htmlspecialchars($row['dni']) . "</td></tr>";
     echo "<tr><td><strong>Teléfono:</strong></td><td>" . htmlspecialchars($row['telefono']) . "</td></tr>";
-    echo "<tr><td><strong>Fecha de Nacimiento:</strong></td><td>" . htmlspecialchars($row['fecha_nacimiento']) . "</td></tr>";
+    echo "<tr><td><strong>Fecha de Nacimiento:</strong></td><td>" . formatDate($row['fecha_nacimiento']) . "</td></tr>";
     echo "<tr><td><strong>Domicilio 1:</strong></td><td>" . htmlspecialchars($row['domicilio1']) . "</td></tr>";
     echo "<tr><td><strong>Referencia 1:</strong></td><td>" . htmlspecialchars($row['referencia1']) . "</td></tr>";
     if (!empty($row['domicilio2'])) {
@@ -37,11 +43,11 @@ if ($result->num_rows > 0) {
     echo "<tr><td><strong>Agencia:</strong></td><td>" . htmlspecialchars($row['agencia']) . "</td></tr>";
     echo "<tr><td><strong>Tipo de credito:</strong></td><td>" . htmlspecialchars($row['tipo_credito']) . "</td></tr>";
     echo "<tr><td><strong>Estado:</strong></td><td>" . htmlspecialchars($row['estado']) . "</td></tr>";
-    echo "<tr><td><strong>Fecha de Desembolso:</strong></td><td>" . htmlspecialchars($row['fecha_desembolso']) . "</td></tr>";
-    echo "<tr><td><strong>Fecha de Vencimiento:</strong></td><td>" . htmlspecialchars($row['fecha_vencimiento']) . "</td></tr>";
+    echo "<tr><td><strong>Fecha de Desembolso:</strong></td><td>" . formatDate($row['fecha_desembolso']) . "</td></tr>";
+    echo "<tr><td><strong>Fecha de Vencimiento:</strong></td><td>" . formatDate($row['fecha_vencimiento']) . "</td></tr>";
     echo "<tr><td><strong>Monto:</strong></td><td>" . formatNumber($row['monto']) . "</td></tr>";
     echo "<tr><td><strong>Saldo:</strong></td><td>" . formatNumber($row['saldo']) . "</td></tr>";
-    echo "<tr><td><strong>Fecha clave:</strong></td><td>" . htmlspecialchars($row['fecha_clave']) . "</td></tr>";
+    echo "<tr><td><strong>Fecha clave:</strong></td><td>" . formatDate($row['fecha_clave']) . "</td></tr>";
     echo "<tr><td><strong>Acción en fecha clave:</strong></td><td>" . htmlspecialchars($row['accion_fecha_clave']) . "</td></tr>";
     echo "</table>";
     echo '</div>';
@@ -62,7 +68,7 @@ if ($result->num_rows > 0) {
         echo "<tr><td><strong>Teléfono:</strong></td><td>" . htmlspecialchars($row['telefono_garante']) . "</td></tr>";
     }
     if ($row['fecha_nacimiento_garante'] !== '0000-00-00' && !empty($row['fecha_nacimiento_garante'])) {
-        echo "<tr><td><strong>Fecha de Nacimiento:</strong></td><td>" . htmlspecialchars($row['fecha_nacimiento_garante']) . "</td></tr>";
+        echo "<tr><td><strong>Fecha de Nacimiento:</strong></td><td>" . formatDate($row['fecha_nacimiento_garante']) . "</td></tr>";
     }
     if (!empty($row['domicilio1_garante'])) {
         echo "<tr><td><strong>Domicilio 1:</strong></td><td>" . htmlspecialchars($row['domicilio1_garante']) . "</td></tr>";

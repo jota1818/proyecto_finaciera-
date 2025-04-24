@@ -1,6 +1,10 @@
 <?php
 require "../conexion_db/connection.php";
 
+function formatDate($date) {
+    return date('d-m-Y', strtotime($date));
+}
+
 // Inicializar variables para el mes y año
 $mes = isset($_POST['mes']) ? $_POST['mes'] : date('m');
 $anio = isset($_POST['anio']) ? $_POST['anio'] : date('Y');
@@ -420,10 +424,10 @@ function mostrarCliente($cliente, $prejudiciales, $judiciales, $encabezados_prej
                         <?php foreach ($prejudiciales as $prejudicial) : ?>
                             <tr>
                                 <?php if (in_array('Fecha', $encabezados_prejudicial)) : ?>
-                                    <td><?php echo htmlspecialchars($prejudicial['fecha_acto']); ?></td>
+                                    <td><?php echo formatDate($prejudicial['fecha_acto']); ?></td>
                                 <?php endif; ?>
                                 <?php if (in_array('Fecha Clave', $encabezados_prejudicial)) : ?>
-                                    <td><?php echo htmlspecialchars($prejudicial['fecha_clave']); ?></td>
+                                    <td><?php echo formatDate($prejudicial['fecha_clave']); ?></td>
                                 <?php endif; ?>
                                 <?php if (in_array('Acto', $encabezados_prejudicial)) : ?>
                                     <td><?php echo htmlspecialchars($prejudicial['acto']); ?></td>
@@ -469,10 +473,10 @@ function mostrarCliente($cliente, $prejudiciales, $judiciales, $encabezados_prej
                         <?php foreach ($judiciales as $judicial) : ?>
                             <tr>
                                 <?php if (in_array('Fecha', $encabezados_judicial)) : ?>
-                                    <td><?php echo htmlspecialchars($judicial['fecha_judicial']); ?></td>
+                                    <td><?php echo formatDate($judicial['fecha_judicial']); ?></td>
                                 <?php endif; ?>
                                 <?php if (in_array('Fecha Clave', $encabezados_judicial)) : ?>
-                                    <td><?php echo htmlspecialchars($judicial['fecha_clave_judicial']); ?></td>
+                                    <td><?php echo formatDate($judicial['fecha_clave_judicial']); ?></td>
                                 <?php endif; ?>
                                 <?php if (in_array('Acto', $encabezados_judicial)) : ?>
                                     <td><?php echo htmlspecialchars($judicial['acto_judicial']); ?></td>

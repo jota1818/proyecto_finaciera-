@@ -2,6 +2,10 @@
 require_once '../tcpdf/tcpdf.php';
 require "../conexion_db/connection.php";
 
+function formatDate($date) {
+    return date('d-m-Y', strtotime($date));
+}
+
 // Obtener parámetros del formulario
 $mes = isset($_POST['mes']) ? $_POST['mes'] : date('m');
 $anio = isset($_POST['anio']) ? $_POST['anio'] : date('Y');
@@ -227,9 +231,9 @@ function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados)
         foreach ($header as $col) {
             $value = '';
             if ($col == 'Fecha') {
-                $value = $row['fecha_acto'] ?? ($row['fecha_judicial'] ?? '');
+                $value = formatDate($row['fecha_acto'] ?? ($row['fecha_judicial'] ?? ''));
             } elseif ($col == 'Fecha Clave') {
-                $value = $row['fecha_clave'] ?? ($row['fecha_clave_judicial'] ?? '');
+                $value = formatDate($row['fecha_clave'] ?? ($row['fecha_clave_judicial'] ?? ''));
             } elseif ($col == 'Acto') {
                 $value = $row['acto'] ?? ($row['acto_judicial'] ?? '');
             } elseif ($col == 'Acción en Fecha Clave') {
