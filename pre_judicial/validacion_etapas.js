@@ -54,7 +54,8 @@ function validarFormularioPreJudicial() {
 
 function validarFormularioJudicial() {
     // Obtener valores del formulario
-    let fecha_judicial = new Date();
+    // let fecha_judicial = new Date();
+    let fecha_judicial = new Date(document.forms["judicialForm"]["fecha_judicial"].value);
     let fecha_clave_judicial = new Date(document.forms["judicialForm"]["fecha_clave_judicial"].value);
     let descripcion_judicial = document.forms["judicialForm"]["descripcion_judicial"].value;
 

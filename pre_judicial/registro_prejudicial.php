@@ -37,7 +37,7 @@ $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     /* $fecha_acto = date('Y-m-d H:i:s'); */
-    $fecha_acto = $_POST["fecha_acto"];
+    $fecha_acto = $_POST["fecha_acto"]; /* asta mientras esta esto */
 
     // Obtener la fecha de inicio del caso (fecha_acto del primer registro)
     $sql_select_inicio = "SELECT fecha_acto, saldo_int FROM etapa_prejudicial WHERE id_cliente = $id_cliente ORDER BY id ASC LIMIT 1";
@@ -369,6 +369,12 @@ $conn->close();
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
                     <h4>Etapa Judicial</h4>
                     <div id="message"></div>
+                    <!-- borrar de aqui, solo esta por mientras -->
+                    <div class="mb-2">
+                        <label class="fw-bold">Fecha Acto:</label>
+                        <input type="date" name="fecha_judicial" required class="form-control">
+                    </div>
+                    <!-- asta aqui -->
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label class="fw-bold">Acto:</label>

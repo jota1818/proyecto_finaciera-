@@ -162,6 +162,11 @@ function agregarClientesSinHistorialAlPDF($pdf, $clientes_sin_historial, $encabe
 
 function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados)
 {
+    // Check if there's enough space for the title and at least one row
+    if ($pdf->GetY() > $pdf->getPageHeight() - 30) { // 30mm margin from bottom
+        $pdf->AddPage();
+    }
+
     $pdf->SetFont('helvetica', 'B', 8);
     $pdf->Cell(0, 10, $titulo, 0, 1, 'L');
     $pdf->SetFont('helvetica', '', 8);
@@ -249,6 +254,18 @@ function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados)
             if ($height > $maxHeight) $maxHeight = $height;
         }
 
+        // Verificar si la fila cabe en la página actual
+        if ($pdf->GetY() + $maxHeight > $pdf->getPageHeight() - 20) { // 20mm margin from bottom
+            $pdf->AddPage();
+            // Volver a dibujar los encabezados en la nueva página
+            $pdf->SetFont('', 'B');
+            foreach ($header as $i => $col) {
+                $pdf->MultiCell($w[$i], 7, $col, 1, 'C', 1, 0);
+            }
+            $pdf->Ln();
+            $pdf->SetFont('', '');
+        }
+
         // Dibujar las celdas de la fila
         foreach ($rowData as $i => $txt) {
             $x = $pdf->GetX();
@@ -260,6 +277,6 @@ function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados)
         $fill = !$fill;
     }
 
-    $pdf->Ln();
+    $pdf->Ln(5); // Espacio adicional después de la tabla
 }
 ?>

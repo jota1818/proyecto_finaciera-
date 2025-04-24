@@ -5,7 +5,9 @@ $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Establecer la fecha y hora actual
-    $fecha_judicial = date('Y-m-d');
+    /* $fecha_judicial = date('Y-m-d'); */
+    $fecha_judicial = $_POST["fecha_judicial"];
+
     $id_cliente = isset($_POST['id_cliente']) ? $_POST['id_cliente'] : '';
 
     // Datos de la etapa judicial
