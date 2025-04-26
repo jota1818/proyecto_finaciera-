@@ -164,9 +164,9 @@ function agregarClientesSinHistorialAlPDF($pdf, $clientes_sin_historial, $encabe
     }
 }
 
-function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados)
+function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados, )
 {
-    // Check if there's enough space for the title and at least one row
+    // Verificar si hay espacio suficiente para el título y al menos una fila
     if ($pdf->GetY() > $pdf->getPageHeight() - 30) { // 30mm margin from bottom
         $pdf->AddPage();
     }
@@ -189,15 +189,15 @@ function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados)
     }
     if (in_array('Fecha Clave', $encabezados)) {
         $header[] = 'Fecha Clave';
-        $w[] = 25;
+        $w[] = 23;
     }
     if (in_array('Acto', $encabezados)) {
         $header[] = 'Acto';
-        $w[] = 30;
+        $w[] = 32;
     }
     if (in_array('Acción en Fecha Clave', $encabezados)) {
         $header[] = 'Acción en Fecha Clave';
-        $w[] = 40;
+        $w[] = 42;
     }
     if (in_array('Descripción', $encabezados)) {
         $header[] = 'Descripción';
@@ -205,7 +205,7 @@ function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados)
     }
     if (in_array('Objetivo Logrado', $encabezados)) {
         $header[] = 'Objetivo Logrado';
-        $w[] = 30;
+        $w[] = 28;
     }
     if (in_array('Nombres', $encabezados)) {
         $header[] = 'Nombre Completo';
@@ -254,12 +254,12 @@ function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados)
         $maxHeight = 0;
         foreach ($rowData as $i => $txt) {
             $nb = $pdf->getNumLines($txt, $w[$i]);
-            $height = 5 * $nb;
+            $height = 6 * $nb;
             if ($height > $maxHeight) $maxHeight = $height;
         }
 
         // Verificar si la fila cabe en la página actual
-        if ($pdf->GetY() + $maxHeight > $pdf->getPageHeight() - 20) { // 20mm margin from bottom
+        if ($pdf->GetY() + $maxHeight > $pdf->getPageHeight() - 20) { // 20mm de margen desde abajo
             $pdf->AddPage();
             // Volver a dibujar los encabezados en la nueva página
             $pdf->SetFont('', 'B');
@@ -274,7 +274,8 @@ function agregarTablaAlPDF($pdf, $titulo, $datos, $encabezados)
         foreach ($rowData as $i => $txt) {
             $x = $pdf->GetX();
             $y = $pdf->GetY();
-            $pdf->MultiCell($w[$i], $maxHeight, $txt, 1, 'L', $fill, 0, '', '', true, 0, false, true, $maxHeight, 'M');
+            $align = ($header[$i] == 'Objetivo Logrado') ? 'C' : 'L'; // Centrar solo la columna "Objetivo Logrado"$pdf->MultiCell($w[$i], $maxHeight, $txt, 1, 'L', $fill, 0, '', '', true, 0, false, true, $maxHeight, 'M');
+            $pdf->MultiCell($w[$i], $maxHeight, $txt, 1, $align, $fill, 0, '', '', true, 0, false, true, $maxHeight, 'M');
             $pdf->SetXY($x + $w[$i], $y);
         }
         $pdf->Ln();
