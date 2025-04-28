@@ -160,7 +160,7 @@ function agregarClientesSinHistorialAlPDF($pdf, $clientes_sin_historial, $encabe
         $pdf->Cell(0, 10, 'Clientes sin Historial', 0, 1, 'L');
         $pdf->Ln(3);
 
-        agregarTablaAlPDF($pdf, 'Clientes sin Historial', $clientes_sin_historial, $encabezados_sin_historial);
+        agregarTablaAlPDF($pdf, 'Datos del cliente', $clientes_sin_historial, $encabezados_sin_historial);
     }
 }
 

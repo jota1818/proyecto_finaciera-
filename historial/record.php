@@ -67,8 +67,8 @@ $conn->close();
                 <div class="col-md-6">
                     <p><strong>Saldo:</strong> <?php echo htmlspecialchars($cliente['saldo']); ?></p>
                     <p><strong>Monto Abonado:</strong> <?php echo htmlspecialchars($monto_abonado); ?></p>
-                    <p><strong>Fecha de Desembolso:</strong> <?php echo htmlspecialchars($cliente['fecha_desembolso']); ?></p>
-                    <p><strong>Fecha de Vencimiento:</strong> <?php echo htmlspecialchars($cliente['fecha_vencimiento']); ?></p>
+                    <p><strong>Fecha de Desembolso:</strong> <?php echo DateTime::createFromFormat('Y-m-d', $cliente['fecha_desembolso'])->format('d-m-Y'); ?></p>
+                    <p><strong>Fecha de Vencimiento:</strong> <?php echo DateTime::createFromFormat('Y-m-d', $cliente['fecha_vencimiento'])->format('d-m-Y'); ?></p>
                     <p><strong>Plazo de Crédito (días):</strong> <?php echo htmlspecialchars($plazo_credito); ?></p>
                 </div>
             </div>
@@ -111,12 +111,12 @@ $conn->close();
                         while ($row = $result_prejudicial->fetch_assoc()) {
                             echo "<tr>
                                 <td>{$count}</td>
-                                <td>{$row['fecha_acto']}</td>
+                                <td>" . (!empty($row['fecha_acto']) ? DateTime::createFromFormat('Y-m-d', $row['fecha_acto'])->format('d-m-Y') : '') . "</td>
                                 <td>{$row['acto']}</td>
                                 <td>{$row['n_de_notif_voucher']}</td>
                                 <td>{$row['descripcion']}</td>
                                 <td>" . (isset($row['notif_compromiso_pago_evidencia']) && !empty($row['notif_compromiso_pago_evidencia']) && $row['notif_compromiso_pago_evidencia'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['notif_compromiso_pago_evidencia']}'>{$row['notif_compromiso_pago_evidencia']}</a> <a href='../pre_judicial/{$row['notif_compromiso_pago_evidencia']}' download style='margin-left:10px; color:blue; font-weight:bold;'>📥Descargar</a>" : '') . "</td>
-                                <td>{$row['fecha_clave']}</td>
+                                <td>" . (!empty($row['fecha_clave']) ? DateTime::createFromFormat('Y-m-d', $row['fecha_clave'])->format('d-m-Y') : '') . "</td>
                                 <td>{$row['accion_fecha_clave']}</td>
                                 <td>{$row['actor']}</td>
                                 <td>" . (isset($row['evidencia1_localizacion']) && !empty($row['evidencia1_localizacion']) && $row['evidencia1_localizacion'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia1_localizacion']}'>{$row['evidencia1_localizacion']}</a> <a href='../pre_judicial/{$row['evidencia1_localizacion']}' download style='margin-left:10px; color:blue; font-weight:bold;' >📥Descargar</a>" : '') . "</td>
@@ -164,14 +164,14 @@ $conn->close();
                             echo "<tr>
                                 <td>{$count}</td>
                                 <td>{$row['etapa']}</td>
-                                <td>{$row['fecha_judicial']}</td>
+                                <td>" . (!empty($row['fecha_judicial']) ? DateTime::createFromFormat('Y-m-d', $row['fecha_judicial'])->format('d-m-Y') : '') . "</td>
                                 <td>{$row['acto_judicial']}</td>
                                 <td>{$row['juzgado']}</td>
                                 <td>{$row['n_exp_juzgado']}</td>
                                 <td>{$row['n_cedula']}</td>
                                 <td>{$row['descripcion_judicial']}</td>
                                 <td>" . (isset($row['doc_evidencia']) && !empty($row['doc_evidencia']) && $row['doc_evidencia'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../judicial/{$row['doc_evidencia']}'>{$row['doc_evidencia']}</a> <a href='../judicial/{$row['doc_evidencia']}' download style='margin-left:10px; color:blue; font-weight:bold;'>📥Descargar</a>" : '') . "</td>
-                                <td>{$row['fecha_clave_judicial']}</td>
+                                <td>" . (!empty($row['fecha_clave_judicial']) ? DateTime::createFromFormat('Y-m-d', $row['fecha_clave_judicial'])->format('d-m-Y') : '') . "</td>
                                 <td>{$row['accion_en_fecha_clave']}</td>
                                 <td>{$row['actor_judicial']}</td>
                               </tr>";
