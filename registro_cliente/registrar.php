@@ -94,13 +94,13 @@ $conn->close();
 
 <body class="container mt-3">
     <div>
-        <h2>Formulario de Registro</h2>
+        <h5>Formulario de Registro</h5>
     </div>
     <div class="form-container">
         <form name="registroForm" method="post" action="registrar.php" onsubmit="return validarFormulario()">
             <div class="row">
                 <div class="col-md-12 border p-3">
-                    <h4>Información del Cliente</h4>
+                    <h5>Información del Cliente</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
                         <input type="text" name="nombre" required class="form-control">
@@ -109,13 +109,15 @@ $conn->close();
                         <label class="fw-bold">Apellidos:</label>
                         <input type="text" name="apellidos" required class="form-control">
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">DNI:</label>
-                        <input type="text" name="dni" required class="form-control" onblur="verificarDNI(this.value)">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Teléfono:</label>
-                        <input type="text" name="telefono" required class="form-control">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">DNI:</label>
+                            <input type="text" name="dni" required class="form-control" onblur="verificarDNI(this.value)">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Teléfono:</label>
+                            <input type="text" name="telefono" required class="form-control">
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha de Nacimiento:</label>
@@ -151,48 +153,54 @@ $conn->close();
                             <option value="PER">PER</option>
                         </select>
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Agencia:</label>
-                        <select name="agencia" required class="form-control">
-                            <option value="" disabled selected>Seleccione una opción</option>
-                            <option value="Ayacucho">Ayacucho</option>
-                            <option value="Huancayo">Huancayo</option>
-                            <option value="Lima">Lima</option>
-                        </select>
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Tipo de credito:</label>
-                        <select name="tipo_credito" required class="form-control">
-                            <option value="" disabled selected>Seleccione una opción</option>
-                            <option value="Diario">Diario</option>
-                            <option value="Semanal">Semanal</option>
-                            <option value="Mensual">Mensual</option>
-                            <option value="Anual">Anual</option>
-                        </select>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Agencia:</label>
+                            <select name="agencia" required class="form-control">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="Ayacucho">Ayacucho</option>
+                                <option value="Huancayo">Huancayo</option>
+                                <option value="Lima">Lima</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Tipo de credito:</label>
+                            <select name="tipo_credito" required class="form-control">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="Diario">Diario</option>
+                                <option value="Semanal">Semanal</option>
+                                <option value="Mensual">Mensual</option>
+                                <option value="Anual">Anual</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Estado:</label>
                         <input type="text" name="estado" required class="form-control">
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Fecha de Desembolso:</label>
-                        <input type="date" name="fecha_desembolso" required class="form-control">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Fecha de Desembolso:</label>
+                            <input type="date" name="fecha_desembolso" required class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Fecha de Vencimiento:</label>
+                            <input type="date" name="fecha_vencimiento" required class="form-control">
+                        </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Fecha de Vencimiento:</label>
-                        <input type="date" name="fecha_vencimiento" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Monto:</label>
-                        <input type="number" step="0.01" name="monto" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Saldo:</label>
-                        <input type="number" step="0.01" name="saldo" required class="form-control">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Monto de crédito:</label>
+                            <input type="number" step="0.01" name="monto" required class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Saldo de crédito :</label>
+                            <input type="number" step="0.01" name="saldo" required class="form-control">
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12 border p-3">
-                    <h4>Información del Garante</h4>
+                    <h5>Información del Garante</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
                         <input type="text" name="nombre_garante" class="form-control">
@@ -201,13 +209,15 @@ $conn->close();
                         <label class="fw-bold">Apellidos:</label>
                         <input type="text" name="apellidos_garante" class="form-control">
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">DNI:</label>
-                        <input type="text" name="dni_garante" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Teléfono:</label>
-                        <input type="number" name="telefono_garante" class="form-control">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold">DNI:</label>
+                            <input type="text" name="dni_garante" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Teléfono:</label>
+                            <input type="number" name="telefono_garante" class="form-control">
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha de Nacimiento:</label>
@@ -245,7 +255,7 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12 border p-3">
-                    <h4>Fecha Programada</h4>
+                    <h5>Fecha Programada</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha clave:</label>
                         <input type="date" name="fecha_clave" required class="form-control">
@@ -256,18 +266,18 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12 border p-3">
-                    <h4>Personal Asignado</h4>
+                    <h5>Personal Asignado</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Gestor:</label>
-                        <input type="number" name="gestor" required class="form-control" min="1" max="9">
+                        <input type="number" name="gestor" required class="form-control" min="1">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Supervisor:</label>
-                        <input type="number" name="supervisor" required class="form-control" min="1" max="9">
+                        <input type="number" name="supervisor" required class="form-control" min="1">
                     </div>
                     <div class="mb-2">
                         <label class="fw-bold">Administrador:</label>
-                        <input type="number" name="administrador" required class="form-control" min="1" max="9">
+                        <input type="number" name="administrador" required class="form-control" min="1">
                     </div>
                 </div>
             </div>

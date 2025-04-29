@@ -204,48 +204,45 @@ $conn->close();
 <body class="d-flex flex-column h-100">
     <div class="container-fluid flex-grow-1">
         <div>
-            <h2>Información del Cliente</h2>
+            <h5>Información del Cliente</h5>
         </div>
         <div class="form-container border p-3 mb-3 active">
+            <!-- primera fila -->
             <div class="row mb-2">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="fw-bold">Nombres:</label>
                     <input type="text" value="<?php echo htmlspecialchars(isset($cliente['nombre']) ? $cliente['nombre'] . ' ' . $cliente['apellidos'] : ''); ?>" class="form-control" readonly>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-2">
                     <label class="fw-bold">DNI:</label>
                     <input type="text" value="<?php echo htmlspecialchars($cliente['dni'] ?? ''); ?>" class="form-control" readonly>
                 </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-md-6">
+                <div class="col-md-2">
                     <label class="fw-bold">Agencia:</label>
                     <input type="text" value="<?php echo htmlspecialchars($cliente['agencia'] ?? ''); ?>" class="form-control" readonly>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="fw-bold">Tipo de Crédito:</label>
                     <input type="text" value="<?php echo htmlspecialchars($cliente['tipo_credito'] ?? ''); ?>" class="form-control" readonly>
                 </div>
             </div>
+            <!-- segunda fila -->
             <div class="row mb-2">
+                <div class="col-md-4">
+                    <label class="fw-bold">Fecha Desembolso:</label>
+                    <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_desembolso'] ?? ''); ?>" class="form-control" readonly>
+                </div>
                 <div class="col-md-4">
                     <label class="fw-bold">Monto:</label>
                     <input type="number" value="<?php echo htmlspecialchars($cliente['monto'] ?? ''); ?>" class="form-control" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label class="fw-bold">Saldo:</label>
-                    <input type="number" value="<?php echo htmlspecialchars($cliente['saldo'] ?? ''); ?>" class="form-control" readonly>
                 </div>
                 <div class="col-md-4">
                     <label class="fw-bold">Monto Abonado:</label>
                     <input type="text" value="<?php echo htmlspecialchars($monto_abonado); ?>" class="form-control" readonly>
                 </div>
             </div>
+            <!-- tercera fila -->
             <div class="row mb-2">
-                <div class="col-md-4">
-                    <label class="fw-bold">Fecha Desembolso:</label>
-                    <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_desembolso'] ?? ''); ?>" class="form-control" readonly>
-                </div>
                 <div class="col-md-4">
                     <label class="fw-bold">Fecha Vencimiento:</label>
                     <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_vencimiento'] ?? ''); ?>" class="form-control" readonly>
@@ -254,12 +251,16 @@ $conn->close();
                     <label class="fw-bold">Plazo de Crédito (días):</label>
                     <input type="text" value="<?php echo htmlspecialchars($plazo_credito); ?>" class="form-control" readonly>
                 </div>
+                <div class="col-md-4">
+                    <label class="fw-bold">Saldo:</label>
+                    <input type="number" value="<?php echo htmlspecialchars($cliente['saldo'] ?? ''); ?>" class="form-control" readonly>
+                </div>
             </div>
         </div>
 
         <div class="row">
             <div>
-                <h2>Formulario de Etapa Prejudicial y Judicial</h2>
+                <h5>Formulario de Etapa Prejudicial y Judicial</h5>
             </div>
             <div class="col-md-12 border p-3">
                 <?php if ($message): ?>
@@ -271,7 +272,7 @@ $conn->close();
                 <!-- Formulario de Etapa Pre-Judicial -->
                 <form id="preJudicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo !$etapa_judicial ? 'active' : ''; ?>" onsubmit="return enviarFormulario()">
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                    <h4>Etapa Pre-Judicial</h4>
+                    <h5>Etapa Pre-Judicial</h5>
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label class="fw-bold">Acto:</label>
@@ -367,7 +368,7 @@ $conn->close();
                 <!-- Formulario de Etapa Judicial -->
                 <form id="judicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo $etapa_judicial ? 'active' : ''; ?>">
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                    <h4>Etapa Judicial</h4>
+                    <h5>Etapa Judicial</h5>
                     <div id="message"></div>
                     <!-- borrar de aqui, solo esta por mientras -->
                     <div class="mb-2">

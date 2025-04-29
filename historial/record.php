@@ -51,34 +51,43 @@ $conn->close();
 <body class="d-flex flex-column h-100">
     <div class="container-fluid flex-grow-1">
         <div class="titulo-cliente border p-1">
-            <h2>Información del Cliente</h2>
+            <h5>Información del Cliente</h5>
         </div>
         <div class="client-info border p-3 mb-3">
             <div class="row">
                 <!-- Primera columna -->
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <p><strong>Nombre:</strong> <?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']); ?></p>
                     <p><strong>DNI:</strong> <?php echo htmlspecialchars($cliente['dni']); ?></p>
-                    <p><strong>Agencia:</strong> <?php echo htmlspecialchars($cliente['agencia']); ?></p>
-                    <p><strong>Tipo de Crédito:</strong> <?php echo htmlspecialchars($cliente['tipo_credito']); ?></p>
-                    <p><strong>Monto:</strong> <?php echo htmlspecialchars($cliente['monto']); ?></p>
                 </div>
                 <!-- Segunda columna -->
-                <div class="col-md-6">
-                    <p><strong>Saldo:</strong> <?php echo htmlspecialchars($cliente['saldo']); ?></p>
-                    <p><strong>Monto Abonado:</strong> <?php echo htmlspecialchars($monto_abonado); ?></p>
+                <div class="col-md-2">
+                    <p><strong>Agencia:</strong> <?php echo htmlspecialchars($cliente['agencia']); ?></p>
+                    <p><strong>Tipo de Crédito:</strong> <?php echo htmlspecialchars($cliente['tipo_credito']); ?></p>
+                </div>
+                <!-- tercera columna -->
+                <div class="col-md-3">
                     <p><strong>Fecha de Desembolso:</strong> <?php echo DateTime::createFromFormat('Y-m-d', $cliente['fecha_desembolso'])->format('d-m-Y'); ?></p>
                     <p><strong>Fecha de Vencimiento:</strong> <?php echo DateTime::createFromFormat('Y-m-d', $cliente['fecha_vencimiento'])->format('d-m-Y'); ?></p>
+                </div>
+                <!-- cuarta columna -->
+                <div class="col-md-2">
+                    <p><strong>Monto:</strong> <?php echo htmlspecialchars($cliente['monto']); ?></p>
                     <p><strong>Plazo de Crédito (días):</strong> <?php echo htmlspecialchars($plazo_credito); ?></p>
+                </div>
+                <!-- quinta columna -->
+                <div class="col-md-2">
+                    <p><strong>Monto Abonado:</strong> <?php echo htmlspecialchars($monto_abonado); ?></p>
+                    <p><strong>Saldo:</strong> <?php echo htmlspecialchars($cliente['saldo']); ?></p>
                 </div>
             </div>
         </div>
         <div class="titulo-historial border p-1">
-            <h2>Historial del Cliente</h2>
+            <h5>Historial del Cliente</h5>
         </div>
         <div class="historial border p-3">
             <div class="table-responsive">
-                <h4>Historial Pre-Judicial</h4>
+                <h5>Historial Pre-Judicial</h5>
             </div>
             <div class="scrollable-table-container">
                 <table class="table table-bordered table-striped table-fixed">
@@ -138,7 +147,7 @@ $conn->close();
             </div>
 
             <div class="table-responsive">
-                <h4>Historial Judicial</h4>
+                <h5>Historial Judicial</h5>
             </div>
             <div class="scrollable-table-container">
                 <table class="table table-bordered table-striped table-fixed-judicial">
