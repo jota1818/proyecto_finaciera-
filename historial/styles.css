@@ -105,8 +105,12 @@
     min-width: 400px;
     max-width: 400px;
 }
-
-
+.table-fixed th:nth-child(9),/* Fecha Clave */
+.table-fixed td:nth-child(9) {
+    width: 320px;
+    min-width: 115px;
+    max-width: 115px;
+}
 .table-fixed th:nth-child(10),/* Acción en Fecha Clave */
 .table-fixed td:nth-child(10) {
     width: 320px;

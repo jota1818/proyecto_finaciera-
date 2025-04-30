@@ -3,7 +3,12 @@ body {
     /* background: linear-gradient(to right, #b2b411, #610707); */ /* Degradado de azul claro a verde claro */
     background: linear-gradient(to right, #961526, #190342); /* Degradado de azul claro a verde claro */
 }
-
+/* Reduce font size for form labels and inputs */
+.form-container label,
+.form-container input,
+.form-container select {
+    font-size: 12px; /* Smaller font for form labels and inputs */
+}
 
 #clienteDetalles {
     display: none;

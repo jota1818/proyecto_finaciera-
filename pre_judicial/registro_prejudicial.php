@@ -392,20 +392,27 @@ $conn->close();
                             <input type="text" name="juzgado" required class="form-control">
                         </div>
                     </div>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Número de Expediente del Juzgado:</label>
-                            <input type="text" name="n_exp_juzgado" class="form-control">
+                    <!-- Nueva disposición en columnas -->
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="md-2">
+                                <label class="fw-bold">Número de Expediente del Juzgado:</label>
+                                <input type="text" name="n_exp_juzgado" class="form-control">
+                            </div>
+                            <div class="md-2">
+                                <label class="fw-bold">Número de Cédula:</label>
+                                <input type="text" name="n_cedula" class="form-control">
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">Número de Cédula:</label>
-                            <input type="text" name="n_cedula" class="form-control">
+                        <!-- Columna derecha: Descripción -->
+                        <div class="col-md-7">
+                            <div class="mb-2">
+                                <label class="fw-bold">Descripción:</label>
+                                <textarea name="descripcion_judicial" required class="form-control" rows="3"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Descripción:</label>
-                        <textarea name="descripcion_judicial" required class="form-control"></textarea>
-                    </div>
+                    <!-- asta aqui -->
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label class="fw-bold">Documento de Evidencia:</label>
