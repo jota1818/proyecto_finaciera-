@@ -99,11 +99,11 @@ $conn->close();
                             <th>N° de Notif. Voucher</th>
                             <th>Descripción</th>
                             <th>Notificación</th>
+                            <th>Evidencia 1</th>
+                            <th>Evidencia 2</th>
                             <th>Fecha Clave</th>
                             <th>Acción en Fecha Clave</th>
                             <th>Actor</th>
-                            <th>Evidencia 1</th>
-                            <th>Evidencia 2</th>
                             <th>Días desde Fecha Clave</th>
                             <th>Objetivo Logrado</th>
                             <th>Días de Mora</th>
@@ -125,11 +125,11 @@ $conn->close();
                                 <td>{$row['n_de_notif_voucher']}</td>
                                 <td>{$row['descripcion']}</td>
                                 <td>" . (isset($row['notif_compromiso_pago_evidencia']) && !empty($row['notif_compromiso_pago_evidencia']) && $row['notif_compromiso_pago_evidencia'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['notif_compromiso_pago_evidencia']}'>{$row['notif_compromiso_pago_evidencia']}</a> <a href='../pre_judicial/{$row['notif_compromiso_pago_evidencia']}' download style='margin-left:10px; color:blue; font-weight:bold;'>📥Descargar</a>" : '') . "</td>
+                                <td>" . (isset($row['evidencia1_localizacion']) && !empty($row['evidencia1_localizacion']) && $row['evidencia1_localizacion'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia1_localizacion']}'>{$row['evidencia1_localizacion']}</a> <a href='../pre_judicial/{$row['evidencia1_localizacion']}' download style='margin-left:10px; color:blue; font-weight:bold;' >📥Descargar</a>" : '') . "</td>
+                                <td>" . (isset($row['evidencia2_foto_fecha']) && !empty($row['evidencia2_foto_fecha']) && $row['evidencia2_foto_fecha'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia2_foto_fecha']}'>{$row['evidencia2_foto_fecha']}</a> <a href='../pre_judicial/{$row['evidencia2_foto_fecha']}' download style='margin-left:10px; color:blue; font-weight:bold;'>📥Descargar</a>" : '') . "</td>
                                 <td>" . (!empty($row['fecha_clave']) ? DateTime::createFromFormat('Y-m-d', $row['fecha_clave'])->format('d-m-Y') : '') . "</td>
                                 <td>{$row['accion_fecha_clave']}</td>
                                 <td>{$row['actor']}</td>
-                                <td>" . (isset($row['evidencia1_localizacion']) && !empty($row['evidencia1_localizacion']) && $row['evidencia1_localizacion'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia1_localizacion']}'>{$row['evidencia1_localizacion']}</a> <a href='../pre_judicial/{$row['evidencia1_localizacion']}' download style='margin-left:10px; color:blue; font-weight:bold;' >📥Descargar</a>" : '') . "</td>
-                                <td>" . (isset($row['evidencia2_foto_fecha']) && !empty($row['evidencia2_foto_fecha']) && $row['evidencia2_foto_fecha'] !== 'uploads/' ? "<a href='#' class='file-link' data-url='../pre_judicial/{$row['evidencia2_foto_fecha']}'>{$row['evidencia2_foto_fecha']}</a> <a href='../pre_judicial/{$row['evidencia2_foto_fecha']}' download style='margin-left:10px; color:blue; font-weight:bold;'>📥Descargar</a>" : '') . "</td>
                                 <td>{$row['dias_desde_fecha_clave']}</td>
                                 <td>{$row['objetivo_logrado']}</td>
                                 <td>{$row['dias_de_mora']}</td>
@@ -158,8 +158,8 @@ $conn->close();
                             <th>Fecha</th>
                             <th>Acto</th>
                             <th>Juzgado</th>
-                            <th>Num. Expediente</th>
-                            <th>Num. Cédula</th>
+                            <th>N° Expediente</th>
+                            <th>N° Cédula</th>
                             <th>Descripción</th>
                             <th>Doc. Evidencia</th>
                             <th>Fecha Clave</th>

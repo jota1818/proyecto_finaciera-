@@ -36,7 +36,7 @@
             <!-- Lista de Clientes -->
             <div class="mb-4 p-3 border">
                 <div class="fixed-header">
-                    <h3>Lista de Clientes</h3>
+                    <h5>Lista de Clientes</h5>
                 </div>
                 <div class="scrollable-table-container">
                     <table class="table table-bordered">
@@ -63,7 +63,7 @@
             <!-- Búsqueda de Clientes -->
             <div class="mb-4 p-3 border busqueda-cli">
                 <div class="mb-4 p-3 border busqueda-clientes">
-                    <h2>Búsqueda de Clientes</h2>
+                    <h5 class="client-search-title">Búsqueda de Clientes</h5>
                     <form id="busquedaForm" method="post" onsubmit="return buscarCliente(event);">
                         <div class="row">
                             <div class="col-md-4">
@@ -92,7 +92,7 @@
             <!-- Cuadro blanco para la información del cliente -->
             <div id="clienteDetalles" class="p-3 border mt-4">
                 <div class="fixed-header">
-                    <h4>Información del Cliente</h4>
+                    <h5>Información del Cliente</h5>
                 </div>
                 <div class="details-container" id="detallesContent">
                     <!-- Mensaje por defecto -->

@@ -273,55 +273,84 @@ $conn->close();
                 <form id="preJudicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo !$etapa_judicial ? 'active' : ''; ?>" onsubmit="return enviarFormulario()">
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
                     <h5>Etapa Pre-Judicial</h5>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Acto:</label>
-                            <select name="acto" required class="form-control">
-                                <option value="" disabled selected>Seleccione una opción</option>
-                                <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
-                                <option value="Notificacion">Notificación</option>
-                                <option value="Amortizacion">Amortización</option>
-                                <option value="Cambio Gestor">Cambio Gestor</option>
-                                <option value="Postergacion">Postergación</option>
-                                <option value="Fin de caso">Fin de caso</option>
-                                <option value="Pasa a Judicial">Pasa a Judicial</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">Número de Notificación/Voucher:</label>
-                            <input type="text" name="n_de_notif_voucher" class="form-control">
-                        </div>
-                    </div>
-                    <!-- por el momento para hacer pruebas -->
+                    <!-- Fecha Acto solamente para prueba -->
                     <div class="mb-2">
                         <label class="fw-bold">Fecha Acto:</label>
                         <input type="date" name="fecha_acto" required class="form-control">
                     </div>
                     <!-- asta aqui -->
-                    <div class="mb-2">
-                        <label class="fw-bold">Descripción:</label>
-                        <textarea name="descripcion" required class="form-control"></textarea>
+                    <!-- Nueva disposición en columnas -->
+                    <div class="row">
+                        <!-- Columna izquierda: Acto, Monto Amortizado y Número de Notificación/Voucher -->
+                        <div class="col-md-5">
+                            <div class="mb-2">
+                                <label class="fw-bold">Acto:</label>
+                                <select name="acto" required class="form-control">
+                                    <option value="" disabled selected>Seleccione una opción</option>
+                                    <option value="Inicio caso prejudicial">Inicio caso prejudicial</option>
+                                    <option value="Notificacion">Notificación</option>
+                                    <option value="Amortizacion">Amortización</option>
+                                    <option value="Cambio Gestor">Cambio Gestor</option>
+                                    <option value="Postergacion">Postergación</option>
+                                    <option value="Fin de caso">Fin de caso</option>
+                                    <option value="Pasa a Judicial">Pasa a Judicial</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label class="fw-bold">Monto Amortizado:</label>
+                                <input type="number" step="0.01" name="monto_amortizado" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <label class="fw-bold">Número de Notificación/Voucher:</label>
+                                <input type="text" name="n_de_notif_voucher" class="form-control">
+                            </div>
+                        </div>
+                        <!-- Columna derecha: Descripción -->
+                        <div class="col-md-7">
+                            <div class="mb-2">
+                                <label class="fw-bold">Descripción:</label>
+                                <textarea name="descripcion" required class="form-control" rows="7"></textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="row mb-2">
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <label class="fw-bold">Notificación/Compromiso de Pago:</label>
                             <input type="file" id="notif_compromiso_pago_evidencia" name="notif_compromiso_pago_evidencia" accept=".docx, .pdf, .jpg, .png" required class="form-control">
                         </div>
                         <div class="col-md-1">
-                            <label class="d-block">&nbsp;</label>
+                            <label class="d-block"> </label>
                             <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('notif_compromiso_pago_evidencia')">Cancelar</button>
-                        </div>
-                        <div class="col-md-5">
-                            <label class="fw-bold">Fecha Clave:</label>
-                            <input type="date" name="fecha_clave" required class="form-control">
                         </div>
                     </div>
                     <div class="row mb-2">
+                        <div class="col-md-5">
+                            <label class="fw-bold">Evidencia 1:</label>
+                            <input type="file" id="evidencia1_localizacion" name="evidencia1_localizacion" accept="image/*" class="form-control">
+                        </div>
+                        <div class="col-md-1">
+                            <label class="d-block"> </label>
+                            <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia1_localizacion')">Cancelar</button>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="fw-bold">Evidencia 2:</label>
+                            <input type="file" id="evidencia2_foto_fecha" name="evidencia2_foto_fecha" accept="image/*" class="form-control">
+                        </div>
+                        <div class="col-md-1">
+                            <label class="d-block"> </label>
+                            <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia2_foto_fecha')">Cancelar</button>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="fw-bold">Fecha Clave:</label>
+                            <input type="date" name="fecha_clave" required class="form-control">
+                        </div>
                         <div class="col-md-6">
                             <label class="fw-bold">Acción en Fecha Clave:</label>
                             <input type="text" name="accion_fecha_clave" required class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label class="fw-bold">Actor Involucrado:</label>
                             <select name="actor" required class="form-control">
                                 <option value="" disabled selected>Seleccione una opción</option>
@@ -331,29 +360,6 @@ $conn->close();
                                 <option value="Administrador">Administrador</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-md-5">
-                            <label class="fw-bold">Evidencia 1:</label>
-                            <input type="file" id="evidencia1_localizacion" name="evidencia1_localizacion" accept="image/*" class="form-control">
-                        </div>
-                        <div class="col-md-1">
-                            <label class="d-block">&nbsp;</label>
-                            <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia1_localizacion')">Cancelar</button>
-                        </div>
-                        <div class="col-md-5">
-                            <label class="fw-bold">Evidencia 2:</label>
-                            <input type="file" id="evidencia2_foto_fecha" name="evidencia2_foto_fecha" accept="image/*" class="form-control">
-
-                        </div>
-                        <div class="col-md-1">
-                            <label class="d-block">&nbsp;</label>
-                            <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('evidencia2_foto_fecha')">Cancelar</button>
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Monto Amortizado:</label>
-                        <input type="number" step="0.01" name="monto_amortizado" class="form-control">
                     </div>
                     <div class="fixed-buttons">
                         <button type="submit" class="btn btn-primary mt-3">Registrar</button>
@@ -409,17 +415,17 @@ $conn->close();
                             <label class="d-block">&nbsp;</label>
                             <button type="button" class="btn btn-danger btn-cancelar" onclick="limpiarArchivo('doc_evidencia')">Cancelar</button>
                         </div>
-                        <div class="col-md-5">
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3">
                             <label class="fw-bold">Fecha Clave:</label>
                             <input type="date" name="fecha_clave_judicial" required class="form-control">
                         </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-md-7">
+                        <div class="col-md-6">
                             <label class="fw-bold">Acción en Fecha Clave:</label>
                             <input type="text" name="accion_en_fecha_clave" required class="form-control">
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <label class="fw-bold">Actor Involucrado:</label>
                             <select name="actor_judicial" required class="form-control">
                                 <option value="" disabled selected>Seleccione una opción</option>

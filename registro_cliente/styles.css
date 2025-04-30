@@ -31,11 +31,16 @@ body {
 }
 /* ----------Para los titulos: lista de clientes y informacion del cliente ----------------------*/
 /* Estilos para centrar los títulos dentro de contenedores específicos */
-.fixed-header h3,
-.fixed-header h4,
-.details-container h4 {
+.fixed-header h5,
+.details-container h5 {
     text-align: center; /* Centra el texto dentro del elemento */
     margin-top: 0;     /* Elimina el margen superior para evitar espacios no deseados */
+    margin-bottom: 10px; /* Añade un margen inferior para separar del contenido siguiente */
+}
+.client-search-title {
+    color: white; /* Cambia el color del texto a blanco */
+    text-align: center; /* Centra el texto */
+    margin-top: 0; /* Elimina el margen superior para evitar espacios no deseados */
     margin-bottom: 10px; /* Añade un margen inferior para separar del contenido siguiente */
 }
 
