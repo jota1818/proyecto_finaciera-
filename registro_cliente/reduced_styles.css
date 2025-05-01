@@ -15,7 +15,7 @@ h5 {
 /* Reducir el tamaño de la fuente en el boton de la tabla lista de clientes*/
 button {
     font-size: 10px; /* Reducir el tamaño de la fuente de los botones */
-    padding: 3px 3px; /* Reducir el padding de los botones */
+    padding: 2px 10px; /* Reducir el padding de los botones */
     margin: 1px;      /* Reducir márgenes entre botones */   
 }
 
@@ -24,21 +24,22 @@ button {
 .form-container input,
 .form-container select {
     font-size: 10px; /* Reducir el tamaño de la fuente en los formularios */
-    margin: 2px 0;   /* Reducir márgenes verticales */
+    margin: 0px 0px;   /* Reducir márgenes verticales */
 }
 
 /* Reducir el tamaño de la fuente en las tablas lista de clientes y informacion del cliente */
 table {
     font-size: 10px; /* Reducir el tamaño de la fuente en la tabla */
-    margin: 0;       /* Eliminar márgenes de la tabla */
+    margin: 0px;       /* Eliminar márgenes de la tabla */
 }
 
 /* Reducir el tamaño de la fuente en los contenedores de detalles */
 .details-container {
     font-size: 10px; /* Reducir el tamaño de la fuente en los contenedores de detalles */
-    margin: 0;       /* Eliminar márgenes del contenedor de detalles */
+    margin: 0px;       /* Eliminar márgenes del contenedor de detalles */
     padding: 2px;   /* Reducir padding */
     padding-bottom: 20px; /* Añade espacio en la parte inferior para los botones */
+    margin: 0px;
 }
 
 /* Reducir el tamaño de la fuente en los títulos de sección */
@@ -59,10 +60,9 @@ table {
 .vertical-button-container,
 .vertical-button-cont,
 .form-container,
-.fixed-buttons,
 .default-box,
 .busqueda-cli {
-    margin: 0;      /* Eliminar márgenes */
+    margin: 0px;      /* Eliminar márgenes */
     padding: 5px;   /* Reducir padding */
 }
 

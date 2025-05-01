@@ -63,7 +63,7 @@ $conn->close();
 <head>
     <style>
         .form-container {
-            height: 490px;
+            height: 517px;
             /* Altura fija para el contenedor del formulario */
             overflow-y: auto;
             /* Habilitar desplazamiento vertical */
@@ -72,12 +72,13 @@ $conn->close();
         }
 
         .fixed-buttonss {
+            position: absolute; /* Cambiar a absolute */
             position: sticky;
             bottom: 0;
             background-color: white;
-            padding: 10px;
-            border-top: 1px solid #ddd;
+            padding: 5px;
             justify-content: center;
+            width: 100%;
             /* Centra los botones horizontalmente */
             gap: 10px;
             /* Espacio entre los botones */
@@ -85,10 +86,10 @@ $conn->close();
         }
 
         .fixed-buttonss button {
-            padding: 0;
-            width: 100px;
+            padding: 3px;
+            width: 160px; /* Ajusta el ancho de los botones */
             /* Ajusta el ancho de los botones */
-            font-size: 16px;
+            font-size: 10px;
             /* Ajusta el tamaño de la fuente si es necesario */
         }
     </style>
@@ -98,7 +99,7 @@ $conn->close();
     <div class="form-container">
         <form name="registroForm" method="post" action="registrar.php" onsubmit="return validarFormulario()">
             <div class="row">
-                <div class="col-md-12 border p-3">
+                <div class="col-md-12 border">
                     <h5>INFORMACION DEL CLIENTE</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
@@ -198,7 +199,7 @@ $conn->close();
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 border p-3">
+                <div class="col-md-12 border">
                     <h5>INFORMACION DEL GARANTE</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
@@ -253,7 +254,7 @@ $conn->close();
                         </select>
                     </div>
                 </div>
-                <div class="col-md-12 border p-3">
+                <div class="col-md-12 border">
                     <h5>FECHA PROGRAMADA</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha clave:</label>
@@ -264,7 +265,7 @@ $conn->close();
                         <input type="text" name="accion_fecha_clave" required class="form-control">
                     </div>
                 </div>
-                <div class="col-md-12 border p-3">
+                <div class="col-md-12 border">
                     <h5>PERSONAL ASIGNADO</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Gestor:</label>

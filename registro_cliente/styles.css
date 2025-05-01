@@ -14,28 +14,31 @@ body {
     position: relative; /* Asegura que los botones se posicionen dentro de este contenedor */
     overflow: hidden; /* Evita que los elementos se desborden */
 }
-
+.table thead th {
+    background-color: #94bdf1; /* Fondo naranja Bootstrap */
+    color: rgb(5, 0, 0);              /* Texto blanco */
+    font-weight: bold;
+    text-align: center;
+}
 .details-container {
-    height: 405px; /* Altura fija para el contenedor de detalles */
+    height: 220px; /* Altura fija para el contenedor de detalles */
     overflow-y: auto; /* Habilitar desplazamiento vertical */
-    padding-right: 15px; /* Espacio para la barra de desplazamiento */
-    padding-bottom: 40px; /* Añade espacio en la parte inferior para los botones */
+    padding-right: 0px; /* Espacio para la barra de desplazamiento */
     box-sizing: content-box; /* Asegura que el padding se añada fuera del tamaño total */
     position: relative; /* Asegura que los elementos absolutos se posicionen dentro de este contenedor */
 }
 /* en la parte de informacion del cliente */
 .details-container {
     background-color: #fdfcfc; /* Mantiene el color de fondo gris claro */
-    padding: 10px;            /* Añade espacio interno */
-    border-radius: 8px;      /* Redondea las esquinas del contenedor */
+    border-radius: 0px;      /* Redondea las esquinas del contenedor */
 }
 /* ----------Para los titulos: lista de clientes y informacion del cliente ----------------------*/
 /* Estilos para centrar los títulos dentro de contenedores específicos */
 .fixed-header h5,
 .details-container h5 {
     text-align: center; /* Centra el texto dentro del elemento */
-    margin-top: 0;     /* Elimina el margen superior para evitar espacios no deseados */
-    margin-bottom: 10px; /* Añade un margen inferior para separar del contenido siguiente */
+    margin-top: 0px;     /* Elimina el margen superior para evitar espacios no deseados */
+    margin-bottom: 3px; /* Añade un margen inferior para separar del contenido siguiente */
 }
 .client-search-title { /* busqueda de quiententes titulo */
     color: white; /* Cambia el color del texto a blanco */
@@ -124,25 +127,33 @@ thead th {
     padding-right: 15px; /* Espacio para la barra de desplazamiento */
 }
 
+/* boton de informacion del cliente */
 .fixed-buttons {
     position: absolute; /* Cambiar a absolute */
     bottom: 0;
-    width: 98.2%;
+    width: 100%;
     background-color: white;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-    display: flex;
+    padding: 5px;
     justify-content: space-around;  /* Centra los botones horizontalmente */
-    gap: 15px; /* Espacio entre los botones */
-    margin-top: 20px; /* Añade espacio entre los botones y el contenido */
+    margin-top: 0px; /* Añade espacio entre los botones y el contenido */
 }
 .fixed-buttons button {
-    width: 200px; /* Ajusta el ancho de los botones */
-    font-size: 16px; /* Ajusta el tamaño de la fuente si es necesario */
+    padding: 3px; /* definir la altura */
+    width: 300px; /* Ajusta el ancho de los botones */
+    font-size: 10px; /* Ajusta el tamaño de la fuente si es necesario */
 }
-
+#clienteDetalles {
+    height: 310px;         /* Cambia este valor según lo que necesites */
+    padding: 0 !important;
+    margin: 0 !important;
+}
+/* boton para registrar nuevo cliente */
+.boton-registro{
+    padding: 5px; /* definir la altura */
+    font-size: 10px; /* Ajusta el tamaño de la fuente si es necesario */
+    font-weight: bold;     /* Texto en negrita */
+}
 .default-box {
-    height: 500px; /* Altura del cuadro blanco por defecto */
     background-color: white;
     border: 1px solid #ddd;
     margin-top: 20px;
@@ -158,8 +169,9 @@ thead th {
 
 /* Estilos para los títulos "Titular" y "Aval" */
 .titular-title, .aval-title {
+    font-size: 10px;        /* Tamaño de fuente más pequeño */
     background-color: #e4e4b4; /* Color de fondo */
-    padding: 10px;
+    padding: 4px;
     border-radius: 8px;
     margin: 0; /* Elimina los márgenes para un mejor ajuste */
     color: black; /* Asegura que el texto sea visible */

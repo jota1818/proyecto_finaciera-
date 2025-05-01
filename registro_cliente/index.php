@@ -10,13 +10,13 @@
     <script src="validacion.js" defer></script>
 </head>
 
-<body class="container-fluid mt-3">
-    <div class="row">
+<body class="container-fluid mt-2">
+    <div class="row gx-2">
         <!-- Barra lateral vertical -->
         <div class="col-md-4">
             <div class="vertical-button-cont">
                 <div class="vertical-button-container">
-                    <button type="button" class="btn btn-primary mb-3" onclick="cargarRegistro()">
+                    <button type="button" class="btn btn-primary boton-registro" onclick="cargarRegistro()">
                         REGISTRAR NUEVO CLIENTE
                     </button>
                     <div id="registroCliente" class="form-container">
@@ -60,7 +60,7 @@
             </div>
 
             <!-- Búsqueda de Clientes -->
-            <div class="mb-4 p-3 border busqueda-clientes">
+            <div class="mb-2 border busqueda-clientes">
                 <h5 class="client-search-title">BUSQUEDA DE CLIENTES</h5>
                 <form id="busquedaForm" method="post" onsubmit="return buscarCliente(event);">
                     <div class="row">
@@ -83,14 +83,14 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3">Buscar</button>
+                    <button type="submit" class="btn btn-primary">Buscar</button>
                 </form>
             </div>
 
             <!-- Cuadro blanco para la información del cliente -->
-            <div id="clienteDetalles" class="p-3 border mt-4">
+            <div id="clienteDetalles" class="border">
                 <div class="fixed-header">
-                    <h5>Información del Cliente</h5>
+                    <h5>INFORMACION DEL CLIENTE</h5>
                 </div>
                 <div class="details-container" id="detallesContent">
                     <!-- Mensaje por defecto -->

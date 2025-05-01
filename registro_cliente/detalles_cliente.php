@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
 
     // Información del Titular
     echo '<div class="col-md-6">';
-    echo "<div class='sticky-top bg-light p-2 mb-3'>"; // Fijar el título en la parte superior
+    echo "<div class='sticky-top bg-light'>"; // Fijar el título en la parte superior
     echo "<h5 class='titular-title'>Titular</h5>"; // Añade la clase titular-title
     echo "</div>";
     echo "<table class='table table-bordered'>";
@@ -54,7 +54,7 @@ if ($result->num_rows > 0) {
 
     // Información del Aval
     echo '<div class="col-md-6">';
-    echo "<div class='sticky-top bg-light p-2 mb-3'>"; // Fijar el título en la parte superior
+    echo "<div class='sticky-top bg-light'>"; // Fijar el título en la parte superior
     echo "<h5 class='aval-title'>Aval</h5>"; // Añade la clase aval-title
     echo "</div>";
     echo "<table class='table table-bordered'>";
