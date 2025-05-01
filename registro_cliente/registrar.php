@@ -63,7 +63,7 @@ $conn->close();
 <head>
     <style>
         .form-container {
-            height: 1000px;
+            height: 490px;
             /* Altura fija para el contenedor del formulario */
             overflow-y: auto;
             /* Habilitar desplazamiento vertical */
@@ -79,12 +79,14 @@ $conn->close();
             border-top: 1px solid #ddd;
             justify-content: center;
             /* Centra los botones horizontalmente */
-            gap: 100px;
+            gap: 10px;
             /* Espacio entre los botones */
+            padding: 0;
         }
 
         .fixed-buttonss button {
-            width: 200px;
+            padding: 0;
+            width: 100px;
             /* Ajusta el ancho de los botones */
             font-size: 16px;
             /* Ajusta el tamaño de la fuente si es necesario */
@@ -93,14 +95,11 @@ $conn->close();
 </head>
 
 <body class="container mt-3">
-    <div>
-        <h5>Formulario de Registro</h5>
-    </div>
     <div class="form-container">
         <form name="registroForm" method="post" action="registrar.php" onsubmit="return validarFormulario()">
             <div class="row">
                 <div class="col-md-12 border p-3">
-                    <h5>Información del Cliente</h5>
+                    <h5>INFORMACION DEL CLIENTE</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
                         <input type="text" name="nombre" required class="form-control">
@@ -200,7 +199,7 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12 border p-3">
-                    <h5>Información del Garante</h5>
+                    <h5>INFORMACION DEL GARANTE</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
                         <input type="text" name="nombre_garante" class="form-control">
@@ -255,7 +254,7 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12 border p-3">
-                    <h5>Fecha Programada</h5>
+                    <h5>FECHA PROGRAMADA</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha clave:</label>
                         <input type="date" name="fecha_clave" required class="form-control">
@@ -266,7 +265,7 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12 border p-3">
-                    <h5>Personal Asignado</h5>
+                    <h5>PERSONAL ASIGNADO</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Gestor:</label>
                         <input type="number" name="gestor" required class="form-control" min="1">
@@ -284,7 +283,6 @@ $conn->close();
             <div class="fixed-buttonss">
                 <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                 <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                <br>
                 <button type="button" class="btn btn-danger mt-3" onclick="cerrarRegistro()">Salir</button>
             </div>
         </form>
