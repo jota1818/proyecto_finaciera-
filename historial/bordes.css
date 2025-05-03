@@ -28,7 +28,7 @@ h5{
 }
 
 .historial{
-    background: #7c7a7a;
+    background: #003366;
 }
 
 .fixed-buttons {
@@ -45,14 +45,14 @@ h5{
     text-align: center; /* Centra el texto */
     padding: 3px; /* definir la altura */
     font-weight: bold; /* en negrita */
-    background-color: #FFD700; /* Color de fondo azul por defecto */
-    color: #000000; /* Color del texto blanco */
+    background-color: #000000; /* Color de fondo azul por defecto */
+    color: #FFD700; /* Color del texto blanco */
     border: none; /* Elimina el borde por defecto */
     transition: background-color 0.3s ease; /* Suaviza la transición del color */
 }
 
 .fixed-buttons button:hover {
-    background-color: #000000 ; /* Color amarillo al pasar el mouse */
-    color: #ffffff; /* Mantiene el color del texto blanco */
+    background-color: #FFD700 ; /* Color amarillo al pasar el mouse */
+    color: #000000; /* Mantiene el color del texto blanco */
     font-weight: bold; /* en negrita */
 }

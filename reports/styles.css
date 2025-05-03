@@ -1,14 +1,42 @@
 body {
-    background: #0056b3 ;
+    background: #FFD700;
+    margin-top: 100px;
+    /* o la misma altura del .reporte-header */
 }
-h5{
+
+* {
+    font-size: 10px !important;
+}
+
+h2 {
+    font-size: 12px !important;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 0px;
+    margin: 0px;
+}
+
+h5 {
     font-size: 10px;
     font-weight: bold;
     text-align: center;
     color: #ffffff;
 }
-* {
-    font-size: 10px !important;
+
+#reporteForm {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-left: auto;
+}
+
+#reporteForm div {
+    margin-bottom: 1rem;
+}
+
+#reporteForm label {
+    color: #ffffff;
+    font-weight: bold;
 }
 
 .client-box {
@@ -33,18 +61,101 @@ h5{
     overflow-x: auto;
 }
 
-.form-select-sm, .form-control-sm {
+/* para que el contenido de mes y año esten a su derecha */
+.form-select-sm,
+.form-control-sm {
     width: auto;
     display: inline-block;
 }
 
-.text-center.w-100 {
-    text-align: center;
+
+.reporte-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    color: #000000;
+    /* Set content inside the div to black */
 }
 
-.btn-salir {
-    width: 150px; /* Ajusta el ancho del botón según tus necesidades */
-    height: 35px; /* Ajusta la altura del botón según tus necesidades */
-    font-size: 16px; /* Ajusta el tamaño de la fuente según tus necesidades */
+/* Cambiar fondo del contenedor "reporte-header" a negro */
+.reporte-header {
+    background-color: #000000;
+    /* Negro */
+    padding: 5px;
+    /* Opcional, para dar algo de espacio interno */
+    width: 100%;
+    /* border-radius: 8px; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    /* Para que esté por encima de otros elementos */
+}
+
+/* Nuevo estilo para el contenedor de botones */
+.btn-container {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    /* Espacio entre botones (opcional) */
+    margin-bottom: 1rem;
+}
+
+/* Hacer que cada botón se expanda uniformemente */
+.btn-container button {
+    flex: 1;
+    padding: 3px;
+    /* definir la altura */
+    font-size: 10px;
+    /* Ajusta el tamaño de la fuente si es necesario */
+    border: none;
+    cursor: pointer;
+    background-color: #003366;
+    transition: background-color 0.3s;
+    /* Transición suave */
+    font-weight: bold;
+    /* Texto en negrita */
+    /* Si lo deseas, puedes eliminar márgenes individuales para lograr el efecto deseado.
+       La propiedad gap del contenedor controla el espacio entre ellos. */
+}
+
+.btn-container button:hover {
+    font-weight: bold;
+    /* Texto en negrita */
+    background-color: #FFD700;
+    /* Color azul al pasar el mouse */
+    color: #000000;
+    /* Cambia el color del texto si lo deseas */
+}
+
+#reporteForm .form-select-sm,
+#reporteForm .form-control-sm {
+    width: 120px;
+    /* mismo ancho para ambos */
+    height: 20px;
+    /* opcional, para que tengan la misma altura */
+    font-size: 10px;
+    /* consistente con el resto del diseño */
+}
+
+.client-box {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: #003366;
+    /* Add a light gray background color (or any color you prefer) */
+}
+
+.table-container .client-box {
+    background-color: #f0f0f0;
+    /* Apply the desired background color */
+}
+
+.table-container .client-box {
+    background-color: #333333;
+    /* Dark background */
+    color: #ffffff;
+    /* White text for contrast */
 }

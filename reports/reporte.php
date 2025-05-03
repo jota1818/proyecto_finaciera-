@@ -20,41 +20,47 @@ if ($reporte_generado) {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Reporte de Historiales</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body>
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-2">
         <?php include "templates.php"; ?>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-center w-100">Reporte de Historiales - <?php echo getMesAnio($mes, $anio); ?></h2>
-            <button type="button" class="btn btn-danger btn-salir" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
-        </div>
+        <div class="reporte-header mb-2">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="text-center w-100">REPORTE DE HISTORIALES - <?php echo getMesAnio($mes, $anio); ?></h2>
 
-        <form id="reporteForm" method="post" action="" class="d-flex justify-content-center mb-4">
-            <div class="me-2">
-                <label for="mes">Mes:</label>
-                <select id="mes" name="mes" class="form-select form-select-sm" required>
-                    <?php foreach (getMeses() as $value => $label): ?>
-                        <option value="<?php echo $value; ?>" <?php echo ($value == $mes) ? 'selected' : ''; ?>><?php echo $label; ?></option>
-                    <?php endforeach; ?>
-                </select>
             </div>
-            <div class="me-2">
-                <label for="anio">Año:</label>
-                <input type="number" id="anio" name="anio" class="form-control form-control-sm" value="<?php echo $anio; ?>" required>
-            </div>
-        </form>
 
-        <div class="d-flex justify-content-center mb-4">
-            <button type="button" class="btn btn-secondary me-2" onclick="abrirModal('con_historial')">Clientes con Historial</button>
-            <button type="button" class="btn btn-secondary me-2" onclick="abrirModal('sin_historial')">Clientes sin Historial</button>
-            <button type="button" class="btn btn-secondary me-2" onclick="abrirModal('todos')">Clientes con y sin Historial</button>
-            <button type="button" class="btn btn-primary" onclick="abrirConfiguracion()">Configuración</button>
+            <form id="reporteForm" method="post" action="" class="d-flex justify-content-center">
+                <div class="me-2">
+                    <label for="mes">Mes:</label>
+                    <select id="mes" name="mes" class="form-select form-select-sm" required>
+                        <?php foreach (getMeses() as $value => $label): ?>
+                            <option value="<?php echo $value; ?>" <?php echo ($value == $mes) ? 'selected' : ''; ?>><?php echo $label; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="me-2">
+                    <label for="anio">Año:</label>
+                    <input type="number" id="anio" name="anio" class="form-control form-control-sm" value="<?php echo $anio; ?>" required>
+                </div>
+            </form>
+
+            <div class="btn-container">
+                <button type="button" class="btn btn-secondary" onclick="abrirModal('con_historial')">Clientes con Historial</button>
+                <button type="button" class="btn btn-secondary" onclick="abrirModal('sin_historial')">Clientes sin Historial</button>
+                <button type="button" class="btn btn-secondary" onclick="abrirModal('todos')">Clientes con y sin Historial</button>
+                <button type="button" class="btn btn-primary" onclick="abrirConfiguracion()">Configuración<i class="bi bi-gear-fill ms-3"></i></button>
+                <button type="button" class="btn btn-danger btn-salir" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
+            </div>
         </div>
 
         <?php if ($reporte_generado): ?>
@@ -74,4 +80,5 @@ if ($reporte_generado) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="scripts.js"></script>
 </body>
+
 </html>

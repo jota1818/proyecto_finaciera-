@@ -93,7 +93,7 @@ $meses = [
     '11' => 'Noviembre',
     '12' => 'Diciembre'
 ];
-$pdf->SetFont('helvetica', 'B', 16);
+$pdf->SetFont('helvetica', 'B', 10);
 $pdf->Cell(0, 10, 'Reporte de Historiales - ' . $meses[$mes] . ' ' . $anio, 0, 1, 'C');
 $pdf->Ln(5);
 
@@ -136,7 +136,7 @@ $pdf->Output('reporte_' . $mes . '_' . $anio . '.pdf', 'I');
 function agregarClienteAlPDF($pdf, $cliente, $prejudiciales, $judiciales, $encabezados_prejudicial, $encabezados_judicial)
 {
     // Agregar el nombre del cliente
-    $pdf->SetFont('helvetica', 'B', 12);
+    $pdf->SetFont('helvetica', 'B', 10);
     $pdf->Cell(0, 10, 'Cliente: ' . $cliente['nombre'] . ' ' . $cliente['apellidos'], 0, 1, 'L');
     $pdf->Ln(-2);
 
