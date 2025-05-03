@@ -93,7 +93,9 @@ if ($result->num_rows > 0) {
 
     echo '</div>';
 } else {
-    echo "No se encontraron detalles para este cliente.";
+    echo '<div class="no-results text-center d-flex justify-content-center align-items-center">';
+    echo 'No se encontraron detalles para este cliente.';
+    echo '</div>';
 }
 
 $conn->close();

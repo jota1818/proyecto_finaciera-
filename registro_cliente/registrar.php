@@ -72,7 +72,8 @@ $conn->close();
         }
 
         .fixed-buttonss {
-            position: absolute; /* Cambiar a absolute */
+            position: absolute;
+            /* Cambiar a absolute */
             position: sticky;
             bottom: 0;
             background-color: white;
@@ -83,14 +84,39 @@ $conn->close();
             gap: 10px;
             /* Espacio entre los botones */
             padding: 0;
+            justify-content: space-around;
+            /* Centra los botones horizontalmente */
+            margin-top: 0px;
+            /* Añade espacio entre los botones y el contenido */
+            display: flex;
+            justify-content: space-between;
+            /* Distribuye los botones uniformemente */
+            gap: 10px;
+            /* Espacio entre los botones */
         }
 
         .fixed-buttonss button {
             padding: 3px;
-            width: 160px; /* Ajusta el ancho de los botones */
-            /* Ajusta el ancho de los botones */
             font-size: 10px;
             /* Ajusta el tamaño de la fuente si es necesario */
+            border: none;
+            cursor: pointer;
+            background-color: #003366;
+            transition: background-color 0.3s;
+            /* Transición suave */
+            font-weight: bold;
+            /* Texto en negrita */
+            flex: 1;
+            /* Cada botón ocupa el mismo espacio */
+        }
+
+        .fixed-buttonss button:hover {
+            font-weight: bold;
+            /* Texto en negrita */
+            background-color: #FFD700;
+            /* Color azul al pasar el mouse */
+            color: #000000;
+            /* Cambia el color del texto si lo deseas */
         }
     </style>
 </head>
@@ -100,7 +126,7 @@ $conn->close();
         <form name="registroForm" method="post" action="registrar.php" onsubmit="return validarFormulario()">
             <div class="row">
                 <div class="col-md-12 border">
-                    <h5>INFORMACION DEL CLIENTE</h5>
+                    <h5 class="fw-bold text-center">INFORMACION DEL CLIENTE</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
                         <input type="text" name="nombre" required class="form-control">
@@ -200,7 +226,7 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12 border">
-                    <h5>INFORMACION DEL GARANTE</h5>
+                    <h5 class="fw-bold text-center">INFORMACION DEL GARANTE</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Nombre:</label>
                         <input type="text" name="nombre_garante" class="form-control">
@@ -255,7 +281,7 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12 border">
-                    <h5>FECHA PROGRAMADA</h5>
+                    <h5 class="fw-bold text-center">FECHA PROGRAMADA</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Fecha clave:</label>
                         <input type="date" name="fecha_clave" required class="form-control">
@@ -266,7 +292,7 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12 border">
-                    <h5>PERSONAL ASIGNADO</h5>
+                    <h5 class="fw-bold text-center">PERSONAL ASIGNADO</h5>
                     <div class="mb-2">
                         <label class="fw-bold">Gestor:</label>
                         <input type="number" name="gestor" required class="form-control" min="1">

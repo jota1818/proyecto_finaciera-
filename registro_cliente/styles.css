@@ -1,7 +1,6 @@
 
 body {
-    /* background: linear-gradient(to right, #b2b411, #610707); */ /* Degradado de azul claro a verde claro */
-    background: linear-gradient(to right, #961526, #190342); /* Degradado de azul claro a verde claro */
+    background:#0056b3; /* Degradado de azul claro a verde claro */
 }
 
 #clienteDetalles {
@@ -15,7 +14,7 @@ body {
     overflow: hidden; /* Evita que los elementos se desborden */
 }
 .table thead th {
-    background-color: #94bdf1; /* Fondo naranja Bootstrap */
+    background-color: #FFD700; /* Fondo Bootstrap */
     color: rgb(5, 0, 0);              /* Texto blanco */
     font-weight: bold;
     text-align: center;
@@ -49,7 +48,7 @@ body {
 
 /* Estilos adicionales para los contenedores si es necesario */
 .fixed-header {
-    background-color: #003366; /* Mantiene el color de fondo azul oscuro */
+    background-color: #000000; /* Mantiene el color de fondo azul oscuro */
     color: white;             /* Mantiene el color del texto blanco */
     padding: 5px;            /* Mantiene el espacio interno */
     border-radius: 8px 8px 0 0; /* Mantiene las esquinas superiores redondeadas */
@@ -65,10 +64,10 @@ body {
 .busqueda-clientes {
     max-height: 130px; /* Altura máxima para la tabla */
     font-size: 10px;
-    background-color: #003366; /* Cambia este valor al color que prefieras */
+    background-color: #000000; /* Cambia este valor al color que prefieras */
     padding: 5px; /* Añade un poco de espacio interno */
     border-radius: 8px; /* Redondea las esquinas del contenedor */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra suave */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Añade una sombra suave */
     margin-top: 5px;
 }
 .busqueda-clientes label {
@@ -83,14 +82,13 @@ body {
 
 .busqueda-clientes .btn {
     font-size: 10px;       /* Tamaño del texto del botón */
-    padding: 1px 20px;      /* Ajuste del tamaño interno del botón (vertical y horizontal) */
+    padding: 1px 50px;      /* Ajuste del tamaño interno del botón (vertical y horizontal) */
     margin-top: 0px;       /* Espacio por encima del botón */
     margin-bottom: 0px;       /* Espacio por encima del botón */
-    background-color: #a0e941; /* Color de fondo: amarillo tipo "warning" */
+    background-color: #FFD700 ; /* Color de fondo: amarillo tipo "warning" */
     color: black;              /* Color del texto: negro */
     font-weight: bold;         /* Texto en negrita */
 }
-
 
 thead th {
     position: sticky;
@@ -136,11 +134,24 @@ thead th {
     padding: 5px;
     justify-content: space-around;  /* Centra los botones horizontalmente */
     margin-top: 0px; /* Añade espacio entre los botones y el contenido */
+    display: flex;
+    justify-content: space-between; /* Distribuye los botones uniformemente */   
+    gap: 10px; /* Espacio entre los botones */
 }
 .fixed-buttons button {
     padding: 3px; /* definir la altura */
-    width: 300px; /* Ajusta el ancho de los botones */
     font-size: 10px; /* Ajusta el tamaño de la fuente si es necesario */
+    border: none;
+    cursor: pointer;
+    background-color: #003366;
+    transition: background-color 0.3s; /* Transición suave */
+    font-weight: bold;             /* Texto en negrita */
+    flex: 1; /* Cada botón ocupa el mismo espacio */
+}
+.fixed-buttons button:hover {
+    font-weight: bold;             /* Texto en negrita */
+    background-color: #FFD700; /* Color azul al pasar el mouse */
+    color: #000000; /* Cambia el color del texto si lo deseas */
 }
 #clienteDetalles {
     height: 310px;         /* Cambia este valor según lo que necesites */
@@ -151,12 +162,8 @@ thead th {
 .boton-registro{
     padding: 5px; /* definir la altura */
     font-size: 10px; /* Ajusta el tamaño de la fuente si es necesario */
+    background-color: #003366;
     font-weight: bold;     /* Texto en negrita */
-}
-.default-box {
-    background-color: white;
-    border: 1px solid #ddd;
-    margin-top: 20px;
 }
 .line {
     position: absolute; /* Asegura que la línea esté posicionada dentro del contenedor */
@@ -170,24 +177,12 @@ thead th {
 /* Estilos para los títulos "Titular" y "Aval" */
 .titular-title, .aval-title {
     font-size: 10px;        /* Tamaño de fuente más pequeño */
-    background-color: #e4e4b4; /* Color de fondo */
+    background-color: #FFD700; /* Color de fondo */
+    font-weight: bold;             /* Texto en negrita */
     padding: 4px;
     border-radius: 8px;
     margin: 0; /* Elimina los márgenes para un mejor ajuste */
     color: black; /* Asegura que el texto sea visible */
-}
-
-/* Estilo para cambiar el color del texto en la sección de búsqueda */
-.busqueda-clientes h2 {
-    color: #ffffff; /* Cambia este valor al color que prefieras */
-}
-
-.busqueda-clientes label {
-    color: #ffffff; /* Cambia este valor al color que prefieras */
-}
-
-.border {
-    border-radius: 8px; /* Redondea las esquinas del contenedor */
 }
 
 /* Asegúrate de que el contenedor del botón ocupe todo el ancho disponible */
@@ -196,19 +191,20 @@ thead th {
     display: flex;                   /* Usamos flexbox para organizar su contenido */
     justify-content: center;        /* Centra el botón horizontalmente (puedes quitarlo si no quieres centrado) */
     margin-top: 10px;               /* Espacio hacia arriba del botón */
-    margin-bottom: 0; /* Quita el espacio debajo del botón */
+    margin-bottom: 0;                /* Quita el espacio debajo del botón */
 }
 
 .informe-button {
     width: 100%;                    /* El botón ocupará todo el ancho del contenedor padre */
     height: 30px;                   /* Altura del botón */
     font-size: 12px;                /* Tamaño del texto dentro del botón */
+    border-color: #003366;
     border-radius: 8px;             /* Esquinas redondeadas del botón */
     font-weight: bold;             /* Texto en negrita */
-    background-color: #ffc107;      /* Color de fondo (amarillo tipo Bootstrap warning) */
-    border: none;                   /* Sin borde alrededor del botón */
+    background-color: #FFD700;     /* Color de fondo (amarillo tipo Bootstrap warning) */
+    border-bottom: #003366;                  /* Sin borde alrededor del botón */
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);  /* Sombra para dar profundidad visual */
-    margin-top: 0; /* Quita el espacio arriba del botón */
+    margin-top: 0px;                /* Quita el espacio arriba del botón */
 }
 
 

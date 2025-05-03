@@ -13,7 +13,7 @@
     position: sticky;
     left: 0;
     top: 0; /* Fija la posición en la parte superior */
-    background-color: #f8d7da;
+    background-color: #FFD700;
     z-index: 5; /* MÁS ALTO que otros encabezados */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
@@ -23,7 +23,7 @@
     position: -webkit-sticky; /* Para Safari */
     position: sticky;
     left: 0;
-    background-color: #f8d7da;
+    background-color: #FFD700;
     z-index: 4; /* MÁS ALTO que otros td, pero MENOR que el th */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
@@ -48,7 +48,7 @@
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-    background-color: #f8d7da;
+    background-color: #FFD700;
     z-index: 3; /* Debajo del encabezado de "N°" */
     text-align: left;
     vertical-align: top;

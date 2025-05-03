@@ -16,7 +16,27 @@ h5 {
 button {
     font-size: 10px; /* Reducir el tamaño de la fuente de los botones */
     padding: 2px 10px; /* Reducir el padding de los botones */
-    margin: 1px;      /* Reducir márgenes entre botones */   
+    margin: 1px;      /* Reducir márgenes entre botones */  
+    background-color: #003366; 
+    border-radius: 8px;
+    border: none; /* Sin borde */
+    color: white; /* Texto blanco */
+    cursor: pointer; /* Cambia el cursor al pasar por el botón */
+    transition: background-color 0.3s, transform 0.1s; /* Transiciones suaves */
+    font-weight: bold;             /* Texto en negrita */
+    justify-content: center; /* Centrado horizontal */
+}
+/* Cambia de color al pasar el mouse */
+button:hover {
+    background-color: #007bff; /* Azul más claro */
+    font-weight: bold;             /* Texto en negrita */
+    /* transform: scale(1.05);    /* Aumentar ligeramente el tamaño */ 
+}
+
+/* Efecto al hacer clic (presionar el botón) */
+button:active {
+    transform: scale(0.97); /* Hace que el botón se vea presionado */
+    background-color: #004a99; /* Azul más oscuro */
 }
 
 /* Reducir el tamaño de la fuente en los formularios */
@@ -68,5 +88,12 @@ table {
 
 /* Ajustar espaciado entre celdas de la tabla */
 table td, table th {
-    padding: 4px;   /* Reducir padding en celdas de tabla */
+    padding: 1px;   /* Reducir padding en celdas de tabla */
+}
+
+.no-results {
+    min-height: 20vh; /* 50% of the viewport height, adjust as needed */
+    font-size: 16px; /* Optional: Larger font for visibility */
+    color: #000; /* Optional: Red color for emphasis */
+    font-weight: bold; /* en negrita */
 }

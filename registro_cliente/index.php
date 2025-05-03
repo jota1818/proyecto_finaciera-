@@ -101,8 +101,7 @@
                     <button type="button" class="btn btn-primary" onclick="verHistorial()">Ver Historia</button>
                     <button type="button" class="btn btn-secondary" onclick="agregarHistoria()">Agregar Historia</button>
                     <button type="button" class="btn btn-success" onclick="window.location.href='index.php'">Regresar</button>
-
-                    <button type="button" class="btn btn-danger">Salir</button>
+                    <button type="button" class="btn btn-danger" onclick="location.reload()">Salir</button>
                 </div>
             </div>
         </div>

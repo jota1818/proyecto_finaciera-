@@ -1,34 +1,36 @@
 body {
-    background: #424040;
+    background: #0056b3 ;
 }
 h5{
     font-size: 10px;
     font-weight: bold;
     text-align: center;
-
+    color: #ffffff;
 }
 * {
     font-size: 10px !important;
 }
-.titulo-principal{
-    color: #FFFFFF;
+
+.titulo-cliente,
+.titulo-historial {
+    background-color: #000; /* Blue background (you can change this to any color, e.g., #ff0000 for red) */
+    color: #ffffff; /* White text color (you can change this to any color, e.g., #000000 for black) */
+    border: 1px solid #000; /* Maintain the existing border */
+    padding: 1px; /* Maintain the existing padding */
 }
-.titulo-principal-info{
-    color: #FFFFFF;
-    padding-top: 10px;
+.table-fixed tbody tr td:first-child,
+.table-fixed-judicial tbody tr td:first-child {
+    font-weight: bold;
 }
-/* boton para cancelar los archivos */
-.btn-cancelar {
-    width: 80px; /* Ajusta el ancho según tus necesidades */
-    margin-top: 5px; /* Añade espacio en la parte superior */
-    padding: 2px 2px; /* Ajusta el padding para reducir la altura */
-    line-height: 1; /* Asegura que el texto esté centrado verticalmente */
-    display: block; /* Asegura que el margen funcione correctamente */
-    font-size: 0.875rem; /* Ajusta el tamaño de la fuente si es necesario */
-    font-weight: bold; /* en negrita */
+.client-info{
+    background: #fff;
+
 }
 
-/* Estilos para los botones en fixed-buttons */
+.historial{
+    background: #7c7a7a;
+}
+
 .fixed-buttons {
     display: flex;
     justify-content: space-between; /* Distribuye los botones uniformemente */   
@@ -53,16 +55,4 @@ h5{
     background-color: #000000 ; /* Color amarillo al pasar el mouse */
     color: #ffffff; /* Mantiene el color del texto blanco */
     font-weight: bold; /* en negrita */
-}
-
-/* contenido de informacion del cliente  */
-.form-container.border.p-3.mb-3.active {
-    background-color: #003366; /* Color de fondo gris claro */
-    color: #FFFFFF;
-}
-
-/* Estilo para el div después de REGISRTO DE ETAPA PRE-JUDICIAL Y JUDICIAL */
-.col-md-12.border.p-3 {
-    background-color: #003366; /* Color de fondo azul claro */
-    color: #FFFFFF;
 }

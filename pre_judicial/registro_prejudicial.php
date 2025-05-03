@@ -204,7 +204,7 @@ $conn->close();
 <body class="d-flex flex-column h-100">
     <div class="container-fluid flex-grow-1">
         <div>
-            <h5>Información del Cliente</h5>
+            <h5 class="titulo-principal-info">INFORMACION DEL CLIENTE</h5>
         </div>
         <div class="form-container border p-3 mb-3 active">
             <!-- primera fila -->
@@ -260,7 +260,7 @@ $conn->close();
 
         <div class="row">
             <div>
-                <h5>Formulario de Etapa Prejudicial y Judicial</h5>
+                <h5 class="titulo-principal">REGISRTO DE ETAPA PRE-JUDICIAL Y JUDICIAL</h5>
             </div>
             <div class="col-md-12 border p-3">
                 <?php if ($message): ?>
@@ -272,7 +272,7 @@ $conn->close();
                 <!-- Formulario de Etapa Pre-Judicial -->
                 <form id="preJudicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo !$etapa_judicial ? 'active' : ''; ?>" onsubmit="return enviarFormulario()">
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                    <h5>Etapa Pre-Judicial</h5>
+                    <h5>ETAPA PRE-JUDICIAL</h5>
                     <!-- Fecha Acto solamente para prueba -->
                     <div class="mb-2">
                         <label class="fw-bold">Fecha Acto:</label>
@@ -365,7 +365,6 @@ $conn->close();
                         <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                         <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
                         <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
-                        <br>
                         <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
                         <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                     </div>
@@ -374,7 +373,7 @@ $conn->close();
                 <!-- Formulario de Etapa Judicial -->
                 <form id="judicialForm" method="post" enctype="multipart/form-data" class="form-container <?php echo $etapa_judicial ? 'active' : ''; ?>">
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($id_cliente); ?>">
-                    <h5>Etapa Judicial</h5>
+                    <h5>ETAPA JUDICIAL</h5>
                     <div id="message"></div>
                     <!-- borrar de aqui, solo esta por mientras -->
                     <div class="mb-2">
@@ -447,7 +446,6 @@ $conn->close();
                         <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                         <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
                         <button type="button" class="btn btn-info mt-3" onclick="verHistorial(<?php echo htmlspecialchars($id_cliente); ?>)">Ver Historial</button>
-                        <br>
                         <button type="button" class="btn btn-success mt-3" onclick="history.back()">Regresar</button>
                         <button type="button" class="btn btn-danger mt-3" onclick="window.location.href='../registro_cliente/index.php'">Salir</button>
                     </div>
