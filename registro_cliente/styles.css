@@ -69,6 +69,7 @@ body {
     border-radius: 8px; /* Redondea las esquinas del contenedor */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Añade una sombra suave */
     margin-top: 5px;
+    color: #ffffff;
 }
 .busqueda-clientes label {
     font-size: 10px;       /* Tamaño del texto de las etiquetas */
