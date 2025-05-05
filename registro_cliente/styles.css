@@ -58,7 +58,7 @@ body {
 .scrollable-table-container {
     max-height: 160px; /* Altura máxima para la tabla */
     overflow-y: auto; /* Habilitar desplazamiento vertical */
-    padding-right: 15px; /* Espacio para la barra de desplazamiento */
+    padding-right: 3px; /* Espacio para la barra de desplazamiento */
 }
 /* Estilo para cambiar el color de fondo del contenedor de búsqueda */
 .busqueda-clientes {
