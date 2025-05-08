@@ -1,7 +1,20 @@
 function abrirModal(filtro) {
     document.getElementById('filtro').value = filtro;
-    document.getElementById('mesModal').value = document.getElementById('mes').value;
-    document.getElementById('anioModal').value = document.getElementById('anio').value;
+
+    const filtroFecha = document.getElementById('filtroFecha').value;
+    document.getElementById('filtroFechaInput').value = filtroFecha;
+
+    if (filtroFecha === 'mes_anio') {
+        document.getElementById('mesModal').value = document.getElementById('mes').value;
+        document.getElementById('anioModal').value = document.getElementById('anio').value;
+        document.getElementById('fecha_inicio_modal').value = '';
+        document.getElementById('fecha_fin_modal').value = '';
+    } else {
+        document.getElementById('fecha_inicio_modal').value = document.getElementById('fecha_inicio').value;
+        document.getElementById('fecha_fin_modal').value = document.getElementById('fecha_fin').value;
+        document.getElementById('mesModal').value = '';
+        document.getElementById('anioModal').value = '';
+    }
 
     const opcionesEncabezados = document.getElementById('opcionesEncabezados');
     opcionesEncabezados.innerHTML = '';
@@ -28,7 +41,6 @@ function abrirModal(filtro) {
 function agregarOpcionEncabezado(contenedor, titulo, encabezados, nombreCampo, opcionesPorDefecto) {
     const opcionDiv = document.createElement('div');
     opcionDiv.classList.add('mb-3');
-
     const tituloLabel = document.createElement('label');
     tituloLabel.classList.add('form-label');
     tituloLabel.textContent = titulo;
@@ -37,7 +49,6 @@ function agregarOpcionEncabezado(contenedor, titulo, encabezados, nombreCampo, o
     encabezados.forEach(encabezado => {
         const checkboxDiv = document.createElement('div');
         checkboxDiv.classList.add('form-check');
-
         const checkboxInput = document.createElement('input');
         checkboxInput.type = 'checkbox';
         checkboxInput.name = nombreCampo + '[]';
@@ -45,12 +56,10 @@ function agregarOpcionEncabezado(contenedor, titulo, encabezados, nombreCampo, o
         checkboxInput.classList.add('form-check-input');
         checkboxInput.checked = opcionesPorDefecto.includes(encabezado);
         checkboxDiv.appendChild(checkboxInput);
-
         const checkboxLabel = document.createElement('label');
         checkboxLabel.classList.add('form-check-label');
         checkboxLabel.textContent = encabezado;
         checkboxDiv.appendChild(checkboxLabel);
-
         opcionDiv.appendChild(checkboxDiv);
     });
 
@@ -63,12 +72,9 @@ function abrirConfiguracion() {
 }
 
 function guardarConfiguracion() {
-    const encabezadosPrejudicial = Array.from(document.querySelectorAll('#encabezadosPrejudicial input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value);
-    const encabezadosJudicial = Array.from(document.querySelectorAll('#encabezadosJudicial input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value);
-    const encabezadosSinHistorial = Array.from(document.querySelectorAll('#encabezadosSinHistorial input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value);
+    const encabezadosPrejudicial = Array.from(document.querySelectorAll('#encabezadosPrejudicial input[type="checkbox"]:checked')).map(cb => cb.value);
+    const encabezadosJudicial = Array.from(document.querySelectorAll('#encabezadosJudicial input[type="checkbox"]:checked')).map(cb => cb.value);
+    const encabezadosSinHistorial = Array.from(document.querySelectorAll('#encabezadosSinHistorial input[type="checkbox"]:checked')).map(cb => cb.value);
 
     localStorage.setItem('encabezadosPrejudicial', JSON.stringify(encabezadosPrejudicial));
     localStorage.setItem('encabezadosJudicial', JSON.stringify(encabezadosJudicial));
@@ -78,18 +84,37 @@ function guardarConfiguracion() {
     modal.hide();
 }
 
-window.addEventListener('load', function() {
+function toggleDateFields() {
+    const filtroFecha = document.getElementById('filtroFecha').value;
+    const mesAnioFields = document.getElementById('mesAnioFields');
+    const fechaRangoFields = document.getElementById('fechaRangoFields');
+
+    if (filtroFecha === 'mes_anio') {
+        mesAnioFields.style.display = 'block';
+        fechaRangoFields.style.display = 'none';
+    } else {
+        mesAnioFields.style.display = 'none';
+        fechaRangoFields.style.display = 'block';
+    }
+}
+
+window.addEventListener('load', function () {
+    toggleDateFields();
+
     const encabezadosPrejudicial = JSON.parse(localStorage.getItem('encabezadosPrejudicial')) || [];
     const encabezadosJudicial = JSON.parse(localStorage.getItem('encabezadosJudicial')) || [];
     const encabezadosSinHistorial = JSON.parse(localStorage.getItem('encabezadosSinHistorial')) || [];
 
     encabezadosPrejudicial.forEach(encabezado => {
-        document.querySelector(`#encabezadosPrejudicial input[value="${encabezado}"]`).checked = true;
+        const el = document.querySelector(`#encabezadosPrejudicial input[value="${encabezado}"]`);
+        if (el) el.checked = true;
     });
     encabezadosJudicial.forEach(encabezado => {
-        document.querySelector(`#encabezadosJudicial input[value="${encabezado}"]`).checked = true;
+        const el = document.querySelector(`#encabezadosJudicial input[value="${encabezado}"]`);
+        if (el) el.checked = true;
     });
     encabezadosSinHistorial.forEach(encabezado => {
-        document.querySelector(`#encabezadosSinHistorial input[value="${encabezado}"]`).checked = true;
+        const el = document.querySelector(`#encabezadosSinHistorial input[value="${encabezado}"]`);
+        if (el) el.checked = true;
     });
 });
