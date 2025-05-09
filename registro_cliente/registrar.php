@@ -118,6 +118,25 @@ $conn->close();
             color: #000000;
             /* Cambia el color del texto si lo deseas */
         }
+
+        /* Estilo para los campos de entrada */
+        /* Estilo para los campos de entrada */
+        .form-control {
+            height: 20px;
+            /* Altura fija para los campos de entrada */
+            width: 100%;
+            /* Ancho completo */
+            box-sizing: border-box;
+            /* Incluye el padding y el borde en el ancho y alto */
+            padding: 0;
+            /* Elimina el padding interno */
+            margin: 0;
+            /* Elimina el margen externo */
+            border-radius: 0;
+            /* Elimina los bordes redondeados */
+            border: 1px solid #ccc;
+            /* Añade un borde cuadrado */
+        }
     </style>
 </head>
 
@@ -125,63 +144,55 @@ $conn->close();
     <div class="form-container">
         <form name="registroForm" method="post" action="registrar.php" onsubmit="return validarFormulario()">
             <div class="row">
-                <div class="col-md-12 border">
-                    <h5 class="fw-bold text-center">INFORMACION DEL CLIENTE</h5>
-                    <div class="mb-2">
-                        <label class="fw-bold">Nombre:</label>
-                        <input type="text" name="nombre" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Apellidos:</label>
-                        <input type="text" name="apellidos" required class="form-control">
-                    </div>
+                <div class="col-md-12">
+                    <h5 class="fw-bold text-center">Información del Cliente</h5>
                     <div class="row mb-2">
                         <div class="col-md-6">
-                            <label class="fw-bold">DNI:</label>
-                            <input type="text" name="dni" required class="form-control" onblur="verificarDNI(this.value)">
+                            <label class="fw-bold">Nombre</label>
+                            <input type="text" name="nombre" required class="form-control" placeholder="Nombre">
                         </div>
                         <div class="col-md-6">
-                            <label class="fw-bold">Teléfono:</label>
-                            <input type="text" name="telefono" required class="form-control">
+                            <label class="fw-bold">Apellidos</label>
+                            <input type="text" name="apellidos" required class="form-control" placeholder="Apellidos">
                         </div>
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Fecha de Nacimiento:</label>
-                        <input type="date" name="fecha_nacimiento" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Domicilio 1:</label>
-                        <input type="text" name="domicilio1" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Referencia 1:</label>
-                        <input type="text" name="referencia1" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Domicilio 2:</label>
-                        <input type="text" name="domicilio2" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Referencia 2:</label>
-                        <input type="text" name="referencia2" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Ocupación:</label>
-                        <input type="text" name="ocupacion" required class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Clasificación de Riesgo:</label>
-                        <select name="clasificacion_riesgo" required class="form-control">
-                            <option value="" disabled selected>Seleccione una opción</option>
-                            <option value="NOR">NOR</option>
-                            <option value="CPP">CPP</option>
-                            <option value="DEF">DEF</option>
-                            <option value="PER">PER</option>
-                        </select>
                     </div>
                     <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Agencia:</label>
+                        <div class="col-md-4">
+                            <label class="fw-bold">DNI</label>
+                            <input type="text" name="dni" required class="form-control" placeholder="28294574" onblur="verificarDNI(this.value)">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-bold">Teléfono</label>
+                            <input type="text" name="telefono" required class="form-control" placeholder="Teléfono">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-bold">Fecha Nacimiento</label>
+                            <input type="date" name="fecha_nacimiento" required class="form-control">
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Ocupación</label>
+                        <input type="text" name="ocupacion" required class="form-control" placeholder="Ocupación y Referencias">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Domicilio 1</label>
+                        <input type="text" name="domicilio1" required class="form-control" placeholder="Domicilio 1">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Referencia 1</label>
+                        <input type="text" name="referencia1" required class="form-control" placeholder="Referencia 1">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Domicilio 2</label>
+                        <input type="text" name="domicilio2" class="form-control" placeholder="Domicilio 2" placeholder="Domicilio 2">
+                    </div>
+                    <div class="mb-2">
+                        <label class="fw-bold">Referencia 2</label>
+                        <input type="text" name="referencia2" class="form-control" placeholder="Referencia 2">
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="fw-bold">Agencia</label>
                             <select name="agencia" required class="form-control">
                                 <option value="" disabled selected>Seleccione una opción</option>
                                 <option value="Ayacucho">Ayacucho</option>
@@ -189,8 +200,8 @@ $conn->close();
                                 <option value="Lima">Lima</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">Tipo de credito:</label>
+                        <div class="col-md-3">
+                            <label class="fw-bold">Tipo Crédito</label>
                             <select name="tipo_credito" required class="form-control">
                                 <option value="" disabled selected>Seleccione una opción</option>
                                 <option value="Diario">Diario</option>
@@ -199,78 +210,88 @@ $conn->close();
                                 <option value="Anual">Anual</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Estado:</label>
-                        <input type="text" name="estado" required class="form-control">
+                        <div class="col-md-3">
+                            <label class="fw-bold">Clas. Riesgo</label>
+                            <select name="clasificacion_riesgo" required class="form-control">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="NOR">NOR</option>
+                                <option value="CPP">CPP</option>
+                                <option value="DEF">DEF</option>
+                                <option value="PER">PER</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw-bold">Estado</label>
+                            <input type="text" name="estado" required class="form-control" placeholder="Estado">
+                        </div>
                     </div>
                     <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Fecha de Desembolso:</label>
-                            <input type="date" name="fecha_desembolso" required class="form-control">
+                        <div class="col-md-3">
+                            <label class="fw-bold">Monto Créd.</label>
+                            <input type="number" step="0.01" name="monto" required class="form-control" placeholder="Monto Créd.">
                         </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">Fecha de Vencimiento:</label>
+                        <div class="col-md-3">
+                            <label class="fw-bold">Fecha Desemb.</label>
+                            <input type="date" name="fecha_desembolso" required class="form-control" placeholder="Fecha Desemb.">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw-bold">Saldo Créd.</label>
+                            <input type="number" step="0.01" name="saldo" required class="form-control" placeholder="Saldo Créd.">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fw-bold">Fec. Vencim.</label>
                             <input type="date" name="fecha_vencimiento" required class="form-control">
                         </div>
                     </div>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold">Monto de crédito:</label>
-                            <input type="number" step="0.01" name="monto" required class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold">Saldo de crédito :</label>
-                            <input type="number" step="0.01" name="saldo" required class="form-control">
-                        </div>
-                    </div>
                 </div>
-                <div class="col-md-12 border">
-                    <h5 class="fw-bold text-center">INFORMACION DEL GARANTE</h5>
-                    <div class="mb-2">
-                        <label class="fw-bold">Nombre:</label>
-                        <input type="text" name="nombre_garante" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Apellidos:</label>
-                        <input type="text" name="apellidos_garante" class="form-control">
-                    </div>
+                <div class="col-md-12">
+                    <h5 class="fw-bold text-center">Información del Aval</h5>
                     <div class="row mb-2">
                         <div class="col-md-6">
-                            <label class="fw-bold">DNI:</label>
-                            <input type="text" name="dni_garante" class="form-control">
+                            <label class="fw-bold">Nombre</label>
+                            <input type="text" name="nombre_garante" class="form-control" placeholder="Nombre">
                         </div>
                         <div class="col-md-6">
-                            <label class="fw-bold">Teléfono:</label>
-                            <input type="number" name="telefono_garante" class="form-control">
+                            <label class="fw-bold">Apellidos</label>
+                            <input type="text" name="apellidos_garante" class="form-control" placeholder="Apellidos">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4">
+                            <label class="fw-bold">DNI</label>
+                            <input type="text" name="dni_garante" class="form-control" placeholder="DNI">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-bold">Teléfono</label>
+                            <input type="number" name="telefono_garante" class="form-control" placeholder="Teléfono">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-bold">Fecha Nacimiento</label>
+                            <input type="date" name="fecha_nacimiento_garante" class="form-control">
                         </div>
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Fecha de Nacimiento:</label>
-                        <input type="date" name="fecha_nacimiento_garante" class="form-control">
+                        <label class="fw-bold">Ocupación</label>
+                        <input type="text" name="ocupacion_garante" class="form-control" placeholder="Ocupación">
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Domicilio 1:</label>
-                        <input type="text" name="domicilio1_garante" class="form-control">
+                        <label class="fw-bold">Domicilio 1</label>
+                        <input type="text" name="domicilio1_garante" class="form-control" placeholder="Domicilio 1">
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Referencia 1:</label>
-                        <input type="text" name="referencia1_garante" class="form-control">
+                        <label class="fw-bold">Referencia 1</label>
+                        <input type="text" name="referencia1_garante" class="form-control" placeholder="Referencia 1">
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Domicilio 2:</label>
-                        <input type="text" name="domicilio2_garante" class="form-control">
+                        <label class="fw-bold">Domicilio 2</label>
+                        <input type="text" name="domicilio2_garante" class="form-control" placeholder="Domicilio 2">
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Referencia 2:</label>
-                        <input type="text" name="referencia2_garante" class="form-control">
+                        <label class="fw-bold">Referencia 2</label>
+                        <input type="text" name="referencia2_garante" class="form-control" placeholder="Referencia 2">
                     </div>
                     <div class="mb-2">
-                        <label class="fw-bold">Ocupación:</label>
-                        <input type="text" name="ocupacion_garante" class="form-control">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Clasificación de Riesgo:</label>
+                        <label class="fw-bold">Clasificación de Riesgo</label>
                         <select name="clasificacion_riesgo_garante" class="form-control">
                             <option value="" disabled selected>Seleccione una opción</option>
                             <option value="NOR">NOR</option>
@@ -280,30 +301,31 @@ $conn->close();
                         </select>
                     </div>
                 </div>
-                <div class="col-md-12 border">
-                    <h5 class="fw-bold text-center">FECHA PROGRAMADA</h5>
-                    <div class="mb-2">
-                        <label class="fw-bold">Fecha clave:</label>
-                        <input type="date" name="fecha_clave" required class="form-control">
+                <div class="col-md-12">
+                    <h5 class="fw-bold text-center">Programacion de Acciones y Responsabilidades</h5>
+                    <div class="row mb-2">
+                        <div class="col-md-4">
+                            <label class="fw-bold">Fecha clave</label>
+                            <input type="date" name="fecha_clave" required class="form-control">
+                        </div>
+                        <div class="col-md-8">
+                            <label class="fw-bold">Actividad programada</label>
+                            <input type="text" name="accion_fecha_clave" required class="form-control" placeholder="Actividad programada">
+                        </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Acción en fecha clave:</label>
-                        <input type="text" name="accion_fecha_clave" required class="form-control">
-                    </div>
-                </div>
-                <div class="col-md-12 border">
-                    <h5 class="fw-bold text-center">PERSONAL ASIGNADO</h5>
-                    <div class="mb-2">
-                        <label class="fw-bold">Gestor:</label>
-                        <input type="number" name="gestor" required class="form-control" min="1">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Supervisor:</label>
-                        <input type="number" name="supervisor" required class="form-control" min="1">
-                    </div>
-                    <div class="mb-2">
-                        <label class="fw-bold">Administrador:</label>
-                        <input type="number" name="administrador" required class="form-control" min="1">
+                    <div class="row mb-2">
+                        <div class="col-md-4">
+                            <label class="fw-bold">Gestor</label>
+                            <input type="number" name="gestor" required class="form-control" min="1" placeholder="Gestor">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-bold">Supervisor</label>
+                            <input type="number" name="supervisor" required class="form-control" min="1" placeholder="Supervisor">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-bold">Administrador</label>
+                            <input type="number" name="administrador" required class="form-control" min="1" placeholder="Administrador">
+                        </div>
                     </div>
                 </div>
             </div>
