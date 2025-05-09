@@ -1,9 +1,11 @@
 <?php
-function formatDate($date) {
+function formatDate($date)
+{
     return date('d-m-Y', strtotime($date));
 }
 
-function getMesAnio($mes, $anio) {
+function getMesAnio($mes, $anio)
+{
     $meses = [
         '01' => 'Enero',
         '02' => 'Febrero',
@@ -18,10 +20,16 @@ function getMesAnio($mes, $anio) {
         '11' => 'Noviembre',
         '12' => 'Diciembre'
     ];
+
+    if (!isset($meses[$mes])) {
+        return 'Mes inválido ' . $anio;
+    }
+
     return $meses[$mes] . ' ' . $anio;
 }
 
-function getMeses() {
+function getMeses()
+{
     return [
         '01' => 'Enero',
         '02' => 'Febrero',
@@ -38,14 +46,15 @@ function getMeses() {
     ];
 }
 
-function generarReporte($mes, $anio, $fecha_inicio, $fecha_fin, $conn) {
+function generarReporte($mes, $anio, $fecha_inicio, $fecha_fin, $conn)
+{
     $clientes_prejudicial = [];
     $clientes_judicial = [];
     $clientes_con_historial = [];
     $clientes_sin_historial = [];
 
     if ($fecha_inicio && $fecha_fin) {
-        // Usar rango de fechas
+        // Usar rango de fechas personalizado
         $sql_prejudicial = "SELECT c.*, p.* FROM etapa_prejudicial p JOIN clientes c ON p.id_cliente = c.id_cliente WHERE p.fecha_acto BETWEEN ? AND ? ORDER BY c.nombre, c.apellidos, p.fecha_acto";
         $sql_judicial = "SELECT c.*, j.* FROM etapa_judicial j JOIN clientes c ON j.id_cliente = c.id_cliente WHERE j.fecha_judicial BETWEEN ? AND ? ORDER BY c.nombre, c.apellidos, j.fecha_judicial";
 
@@ -55,8 +64,10 @@ function generarReporte($mes, $anio, $fecha_inicio, $fecha_fin, $conn) {
         $result_prejudicial = $stmt_prejudicial->get_result();
 
         while ($row = $result_prejudicial->fetch_assoc()) {
-            $clientes_prejudicial[$row['id_cliente']][] = $row;
-            $clientes_con_historial[$row['id_cliente']] = true;
+            if (!empty($row['id_cliente'])) { // Validar que id_cliente exista
+                $clientes_prejudicial[$row['id_cliente']][] = $row;
+                $clientes_con_historial[$row['id_cliente']] = true;
+            }
         }
 
         $stmt_judicial = $conn->prepare($sql_judicial);
@@ -65,13 +76,16 @@ function generarReporte($mes, $anio, $fecha_inicio, $fecha_fin, $conn) {
         $result_judicial = $stmt_judicial->get_result();
 
         while ($row = $result_judicial->fetch_assoc()) {
-            $clientes_judicial[$row['id_cliente']][] = $row;
-            $clientes_con_historial[$row['id_cliente']] = true;
+            if (!empty($row['id_cliente'])) { // Validar que id_cliente exista
+                $clientes_judicial[$row['id_cliente']][] = $row;
+                $clientes_con_historial[$row['id_cliente']] = true;
+            }
         }
     } else {
         // Usar mes y año
         $fecha_inicio = $anio . '-' . $mes . '-01';
         $fecha_fin = date('Y-m-t', strtotime($fecha_inicio));
+
         $sql_prejudicial = "SELECT c.*, p.* FROM etapa_prejudicial p JOIN clientes c ON p.id_cliente = c.id_cliente WHERE p.fecha_acto BETWEEN ? AND ? ORDER BY c.nombre, c.apellidos, p.fecha_acto";
         $sql_judicial = "SELECT c.*, j.* FROM etapa_judicial j JOIN clientes c ON j.id_cliente = c.id_cliente WHERE j.fecha_judicial BETWEEN ? AND ? ORDER BY c.nombre, c.apellidos, j.fecha_judicial";
 
@@ -81,8 +95,10 @@ function generarReporte($mes, $anio, $fecha_inicio, $fecha_fin, $conn) {
         $result_prejudicial = $stmt_prejudicial->get_result();
 
         while ($row = $result_prejudicial->fetch_assoc()) {
-            $clientes_prejudicial[$row['id_cliente']][] = $row;
-            $clientes_con_historial[$row['id_cliente']] = true;
+            if (!empty($row['id_cliente'])) { // Validar que id_cliente exista
+                $clientes_prejudicial[$row['id_cliente']][] = $row;
+                $clientes_con_historial[$row['id_cliente']] = true;
+            }
         }
 
         $stmt_judicial = $conn->prepare($sql_judicial);
@@ -91,15 +107,17 @@ function generarReporte($mes, $anio, $fecha_inicio, $fecha_fin, $conn) {
         $result_judicial = $stmt_judicial->get_result();
 
         while ($row = $result_judicial->fetch_assoc()) {
-            $clientes_judicial[$row['id_cliente']][] = $row;
-            $clientes_con_historial[$row['id_cliente']] = true;
+            if (!empty($row['id_cliente'])) { // Validar que id_cliente exista
+                $clientes_judicial[$row['id_cliente']][] = $row;
+                $clientes_con_historial[$row['id_cliente']] = true;
+            }
         }
     }
 
-    // Fetch all clients
+    // Obtener todos los clientes
     $result_clientes = $conn->query("SELECT * FROM clientes ORDER BY nombre, apellidos");
     while ($row = $result_clientes->fetch_assoc()) {
-        if (!array_key_exists($row['id_cliente'], $clientes_con_historial)) {
+        if (!isset($clientes_con_historial[$row['id_cliente']])) {
             $clientes_sin_historial[] = $row;
         }
     }
@@ -107,7 +125,8 @@ function generarReporte($mes, $anio, $fecha_inicio, $fecha_fin, $conn) {
     return [$clientes_prejudicial, $clientes_judicial, $clientes_sin_historial];
 }
 
-function mostrarClientes($filtro, $clientes_prejudicial, $clientes_judicial, $clientes_sin_historial, $encabezados_prejudicial, $encabezados_judicial, $encabezados_sin_historial) {
+function mostrarClientes($filtro, $clientes_prejudicial, $clientes_judicial, $clientes_sin_historial, $encabezados_prejudicial, $encabezados_judicial, $encabezados_sin_historial)
+{
     if ($filtro === 'con_historial') {
         foreach ($clientes_prejudicial as $id_cliente => $prejudiciales) {
             $cliente = $prejudiciales[0];
@@ -126,8 +145,9 @@ function mostrarClientes($filtro, $clientes_prejudicial, $clientes_judicial, $cl
     }
 }
 
-function mostrarCliente($cliente, $prejudiciales, $judiciales, $encabezados_prejudicial, $encabezados_judicial) {
-    ?>
+function mostrarCliente($cliente, $prejudiciales, $judiciales, $encabezados_prejudicial, $encabezados_judicial)
+{
+?>
     <div class="client-box">
         <div class="client-header">
             <h4><?= htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']) ?></h4>
@@ -181,8 +201,9 @@ function mostrarCliente($cliente, $prejudiciales, $judiciales, $encabezados_prej
     <?php
 }
 
-function mostrarClientesSinHistorial($clientes, $encabezados) {
-    ?>
+function mostrarClientesSinHistorial($clientes, $encabezados)
+{
+?>
     <div class="client-box">
         <div class="client-header">
             <h4>Clientes sin Historial</h4>
@@ -208,7 +229,8 @@ function mostrarClientesSinHistorial($clientes, $encabezados) {
     <?php
 }
 
-function mostrarEncabezados($encabezados) {
+function mostrarEncabezados($encabezados)
+{
     return !empty(array_filter($encabezados, function ($encabezado) {
         return in_array($encabezado, ['Fecha', 'Fecha Clave', 'Acto', 'Acción en Fecha Clave', 'Descripción', 'Objetivo Logrado']);
     }));

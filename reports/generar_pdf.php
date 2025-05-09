@@ -2,7 +2,8 @@
 require_once '../tcpdf/tcpdf.php';
 require "../conexion_db/connection.php";
 
-function formatDate($date) {
+function formatDate($date)
+{
     return date('d-m-Y', strtotime($date));
 }
 
@@ -79,25 +80,21 @@ $pdf->SetTitle('Reporte de Historiales');
 $pdf->SetSubject('Reporte de Historiales');
 $pdf->SetKeywords('Reporte, Historiales, PDF');
 
+$pdf->SetFillColor(230, 230, 230); // Color gris claro
+
 // Establecer márgenes y formato de página
 $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(false);
-$pdf->SetMargins(10, 10, 10);
+$pdf->SetMargins(5, 3, 5);
 $pdf->SetAutoPageBreak(true, 10);
 $pdf->AddPage();
 
 // Configurar fuente por defecto de TCPDF (helvetica)
-$pdf->SetFont('helvetica', '', 10); // Fuente estándar de TCPDF
+$pdf->SetFont('helvetica', 'B', 10);
 
-// Título del reporte
-$pdf->SetFont('helvetica', 'B', 12);
-$pdf->Cell(0, 8, 'REPORTE DE HISTORIALES', 0, 1, 'C');
-$pdf->Ln(2); // Espacio pequeño entre títulos
-
-// Mostrar rango de fechas o mes/año
+// Construir el texto dinámico según el caso
 if ($fecha_inicio && $fecha_fin) {
-    $pdf->SetFont('helvetica', 'B', 10);
-    $pdf->Cell(0, 8, 'Del ' . formatDate($fecha_inicio) . ' al ' . formatDate($fecha_fin), 0, 1, 'C');
+    $texto_fecha = 'Del ' . formatDate($fecha_inicio) . ' al ' . formatDate($fecha_fin);
 } else {
     $meses = [
         '01' => 'Enero',
@@ -113,10 +110,13 @@ if ($fecha_inicio && $fecha_fin) {
         '11' => 'Noviembre',
         '12' => 'Diciembre'
     ];
-    $pdf->SetFont('helvetica', 'B', 10);
-    $pdf->Cell(0, 8, 'Mes: ' . $meses[$mes] . ' - Año: ' . $anio, 0, 1, 'C');
+    $texto_fecha = 'Mes: ' . $meses[$mes] . ' - Año: ' . $anio;
 }
-$pdf->Ln(5);
+
+// Imprimir ambos textos en la misma línea
+$pdf->Cell(100, 8, 'REPORTE DE HISTORIALES', 0, 0, 'R');
+$pdf->Cell(0, 8, $texto_fecha, 0, 1, 'L');
+
 
 // Cargar datos para mostrar en el PDF
 $clientes_prejudicial = [];
@@ -158,13 +158,21 @@ function agregarClienteAlPDF($pdf, $cliente, $prejudiciales, $judiciales, $encab
 {
     // Nombre del cliente
     $pdf->SetFont('helvetica', 'B', 10);
-    $pdf->Cell(0, 8, 'Cliente: ' . htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']), 0, 1, 'L');
+    $nombreCompleto = 'Cliente: ' . htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellidos']);
+    if (!empty($prejudiciales)) {
+        $etapa = 'Etapa Pre-Judicial';
+    } elseif (!empty($judiciales)) {
+        $etapa = 'Etapa Judicial';
+    } else {
+        $etapa = '';
+    }
+    $pdf->Cell(100, 8, $nombreCompleto, 0, 0, 'L');
+    $pdf->Cell(0, 8, $etapa, 0, 1, 'C');
     $pdf->Ln(-2);
 
     // Etapa Pre-Judicial
     if (!empty($prejudiciales) && !empty($encabezados_prejudicial)) {
         $pdf->SetFont('helvetica', 'B', 10);
-        $pdf->Cell(0, 8, 'Etapa Pre-Judicial', 0, 1, 'L');
         $pdf->SetFont('helvetica', '', 10);
         agregarTablaAlPDF($pdf, $prejudiciales, $encabezados_prejudicial);
     }
@@ -172,20 +180,20 @@ function agregarClienteAlPDF($pdf, $cliente, $prejudiciales, $judiciales, $encab
     // Etapa Judicial
     if (!empty($judiciales) && !empty($encabezados_judicial)) {
         $pdf->SetFont('helvetica', 'B', 10);
-        $pdf->Cell(0, 8, 'Etapa Judicial', 0, 1, 'L');
+        $pdf->Cell(0, 8, 'Etapa Judicial', 0, 1, 'C');
         $pdf->SetFont('helvetica', '', 10);
         agregarTablaAlPDF($pdf, $judiciales, $encabezados_judicial);
     }
 
-    $pdf->Ln(5);
+    $pdf->Ln(1);
 }
 
 function agregarClientesSinHistorialAlPDF($pdf, $clientes_sin_historial, $encabezados_sin_historial)
 {
     if (!empty($clientes_sin_historial) && !empty($encabezados_sin_historial)) {
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont('helvetica', 'B', 10);
         $pdf->Cell(0, 10, 'Clientes sin Historial', 0, 1, 'L');
-        $pdf->Ln(3);
+        $pdf->Ln(-1);
         $pdf->SetFont('helvetica', '', 10);
         agregarTablaAlPDF($pdf, $clientes_sin_historial, $encabezados_sin_historial);
     }
@@ -266,7 +274,7 @@ function agregarTablaAlPDF($pdf, $datos, $encabezados)
         $maxHeight = 0;
         foreach ($rowData as $i => $txt) {
             $nb = $pdf->getNumLines($txt, $w[$i]);
-            $height = 6 * $nb;
+            $height = 4 * $nb;
             if ($height > $maxHeight) $maxHeight = $height;
         }
 
@@ -282,14 +290,17 @@ function agregarTablaAlPDF($pdf, $datos, $encabezados)
             $pdf->SetFont('helvetica', '', 8);
         }
 
-        // Dibujar cada celda
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
+
         foreach ($rowData as $i => $txt) {
             $align = in_array($encabezados[$i], ['Objetivo Logrado']) ? 'C' : 'L';
-            $pdf->Cell($w[$i], $maxHeight, $txt, 1, 0, $align, false);
+            $pdf->MultiCell($w[$i], $maxHeight, $txt, 1, $align, false, 0, '', '', true, 0, false, true, $maxHeight, 'T');
         }
-        $pdf->Ln();
+
+        // Salto a la siguiente línea de fila
+        $pdf->Ln($maxHeight);
     }
 
-    $pdf->Ln(5); // Espacio después de la tabla
+    $pdf->Ln(-1); // Espacio después de la tabla
 }
-?>
