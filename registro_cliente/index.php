@@ -245,7 +245,7 @@
             <td>${formatNumber(parseFloat(cliente.saldo))}</td>
             <td>${cliente.fecha_clave}</td>
             <td>${cliente.accion_fecha_clave}</td>
-            <td><button onclick="mostrarCliente('${cliente.dni}')">Seleccionar</button></td>
+            <td><button onclick="mostrarCliente('${cliente.dni}')">Ver</button></td>
         </tr>
             `).join('');
         }
@@ -336,7 +336,7 @@
             <td>${formatNumber(parseFloat(cliente.saldo))}</td>
             <td>${formatDate(cliente.fecha_clave)}</td>
             <td>${cliente.accion_fecha_clave}</td>
-            <td><button onclick="mostrarCliente('${cliente.dni}')">Seleccionar</button></td>
+            <td style="text-align: center;"><button onclick="mostrarCliente('${cliente.dni}')">Ver</button></td>
         </tr>
         `).join('');
         }
