@@ -1,27 +1,54 @@
 
 body {
     background:#0056b3; 
+    font-size: 10px !important;
 }
 
 #clienteDetalles {
-    display: none;
     margin-top: 20px;
     padding: 15px; /* Añade espacio interno */
     border: 2px solid #ddd; /* Añade un borde */
-    border-radius: 8px; /* Redondea las esquinas */
+    border-radius: 0px; /* Redondea las esquinas */
     /* background-color: #ac1515; */ /* Color de fondo */
     position: relative; /* Asegura que los botones se posicionen dentro de este contenedor */
     overflow: hidden; /* Evita que los elementos se desborden */
 }
+#clienteDetalles {
+    height: 315px;         /* Cambia este valor según lo que necesites */
+    padding: 0 !important;
+    margin: 0 !important;
+    border-color: #000000 !important;
+}
+.mensaje-vacio {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10px;
+    margin-top: 60px;
+}
+
 .table thead th {
     background-color: #FFD700; /* Fondo Bootstrap */
     color: rgb(5, 0, 0);              /* Texto blanco */
     font-weight: bold;
     text-align: center;
 }
+
+/* Reducir altura de las filas de la tabla */
+.table td,
+.table th {
+    padding: 0px !important; /* Reduce el padding interno de las celdas */
+    font-size: 10px !important; /* Ajusta el tamaño de fuente */
+    white-space: nowrap; /* Evita saltos de línea en las celdas */
+    text-overflow: ellipsis; /* Agrega puntos suspensivos para texto largo */
+    overflow: hidden;
+}
+
 .details-container {
-    height: 220px; /* Altura fija para el contenedor de detalles */
+    height: 246px; /* Altura fija para el contenedor de detalles */
     overflow-y: auto; /* Habilitar desplazamiento vertical */
+    overflow-x: hidden;
     padding-right: 0px; /* Espacio para la barra de desplazamiento */
     box-sizing: content-box; /* Asegura que el padding se añada fuera del tamaño total */
     position: relative; /* Asegura que los elementos absolutos se posicionen dentro de este contenedor */
@@ -30,6 +57,7 @@ body {
 .details-container {
     background-color: #fdfcfc; /* Mantiene el color de fondo gris claro */
     border-radius: 0px;      /* Redondea las esquinas del contenedor */
+    padding: 0px !important;
 }
 /* ----------Para los titulos: lista de clientes y informacion del cliente ----------------------*/
 /* Estilos para centrar los títulos dentro de contenedores específicos */
@@ -48,25 +76,32 @@ body {
 
 /* Estilos adicionales para los contenedores si es necesario */
 .fixed-header {
-    background-color: #000000; /* Mantiene el color de fondo azul oscuro */
+    background-color: #003366; /* Mantiene el color de fondo azul oscuro */
     color: white;             /* Mantiene el color del texto blanco */
     padding: 5px;            /* Mantiene el espacio interno */
-    border-radius: 8px 8px 0 0; /* Mantiene las esquinas superiores redondeadas */
+    border-radius: 0; /* Mantiene las esquinas superiores redondeadas */
+    border-color: #000000 !important;
     /* z-index: 2; /* Asegura que el encabezado esté sobre el contenido desplazable */ 
 }
 
+/* para lista de clientes encabezado */
 .scrollable-table-container {
     max-height: 160px; /* Altura máxima para la tabla */
     overflow-y: auto; /* Habilitar desplazamiento vertical */
     padding-right: 3px; /* Espacio para la barra de desplazamiento */
 }
+#listaClientes {
+    margin: 0 !important; /* Eliminamos márgenes alrededor de la tabla */
+    padding: 0 !important; /* Eliminamos padding alrededor de la tabla */
+}
 /* Estilo para cambiar el color de fondo del contenedor de búsqueda */
 .busqueda-clientes {
     max-height: 130px; /* Altura máxima para la tabla */
     font-size: 10px;
-    background-color: #000000; /* Cambia este valor al color que prefieras */
+    border-color: #000000 !important;
+    background-color: #003366; /* Cambia este valor al color que prefieras */
     padding: 5px; /* Añade un poco de espacio interno */
-    border-radius: 8px; /* Redondea las esquinas del contenedor */
+    border-radius: 0px; /* Redondea las esquinas del contenedor */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Añade una sombra suave */
     margin-top: 5px;
     color: #ffffff;
@@ -99,31 +134,13 @@ thead th {
 }
 
 .vertical-button-container {
-    background-color: white;
-    padding: 10px;
+    background-color: #000000;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 0px;
+    border-color: #000000;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* height: 100%; */ /* Ocupa todo el espacio vertical disponible */
     display: flex;
     flex-direction: column;
-}
-.vertical-button-cont {
-    /* background-color: rgba(255, 255, 255, 0.5); */ /* Fondo semi-transparente */
-    border: 1px solid white; /* Borde blanco */
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px; /* Redondea las esquinas del contenedor */
-    /* height: 100%; */ /* Ocupa todo el espacio vertical disponible */
-    display: flex;
-    flex-direction: column;
-}
-
-.form-container {
-    flex: 1; /* Ocupa el espacio restante en el contenedor vertical */
-    overflow-y: auto; /* Habilitar desplazamiento vertical */
-    padding-right: 15px; /* Espacio para la barra de desplazamiento */
 }
 
 /* boton de informacion del cliente */
@@ -144,27 +161,25 @@ thead th {
     font-size: 10px; /* Ajusta el tamaño de la fuente si es necesario */
     border: none;
     cursor: pointer;
-    background-color: #003366;
+    background-color: #FFD700;
+    color: #000000;
     transition: background-color 0.3s; /* Transición suave */
     font-weight: bold;             /* Texto en negrita */
     flex: 1; /* Cada botón ocupa el mismo espacio */
 }
 .fixed-buttons button:hover {
     font-weight: bold;             /* Texto en negrita */
-    background-color: #FFD700; /* Color azul al pasar el mouse */
-    color: #000000; /* Cambia el color del texto si lo deseas */
+    background-color: #000000; /* Color azul al pasar el mouse */
+    color: #ffffff; /* Cambia el color del texto si lo deseas */
 }
-#clienteDetalles {
-    height: 310px;         /* Cambia este valor según lo que necesites */
-    padding: 0 !important;
-    margin: 0 !important;
-}
+
 /* boton para registrar nuevo cliente */
 .boton-registro{
     padding: 5px; /* definir la altura */
     font-size: 10px; /* Ajusta el tamaño de la fuente si es necesario */
     background-color: #003366;
     font-weight: bold;     /* Texto en negrita */
+    border-radius: 0;
 }
 .line {
     position: absolute; /* Asegura que la línea esté posicionada dentro del contenedor */
@@ -190,11 +205,12 @@ thead th {
 .informe-button-container {
     width: 100%;                     /* El contenedor ocupa todo el ancho disponible */
     display: flex;                   /* Usamos flexbox para organizar su contenido */
-    justify-content: center;        /* Centra el botón horizontalmente (puedes quitarlo si no quieres centrado) */
     margin-top: 10px;               /* Espacio hacia arriba del botón */
     margin-bottom: 0;                /* Quita el espacio debajo del botón */
+    justify-content: space-between; /* Distribuye los botones uniformemente */ 
 }
 
+.salir-button,
 .informe-button {
     width: 100%;                    /* El botón ocupará todo el ancho del contenedor padre */
     height: 30px;                   /* Altura del botón */
@@ -203,9 +219,16 @@ thead th {
     border-radius: 8px;             /* Esquinas redondeadas del botón */
     font-weight: bold;             /* Texto en negrita */
     background-color: #FFD700;     /* Color de fondo (amarillo tipo Bootstrap warning) */
-    border-bottom: #003366;                  /* Sin borde alrededor del botón */
+    border-bottom: none;                  /* Sin borde alrededor del botón */
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);  /* Sombra para dar profundidad visual */
     margin-top: 0px;                /* Quita el espacio arriba del botón */
+    gap: 100px;                   /* Espacio entre los botones */
+}
+.salir-button:hover,
+.informe-button:hover {
+    font-weight: bold;             /* Texto en negrita */
+    background-color: #000000; /* Color azul al pasar el mouse */
+    color: #ffffff; /* Cambia el color del texto si lo deseas */
 }
 
 

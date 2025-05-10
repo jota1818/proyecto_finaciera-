@@ -63,15 +63,21 @@ $conn->close();
 <head>
     <style>
         .form-container {
+            flex: 1; /* Ocupa el espacio restante en el contenedor vertical */
             height: 517px;
             /* Altura fija para el contenedor del formulario */
             overflow-y: auto;
+            /* Solo scroll vertical */
+            overflow-x: hidden;
+            /* Oculta scroll horizontal */
             /* Habilitar desplazamiento vertical */
-            padding-right: 15px;
+            padding-right: 2px;
             /* Espacio para la barra de desplazamiento */
+            background-color: #E0E0E0;
         }
 
         .fixed-buttonss {
+            background-color: #E0E0E0 !important;
             position: absolute;
             /* Cambiar a absolute */
             position: sticky;
@@ -91,8 +97,6 @@ $conn->close();
             display: flex;
             justify-content: space-between;
             /* Distribuye los botones uniformemente */
-            gap: 10px;
-            /* Espacio entre los botones */
         }
 
         .fixed-buttonss button {
@@ -101,7 +105,7 @@ $conn->close();
             /* Ajusta el tamaño de la fuente si es necesario */
             border: none;
             cursor: pointer;
-            background-color: #003366;
+            background-color: #0056b3;
             transition: background-color 0.3s;
             /* Transición suave */
             font-weight: bold;
@@ -113,13 +117,12 @@ $conn->close();
         .fixed-buttonss button:hover {
             font-weight: bold;
             /* Texto en negrita */
-            background-color: #FFD700;
+            background-color: #000000;
             /* Color azul al pasar el mouse */
-            color: #000000;
+            color: #ffffff;
             /* Cambia el color del texto si lo deseas */
         }
 
-        /* Estilo para los campos de entrada */
         /* Estilo para los campos de entrada */
         .form-control {
             height: 20px;
@@ -137,6 +140,23 @@ $conn->close();
             border: 1px solid #ccc;
             /* Añade un borde cuadrado */
         }
+
+        .titulo-seccion {
+            background-color: #003366;
+            /* Puedes cambiarlo al color que desees */
+            border-radius: 0px;
+            padding: 0px;
+            margin-bottom: 0px;
+            color: #ffffff;
+        }
+
+        .titulo-seccion h5 {
+            margin: 0;
+            padding: 3px;
+            /* Puedes poner 0 si no quieres nada de espacio interno */
+            text-align: center;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -145,7 +165,9 @@ $conn->close();
         <form name="registroForm" method="post" action="registrar.php" onsubmit="return validarFormulario()">
             <div class="row">
                 <div class="col-md-12">
-                    <h5 class="fw-bold text-center">Información del Cliente</h5>
+                    <div class="titulo-seccion">
+                        <h5>Información del Cliente</h5>
+                    </div>
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label class="fw-bold">Nombre</label>
@@ -159,7 +181,7 @@ $conn->close();
                     <div class="row mb-2">
                         <div class="col-md-4">
                             <label class="fw-bold">DNI</label>
-                            <input type="text" name="dni" required class="form-control" placeholder="28294574" onblur="verificarDNI(this.value)">
+                            <input type="text" name="dni" required class="form-control" placeholder="DNI" onblur="verificarDNI(this.value)">
                         </div>
                         <div class="col-md-4">
                             <label class="fw-bold">Teléfono</label>
@@ -245,7 +267,9 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <h5 class="fw-bold text-center">Información del Aval</h5>
+                    <div class="titulo-seccion">
+                        <h5>Información del Aval</h5>
+                    </div>
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label class="fw-bold">Nombre</label>
@@ -302,7 +326,9 @@ $conn->close();
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <h5 class="fw-bold text-center">Programacion de Acciones y Responsabilidades</h5>
+                    <div class="titulo-seccion">
+                        <h5>Programación de Acciones y Responsabilidades</h5>
+                    </div>
                     <div class="row mb-2">
                         <div class="col-md-4">
                             <label class="fw-bold">Fecha clave</label>
@@ -332,7 +358,6 @@ $conn->close();
             <div class="fixed-buttonss">
                 <button type="submit" class="btn btn-primary mt-3">Registrar</button>
                 <button type="reset" class="btn btn-secondary mt-3">Limpiar</button>
-                <button type="button" class="btn btn-danger mt-3" onclick="cerrarRegistro()">Salir</button>
             </div>
         </form>
     </div>

@@ -26,6 +26,13 @@ if ($id_cliente) {
                 $etapa_judicial = true;
             }
         }
+        // Formatear la fecha de desembolso
+        $fecha_desembolso = isset($cliente['fecha_desembolso']) ? new DateTime($cliente['fecha_desembolso']) : null;
+        $fecha_desembolso_formateada = $fecha_desembolso ? $fecha_desembolso->format('d/m/Y') : '';
+
+        // Formatear la fecha de vencimiento
+        $fecha_vencimiento = isset($cliente['fecha_vencimiento']) ? new DateTime($cliente['fecha_vencimiento']) : null;
+        $fecha_vencimiento_formateada = $fecha_vencimiento ? $fecha_vencimiento->format('d/m/Y') : '';
     } else {
         die("Error: El ID del cliente no existe en la base de datos.");
     }
@@ -230,7 +237,7 @@ $conn->close();
             <div class="row mb-2">
                 <div class="col-md-4">
                     <label class="fw-bold">Fecha Desembolso:</label>
-                    <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_desembolso'] ?? ''); ?>" class="form-control" readonly>
+                    <input type="text" value="<?php echo htmlspecialchars($fecha_desembolso_formateada); ?>" class="form-control" readonly>
                 </div>
                 <div class="col-md-4">
                     <label class="fw-bold">Monto:</label>
@@ -245,7 +252,7 @@ $conn->close();
             <div class="row mb-2">
                 <div class="col-md-4">
                     <label class="fw-bold">Fecha Vencimiento:</label>
-                    <input type="text" value="<?php echo htmlspecialchars($cliente['fecha_vencimiento'] ?? ''); ?>" class="form-control" readonly>
+                    <input type="text" value="<?php echo htmlspecialchars($fecha_vencimiento_formateada); ?>" class="form-control" readonly>
                 </div>
                 <div class="col-md-4">
                     <label class="fw-bold">Plazo de Crédito (días):</label>
@@ -456,6 +463,12 @@ $conn->close();
 
 
     <script>
+        document.querySelector('input[type="date"]').addEventListener('change', function(e) {
+            let fecha = new Date(e.target.value);
+            let fechaFormateada = fecha.toLocaleDateString('es-ES');
+            e.target.value = fechaFormateada;
+        });
+
         function limpiarArchivo(inputId) {
             document.getElementById(inputId).value = '';
         }

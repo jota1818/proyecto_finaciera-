@@ -10,32 +10,31 @@
     <script src="validacion.js" defer></script>
 </head>
 
-<body class="container-fluid mt-2">
+<body class="container-fluid mt-1">
     <div class="row gx-2">
         <!-- Barra lateral vertical -->
         <div class="col-md-4">
-            <div class="vertical-button-cont">
-                <div class="vertical-button-container">
-                    <button type="button" class="btn btn-primary boton-registro" onclick="cargarRegistro()">
-                        REGISTRAR NUEVO CLIENTE
-                    </button>
-                    <div id="registroCliente" class="form-container">
-                        <div id="registroContent">
-                            <!-- El formulario de registro se cargará aquí por defecto -->
-                            <?php include 'registrar.php'; ?>
-                        </div>
+            <div class="vertical-button-container">
+                <button type="button" class="btn btn-primary boton-registro" onclick="cargarRegistro()">
+                    REGISTRAR NUEVO CLIENTE
+                </button>
+                <div id="registroCliente" class="form-container">
+                    <div id="registroContent">
+                        <!-- El formulario de registro se cargará aquí por defecto -->
+                        <?php include 'registrar.php'; ?>
                     </div>
                 </div>
-                <div class="informe-button-container">
-                    <button type="button" class="btn btn-warning informe-button" onclick="window.location.href='../reports/reporte.php'">REPORTE</button>
-                </div>
+            </div>
+            <div class="informe-button-container">
+                <button type="button" class="btn btn-warning informe-button" onclick="window.location.href='../reports/reporte.php'">REPORTE</button>
+                <button type="button" class="btn btn-warning salir-button" onclick="cerrarRegistro()">SALIR</button>
             </div>
         </div>
 
         <!-- Contenido principal horizontal -->
         <div class="col-md-8">
             <!-- Lista de Clientes -->
-            <div class="fixed-header">
+            <div class="border fixed-header">
                 <h5>LISTA DE CLIENTES</h5>
             </div>
             <div class="scrollable-table-container">
@@ -64,26 +63,30 @@
                 <h5 class="client-search-title">BUSQUEDA DE CLIENTES</h5>
                 <form id="busquedaForm" method="post" onsubmit="return buscarCliente(event);">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="mb-2">
-                                <label class="fw-bold">DNI:</label>
-                                <input type="number" id="dniInput" name="dni" class="form-control" oninput="buscarClientePorDNI()">
+                                
+                                <input type="number" id="dniInput" name="dni" class="form-control" placeholder="DNI" oninput="buscarClientePorDNI()">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-2">
-                                <label class="fw-bold">Nombre:</label>
-                                <input type="text" name="nombre" class="form-control">
+                                
+                                <input type="text" name="nombre" class="form-control" placeholder="Nombre">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-2">
-                                <label class="fw-bold">Apellidos:</label>
-                                <input type="text" name="apellidos" class="form-control">
+                                
+                                <input type="text" name="apellidos" class="form-control" placeholder="Apellidos">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-2">
+                                <button type="submit" class="btn btn-primary">Buscar</button>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Buscar</button>
                 </form>
             </div>
 
@@ -94,7 +97,9 @@
                 </div>
                 <div class="details-container" id="detallesContent">
                     <!-- Mensaje por defecto -->
-                    <p>No se ha seleccionado ningún cliente.</p>
+                    <div class="mensaje-vacio">
+                        <p>No se ha seleccionado ningún cliente.</p>
+                    </div>
                 </div>
                 <div class="fixed-buttons mt-3">
                     <!-- <button type="button" class="btn btn-primary">Ver Historia</button> -->
